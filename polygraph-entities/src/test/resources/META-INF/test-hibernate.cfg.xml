@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC 
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+		<property name="hibernate.connection.characterEncoding">UTF8</property>
+		<property name="hibernate.connection.useUnicode">true</property>
+		<property name="hibernate.connection.showSql">true</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">samUJKbs2010</property>
+		<property name="hibernate.connection.url">jdbc:hsqldb:mem:polygraph</property>
+		<property name="hibernate.connection.charSet">UTF8</property>
+
+		
+		<property name="hbm2ddl.auto">update</property>
+		
+		<mapping package="kz.aksay.polygraph.entity"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.EmployeeType"></mapping>		
+		<mapping class="kz.aksay.polygraph.entity.Family"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Material"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.MaterialConsumption"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.MaterialType"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Organization"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Person"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.ProducedWork"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.User"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.WorkType"></mapping>
+		
+		
+	</session-factory>
+</hibernate-configuration>

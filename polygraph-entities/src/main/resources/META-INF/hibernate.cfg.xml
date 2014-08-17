@@ -25,6 +25,7 @@
 		<mapping class="kz.aksay.polygraph.entity.MaterialConsumption"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.MaterialType"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Organization"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Order"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Person"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.ProducedWork"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.User"></mapping>

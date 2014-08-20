@@ -1,5 +1,13 @@
 package kz.aksay.polygraph.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="customer")
+@Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Customer extends EntitySupport {
 
 	/**

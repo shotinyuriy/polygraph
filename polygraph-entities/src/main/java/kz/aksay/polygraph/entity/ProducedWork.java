@@ -29,6 +29,18 @@ public class ProducedWork extends EntitySupport {
 	@ManyToOne
 	@JoinColumn(name="order_id")
 	private Order order;
+	
+	@ManyToOne
+	@JoinColumn(name="exeutor_id")
+	private Employee executor;
+
+	public Employee getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Employee executor) {
+		this.executor = executor;
+	}
 
 	public WorkType getWorkType() {
 		return workType;

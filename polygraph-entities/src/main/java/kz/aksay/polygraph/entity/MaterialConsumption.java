@@ -18,14 +18,14 @@ public class MaterialConsumption extends EntitySupport {
 	private static final long serialVersionUID = 8066545437632459224L;
 	
 	@ManyToOne
-	@JoinColumn(name="material_id")
+	@JoinColumn(name="material_id", nullable=false)
 	private Material material;
 
 	@Column
 	private BigDecimal quantity;
 	
 	@ManyToOne
-	@JoinColumn(name="produced_work_id")
+	@JoinColumn(name="produced_work_id", nullable=false)
 	private ProducedWork producedWork;
 
 	public Material getMaterial() {

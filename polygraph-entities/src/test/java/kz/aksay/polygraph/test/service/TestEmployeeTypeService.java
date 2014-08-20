@@ -13,6 +13,8 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -21,6 +23,8 @@ public class TestEmployeeTypeService extends Assert {
 	private ApplicationContext context;
 	
 	private EmployeeTypeService employeeTypeService;
+	
+	EmployeeType employeeTypeFirst;
 	
 	@BeforeClass
 	public void setUp() {
@@ -39,11 +43,11 @@ public class TestEmployeeTypeService extends Assert {
 	
 	@Test(expectedExceptions=ConstraintViolationException.class)
 	public void testSaveWithSameName() {
-		EmployeeType employeeType = new EmployeeType();
-		employeeType.setCreatedAt(new Date());
-		employeeType.setCreatedBy(User.TECH_USER);
-		employeeType.setName("А");
-		employeeTypeService.save(employeeType);
+		EmployeeType employeeTypeFirst = new EmployeeType();
+		employeeTypeFirst.setCreatedAt(new Date());
+		employeeTypeFirst.setCreatedBy(User.TECH_USER);
+		employeeTypeFirst.setName("А");
+		employeeTypeService.save(employeeTypeFirst);
 		
 		
 		EmployeeType employeeTypeTwink = new EmployeeType();
@@ -56,5 +60,10 @@ public class TestEmployeeTypeService extends Assert {
 			Throwable t = e;
 			TrowableUtils.findAndThrowCause(t, ConstraintViolationException.class);
 		}
+	}
+	
+	@AfterTest
+	public void cleanUp() {
+		employeeTypeService.delete(employeeTypeFirst);
 	}
 }

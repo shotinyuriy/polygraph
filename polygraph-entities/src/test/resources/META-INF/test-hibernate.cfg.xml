@@ -18,6 +18,7 @@
 		<property name="hbm2ddl.auto">update</property>
 		
 		<mapping package="kz.aksay.polygraph.entity"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Customer"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.EmployeeType"></mapping>		
 		<mapping class="kz.aksay.polygraph.entity.Family"></mapping>

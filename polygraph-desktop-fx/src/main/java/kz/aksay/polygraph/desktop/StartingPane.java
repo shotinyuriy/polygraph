@@ -6,14 +6,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public class FXMLTableView extends Application {
+public class StartingPane extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("FXMLTableView Example");
-		Pane myPane = (Pane)FXMLLoader.load(getClass().getResource(
-				"fxml_tableview.fxml"));
-		Scene myScene = new Scene(myPane);
+		Scene myScene = (Scene)FXMLLoader.load(getClass().getResource(
+				"fxml_login.fxml"));
 		primaryStage.setScene(myScene);
 		primaryStage.show();
 	}

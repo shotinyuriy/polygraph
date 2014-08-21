@@ -56,14 +56,13 @@ public class TestEmployeeTypeService extends Assert {
 		employeeTypeTwink.setName("А");
 		try {
 			employeeTypeService.save(employeeTypeTwink);
-		} catch(Exception e) {
+		} 
+		catch(Exception e) {
 			Throwable t = e;
 			TrowableUtils.findAndThrowCause(t, ConstraintViolationException.class);
 		}
-	}
-	
-	@AfterTest
-	public void cleanUp() {
-		employeeTypeService.delete(employeeTypeFirst);
+		finally {
+			employeeTypeService.delete(employeeTypeFirst);
+		}
 	}
 }

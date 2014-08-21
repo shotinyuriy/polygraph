@@ -1,0 +1,43 @@
+<html><head>
+  <SCRIPT src="./web-files/dtjava.js"></SCRIPT>
+<script>
+    function launchApplication(jnlpfile) {
+        dtjava.launch(            {
+                url : 'polygraph-desktop-fx.jnlp'
+            },
+            {
+                javafx : '2.2+'
+            },
+            {}
+        );
+        return false;
+    }
+</script>
+
+<script>
+    function javafxEmbed_fxApplication() {
+        dtjava.embed(
+            {
+                id : 'fxApplication',
+                url : 'polygraph-desktop-fx.jnlp',
+                placeholder : 'polygraphId',
+                width : 640,
+                height : 480
+            },
+            {
+                javafx : '2.2+'
+            },
+            {}
+        );
+    }
+    <!-- Embed FX application into web page once page is loaded -->
+    dtjava.addOnloadCallback(javafxEmbed_fxApplication);
+</script>
+
+</head><body>
+<h2>Test page for <b>polygraph</b></h2>
+  <b>Webstart:</b> <a href='polygraph-desktop-fx.jnlp' onclick="return launchApplication('polygraph-desktop-fx.jnlp');">click to launch this app as webstart</a><br><hr><br>
+
+  <!-- Applet will be inserted here -->
+  <div id='polygraphId'></div>
+</body></html>

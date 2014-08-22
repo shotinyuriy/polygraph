@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 
 import kz.aksay.polygraph.entity.EmployeeType;
+import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class DefaultDataCreationService {
 	private UserService userService;
 	
 	private EmployeeTypeService employeeTypeService;
+	
+	private MaterialTypeService materialTypeService;
 	
 	@Autowired
 	private PlatformTransactionManager  txManager;
@@ -45,6 +48,15 @@ public class DefaultDataCreationService {
 								 createEmployeeType(employeeTypeName));
 					 }
 				 }
+				 
+				 for(String materialTypeName : 
+					 MaterialType.DefaultNames.all()) {
+					 if(materialTypeService.
+							 findByName(materialTypeName) == null) {
+						 materialTypeService.save(
+								 createMaterialType(materialTypeName));
+					 }
+				 }
 			}
 		});
 	}
@@ -55,6 +67,14 @@ public class DefaultDataCreationService {
 		employeeType.setCreatedBy(User.TECH_USER);
 		employeeType.setName(name);
 		return employeeType;
+	}
+	
+	private MaterialType createMaterialType(String name) {
+		MaterialType materialType = new MaterialType();
+		materialType.setCreatedAt(new Date());
+		materialType.setCreatedBy(User.TECH_USER);
+		materialType.setName(name);
+		return materialType;
 	}
 	
 	public void setTxManager(PlatformTransactionManager txManager) {
@@ -69,5 +89,10 @@ public class DefaultDataCreationService {
 	@Autowired
 	public void setEmployeeTypeService(EmployeeTypeService employeeTypeService) {
 		this.employeeTypeService = employeeTypeService;
+	}
+	
+	@Autowired
+	public void setMaterialtypeService(MaterialTypeService materialTypeService) {
+		this.materialTypeService = materialTypeService;
 	}
 }

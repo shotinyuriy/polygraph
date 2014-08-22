@@ -156,7 +156,7 @@ public class TestDesignerBaseScenario {
 		paper = new MaterialType();
 		paper.setCreatedAt(new Date());
 		paper.setCreatedBy(User.TECH_USER);
-		paper.setName("Бумага");
+		paper.setName("КРАСКА");
 		materialTypeService.save(paper);
 	}
 	

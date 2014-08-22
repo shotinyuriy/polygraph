@@ -8,17 +8,24 @@ import javafx.stage.Stage;
 
 public class StartingPane extends Application {
 
+	private static Stage primaryStage;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("FXMLTableView Example");
+		StartingPane.primaryStage = primaryStage;
+		primaryStage.setTitle("Управление задачами");
 		Scene myScene = (Scene)FXMLLoader.load(getClass().getResource(
 				"fxml_login.fxml"));
 		primaryStage.setScene(myScene);
 		primaryStage.show();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		launch(args);
+	}
+
+	public static Stage getPrimaryStage() {
+		return primaryStage;
 	}
 	
 }

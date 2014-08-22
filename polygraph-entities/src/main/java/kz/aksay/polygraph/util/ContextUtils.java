@@ -14,4 +14,12 @@ public class ContextUtils {
 		}
 		return context;
 	}
+	
+	public static <T> T getBean(Class<T> clazz) {
+		return getApplicationContext().getBean(clazz);
+	}
+	
+	public static Object getBean(String beanName) {
+		return getApplicationContext().getBean(beanName);
+	}
 }

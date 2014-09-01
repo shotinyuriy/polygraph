@@ -1,6 +1,7 @@
 package kz.aksay.polygraph.test.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 
@@ -61,6 +62,12 @@ public class TestPersonService extends Assert {
 		assertNotNull(person.getId());
 		
 		personService.delete(person);
+	}
+	
+	@Test
+	public void testFildAll() {
+		List<Person> allPersons = personService.findAll();
+		assertNotNull(allPersons);
 	}
 	
 	@AfterClass

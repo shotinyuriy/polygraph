@@ -26,8 +26,9 @@ public class MaterialTypeTableViewController implements Initializable {
 	@FXML
 	protected void addMaterialType(ActionEvent event) {
 		ObservableList<MaterialType> data = tableView.getItems();
-		data.add(createMaterialType(nameField.getText()));
-		
+		MaterialType newMaterialType = createMaterialType(nameField.getText()); 
+		data.add(newMaterialType);
+		materialTypeService.save(newMaterialType);
 		nameField.setText("");
 		
 	}

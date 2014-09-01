@@ -55,7 +55,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 
 	@SuppressWarnings("unchecked")
 	public List<T> readAll() {
-		return (List<T>) getSession().createCriteria(clazz).list();
+		return (List<T>) getSession().createCriteria(clazz()).list();
 	}
 
 	@Override

@@ -9,9 +9,9 @@ public class ContextUtils {
 	
 	public static synchronized ApplicationContext getApplicationContext() {
 		if(context == null) {
-			/*context = new FileSystemXmlApplicationContext(
-					"src/test/resources/META-INF/test-application-context.xml");*/
-			context = kz.aksay.polygraph.util.ContextUtils.getApplicationContext();
+			context = new FileSystemXmlApplicationContext(
+					"src/test/resources/META-INF/test-application-context.xml");
+			//context = kz.aksay.polygraph.util.ContextUtils.getApplicationContext();
 		}
 		return context;
 	}

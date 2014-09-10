@@ -148,8 +148,10 @@ public class TestDesignerBaseScenario {
 		xerocopy = new WorkType();
 		xerocopy.setCreatedAt(new Date());
 		xerocopy.setCreatedBy(User.TECH_USER);
-		xerocopy.setName("Ксерокопия");
+		xerocopy.setName("КСЕРОКОПИЯ");
 		workTypeService.save(xerocopy);
+		xerocopy = workTypeService.find(xerocopy.getId());
+		System.out.println("XEROCOPY "+xerocopy);
 	}
 	
 	private void createMaterialTypePaper() {

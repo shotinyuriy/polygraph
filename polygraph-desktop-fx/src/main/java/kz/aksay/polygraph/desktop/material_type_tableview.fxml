@@ -9,7 +9,6 @@
 <?import javafx.collections.*?>
 <?import javafx.scene.control.cell.*?>
 <?import kz.aksay.polygraph.desktop.model.*?>
-<?import kz.aksay.polygraph.desktop.FormattedTableCellFactory?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>

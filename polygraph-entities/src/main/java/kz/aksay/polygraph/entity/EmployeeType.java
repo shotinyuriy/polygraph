@@ -3,6 +3,7 @@ package kz.aksay.polygraph.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Check;
 
@@ -17,6 +18,7 @@ public class EmployeeType extends EntitySupport {
 	private static final long serialVersionUID = -2734620163914064767L;
 	
 	@Column(nullable=false, unique=true)
+	@Size(min=2, max=32)
 	private String name;
 
 	public String getName() {

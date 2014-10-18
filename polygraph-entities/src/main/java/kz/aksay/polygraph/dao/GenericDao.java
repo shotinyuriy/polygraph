@@ -12,13 +12,13 @@ public interface GenericDao <T, PK extends Serializable> {
 	
 	public Class<T> clazz();
 	
-	public PK create(T newEntity);
+	public PK create(T newEntity) throws Exception;
 	
-	public void createOrUpdate(T entity);
+	public void createOrUpdate(T entity)  throws Exception;
 	
 	public T read(PK pimaryKey);
 	
-	void update(T entity);
+	void update(T entity) throws Exception;
 	
 	void delete(T entity);
 	

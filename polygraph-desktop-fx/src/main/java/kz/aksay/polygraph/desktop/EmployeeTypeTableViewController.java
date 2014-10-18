@@ -14,29 +14,34 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.service.EmployeeTypeService;
 import kz.aksay.polygraph.service.MaterialTypeService;
 import kz.aksay.polygraph.session.SessionAware;
+import kz.aksay.polygraph.session.SessionUtil;
 import kz.aksay.polygraph.util.ContextUtils;
 
-public class MaterialTypeTableViewController implements Initializable, SessionAware {
-	@FXML	private TableView<MaterialType> tableView;
+public class EmployeeTypeTableViewController implements Initializable, SessionAware {
+	@FXML	private TableView<EmployeeType> tableView;
 	@FXML	private TextField nameField;
 	@FXML	private Label validationLabel;
 	
+	private EmployeeTypeService employeeTypeService 
+		= ContextUtils.getBean(EmployeeTypeService.class);
+	
 	private Map<String, Object> session;
 	
-	private MaterialTypeService materialTypeService 
-		= ContextUtils.getBean(MaterialTypeService.class);
+	private User user;
 	
 	@FXML
 	protected void addMaterialType(ActionEvent event) {
-		ObservableList<MaterialType> data = tableView.getItems();
-		MaterialType newMaterialType = createMaterialType(nameField.getText()); 
-		data.add(newMaterialType);
+		ObservableList<EmployeeType> data = tableView.getItems();
+		EmployeeType newEmployeeType = createMaterialType(nameField.getText()); 
+		data.add(newEmployeeType);
 		try {
-			materialTypeService.save(newMaterialType);
+			employeeTypeService.save(newEmployeeType);
 			nameField.setText("");
 		}
 		catch(ValidationException ve) {
@@ -48,29 +53,27 @@ public class MaterialTypeTableViewController implements Initializable, SessionAw
 		
 	}
 	
-	protected MaterialType createMaterialType(String name) {
-		MaterialType mt = new MaterialType();
-		mt.setCreatedAt(new Date());
-		mt.setCreatedBy(User.TECH_USER);
-		mt.setName(name.toString());
-		return mt;
+	protected EmployeeType createMaterialType(String name) {
+		EmployeeType et = new EmployeeType();
+		et.setCreatedAt(new Date());
+		et.setCreatedBy(SessionUtil.retrieveUser(session));
+		et.setName(name.toString());
+		return et;
 	}
 
-	public TableView<MaterialType> getTableView() {
+	public TableView<EmployeeType> getTableView() {
 		return tableView;
 	}
 
-	public void setTableView(TableView<MaterialType> tableView) {
+	public void setTableView(TableView<EmployeeType> tableView) {
 		this.tableView = tableView;
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
-		
-		tableView.getItems().setAll(materialTypeService.findAll());
+		tableView.getItems().setAll(employeeTypeService.findAll());
 	}
 
-	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 	}

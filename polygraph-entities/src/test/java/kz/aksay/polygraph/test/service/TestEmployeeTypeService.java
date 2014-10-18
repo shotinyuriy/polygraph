@@ -32,28 +32,34 @@ public class TestEmployeeTypeService extends Assert {
 		employeeTypeService = context.getBean(EmployeeTypeService.class);
 	}
 	
-	@Test(expectedExceptions=PropertyValueException.class)
+	@Test(expectedExceptions=ConstraintViolationException.class)
 	public void testSaveWithNullName() {
 		EmployeeType employeeType = new EmployeeType();
 		employeeType.setCreatedAt(new Date());
 		employeeType.setCreatedBy(User.TECH_USER);
 		employeeType.setName(null);
-		employeeTypeService.save(employeeType);
+		try {
+			employeeTypeService.save(employeeType);
+		} 
+		catch(Exception e) {
+			Throwable t = e;
+			TrowableUtils.findAndThrowCause(t, ConstraintViolationException.class);
+		}
 	}
 	
 	@Test(expectedExceptions=ConstraintViolationException.class)
-	public void testSaveWithSameName() {
+	public void testSaveWithSameName() throws Exception {
 		EmployeeType employeeTypeFirst = new EmployeeType();
 		employeeTypeFirst.setCreatedAt(new Date());
 		employeeTypeFirst.setCreatedBy(User.TECH_USER);
-		employeeTypeFirst.setName("А");
+		employeeTypeFirst.setName("АB");
 		employeeTypeService.save(employeeTypeFirst);
 		
 		
 		EmployeeType employeeTypeTwink = new EmployeeType();
 		employeeTypeTwink.setCreatedAt(new Date());
 		employeeTypeTwink.setCreatedBy(User.TECH_USER);
-		employeeTypeTwink.setName("А");
+		employeeTypeTwink.setName("АB");
 		try {
 			employeeTypeService.save(employeeTypeTwink);
 		} 

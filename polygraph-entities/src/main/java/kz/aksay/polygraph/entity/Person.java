@@ -17,21 +17,18 @@ public class Person extends Customer {
 	 */
 	private static final long serialVersionUID = -4348411584806091385L;
 
-	@Column(name = "first_name")
+	@Column(name = "first_name", nullable= false)
 	private String firstName;
 
 	@Column(name = "middle_name")
 	private String middleName;
 
-	@Column(name = "last_name")
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
 	@Column(name = "birth_date")
 	private Date birthDate;
 	
-	@OneToOne(mappedBy="person", cascade=CascadeType.ALL)
-	private Family family;
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -62,13 +59,5 @@ public class Person extends Customer {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
-	}
-
-	public Family getFamily() {
-		return family;
-	}
-
-	public void setFamily(Family family) {
-		this.family = family;
 	}
 }

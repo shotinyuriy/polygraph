@@ -23,7 +23,7 @@ public class TestOrganizationService extends Assert {
 		organizationService = context.getBean(OrganizationService.class);
 	}
 	
-	private Organization createOrganization() {
+	private Organization createOrganization() throws Exception {
 		Organization organization = new Organization();
 		
 		Date now = new Date();
@@ -31,14 +31,16 @@ public class TestOrganizationService extends Assert {
 		organization.setCreatedAt(now);
 		organization.setCreatedBy(User.TECH_USER);
 		organization.setFullname("Тестовая Организация");
+		organization.setShortname("Тестовая Организация");
 		organization.setInn("0123456789");
+		organization.setKpp("0123456789");
 		organizationService.save(organization);
 		
 		return organization;
 	}
 	
 	@Test
-	public void testSave() {
+	public void testSave() throws Exception {
 		Organization organization  = createOrganization();
 		
 		organizationService.save(organization);

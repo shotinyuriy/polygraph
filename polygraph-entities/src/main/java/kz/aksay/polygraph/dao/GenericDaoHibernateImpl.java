@@ -2,7 +2,17 @@ package kz.aksay.polygraph.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidationException;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import kz.aksay.polygraph.exception.InternalLogicException;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -16,36 +26,59 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	private SessionFactory sessionFactory;
 
 	private Class<T> clazz;
-	
+
+	private Validator validator;
+
 	@SuppressWarnings("unchecked")
 	public Class<T> clazz() {
-		if(clazz == null) {
-			
+		if (clazz == null) {
+
 			Class<?> actualClass = this.getClass();
-			ParameterizedType pt = 
-					(ParameterizedType) actualClass.getGenericSuperclass();
+			ParameterizedType pt = (ParameterizedType) actualClass
+					.getGenericSuperclass();
 			clazz = (Class<T>) pt.getActualTypeArguments()[0];
 		}
 		return clazz;
 	}
 
+	public void validate(T entity) throws ValidationException {
+		Set<ConstraintViolation<T>> constraintViolations = validator
+				.validate(entity);
+		if (!constraintViolations.isEmpty()) {
+			StringBuffer exceptionBuffer = new StringBuffer();
+			Iterator<ConstraintViolation<T>> iter = constraintViolations
+					.iterator();
+			while (iter.hasNext()) {
+				ConstraintViolation<T> constraintViolation = iter.next();
+				exceptionBuffer.append(constraintViolation.getMessage());
+				if (iter.hasNext()) {
+					exceptionBuffer.append("\n");
+				}
+				throw new ValidationException(exceptionBuffer.toString());
+			}
+		}
+	}
+
 	public T read(PK id) {
 		return (T) getSession().get(clazz(), id);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public PK create(T entity) {	
+	public PK create(T entity) throws Exception {
+		validate(entity);
 		getSession().saveOrUpdate(entity);
 		return (PK) getSession().save(entity);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void update(T entity) {
+	public void update(T entity)  throws Exception {
+		validate(entity);
 		getSession().update(entity);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public void createOrUpdate(T entity) {
+	public void createOrUpdate(T entity)  throws Exception  {
+		validate(entity);
 		getSession().saveOrUpdate(entity);
 	}
 
@@ -62,8 +95,7 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	public Session getSession() {
 		try {
 			return sessionFactory.getCurrentSession();
-		}
-		catch(HibernateException he) {
+		} catch (HibernateException he) {
 			return sessionFactory.openSession();
 		}
 	}
@@ -77,12 +109,21 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	@Override
 	public List<T> readByCriteria(Criteria criteria) {
 		// TODO Auto-generated method stub
-		return (List<T>)criteria.list();
+		return (List<T>) criteria.list();
 	}
-	
+
 	@Override
 	public <T> T readUniqueByCriteria(Criteria criteria) {
-		return (T)criteria.uniqueResult();
+		return (T) criteria.uniqueResult();
+	}
+
+	public Validator getValidator() {
+		return validator;
+	}
+
+	@Autowired
+	public void setValidator(Validator validator) {
+		this.validator = validator;
 	}
 
 }

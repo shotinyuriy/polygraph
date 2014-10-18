@@ -22,7 +22,7 @@ public class TestUserService extends Assert {
 		userService = context.getBean(UserService.class);
 	}
 	
-	private User createUser() {
+	private User createUser() throws Exception {
 		User user = new User();
 		user.setCreatedAt(new Date());
 		user.setCreatedBy(User.TECH_USER);

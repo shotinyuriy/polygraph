@@ -47,6 +47,7 @@
 		GridPane.rowIndex="2">
 		<TextField fx:id="nameField" promptText="Название" prefWidth="90"/>
 		<Button text="Добавить" onAction="#addMaterialType"/>
+		<Label fx:id="validationLabel" text=""/>
 	</HBox>
 </GridPane>
 

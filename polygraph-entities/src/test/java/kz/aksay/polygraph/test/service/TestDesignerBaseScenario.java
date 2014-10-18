@@ -79,7 +79,7 @@ public class TestDesignerBaseScenario {
 	}
 	
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		try {
 			createPerson();
 			createEmployee();
@@ -101,7 +101,7 @@ public class TestDesignerBaseScenario {
 		}
 	}
 
-	private void createPerson() {
+	private void createPerson() throws Exception {
 		executorPerson = new Person();
 		executorPerson.setCreatedAt(new Date());
 		executorPerson.setCreatedBy(User.TECH_USER);
@@ -113,7 +113,7 @@ public class TestDesignerBaseScenario {
 	}
 	
 	
-	private void createEmployee() {
+	private void createEmployee() throws Exception {
 		executorEmployee = new Employee();
 		executorEmployee.setCreatedAt(new Date());
 		executorEmployee.setCreatedBy(User.TECH_USER);
@@ -123,7 +123,7 @@ public class TestDesignerBaseScenario {
 		employeeService.save(executorEmployee);
 	}
 	
-	private void createUser() {
+	private void createUser() throws Exception {
 		executorUser = new User();
 		executorUser.setCreatedAt(new Date());
 		executorUser.setCreatedBy(User.TECH_USER);
@@ -134,17 +134,18 @@ public class TestDesignerBaseScenario {
 		userService.save(executorUser);
 	}
 
-	private void createOrganizationCustomer() {
+	private void createOrganizationCustomer() throws Exception {
 		organizationCustomer = new Organization();
 		organizationCustomer.setCreatedAt(new Date());
 		organizationCustomer.setCreatedBy(User.TECH_USER);
 		organizationCustomer.setFullname("Тестовая Организация");
+		organizationCustomer.setShortname("Тестовая Организация");
 		organizationCustomer.setInn("1231231230");
 		organizationCustomer.setKpp("123123123");
 		organizationService.save(organizationCustomer);
 	}
 	
-	private void createWorkTypeXerocopy() {
+	private void createWorkTypeXerocopy() throws Exception {
 		xerocopy = new WorkType();
 		xerocopy.setCreatedAt(new Date());
 		xerocopy.setCreatedBy(User.TECH_USER);
@@ -154,7 +155,7 @@ public class TestDesignerBaseScenario {
 		System.out.println("XEROCOPY "+xerocopy);
 	}
 	
-	private void createMaterialTypePaper() {
+	private void createMaterialTypePaper() throws Exception {
 		paper = new MaterialType();
 		paper.setCreatedAt(new Date());
 		paper.setCreatedBy(User.TECH_USER);
@@ -162,7 +163,7 @@ public class TestDesignerBaseScenario {
 		materialTypeService.save(paper);
 	}
 	
-	private void createMaterialPaperA4() {
+	private void createMaterialPaperA4() throws Exception {
 		paperA4 = new Material();
 		paperA4.setCreatedAt(new Date());
 		paperA4.setCreatedBy(User.TECH_USER);
@@ -170,7 +171,7 @@ public class TestDesignerBaseScenario {
 		materialService.save(paperA4);
 	}
 
-	private void createOrder() {
+	private void createOrder() throws Exception {
 		firstOrder = new Order();
 		firstOrder.setCreatedAt(new Date());
 		firstOrder.setCreatedBy(User.TECH_USER);
@@ -180,7 +181,7 @@ public class TestDesignerBaseScenario {
 		orderService.save(firstOrder);
 	}
 
-	private void createProducedWork() {
+	private void createProducedWork() throws Exception {
 		producedWork = new ProducedWork();
 		producedWork.setCreatedAt(new Date());
 		producedWork.setCreatedBy(User.TECH_USER);
@@ -190,7 +191,7 @@ public class TestDesignerBaseScenario {
 		producedWorkService.save(producedWork);
 	}
 	
-	private void createMaterialConsumption() {
+	private void createMaterialConsumption() throws Exception {
 		copyMaterialConsumption = new MaterialConsumption();
 		copyMaterialConsumption.setCreatedAt(new Date());
 		copyMaterialConsumption.setCreatedBy(User.TECH_USER);

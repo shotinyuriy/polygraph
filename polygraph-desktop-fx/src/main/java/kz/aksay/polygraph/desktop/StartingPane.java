@@ -18,7 +18,7 @@ import kz.aksay.polygraph.util.ContextUtils;
 
 
 public class StartingPane extends Application {
-	
+
 	private static ApplicationContext applicationContext;
 
 	private static Stage primaryStage;

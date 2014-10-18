@@ -33,30 +33,36 @@ public class DefaultDataCreationService {
 		tmpl.execute(new TransactionCallbackWithoutResult() {
 			@Override
 			protected void doInTransactionWithoutResult(TransactionStatus status) {
-				User techUser = userService.findByLogin(User.TECH_USER.getLogin());
-				if(techUser == null) {
-					techUser = userService.save(User.TECH_USER);
+				try {
+					
+					User techUser = userService.findByLogin(User.TECH_USER.getLogin());
+					if(techUser == null) {
+						techUser = userService.save(User.TECH_USER);
+					}
+					
+					User.TECH_USER = techUser; 
+					
+					 for(String employeeTypeName : 
+						 EmployeeType.DefaultNames.all()) {
+						 if(employeeTypeService.
+								 findByName(employeeTypeName) == null) {
+							 employeeTypeService.save(
+									 createEmployeeType(employeeTypeName));
+						 }
+					 }
+					 
+					 for(String materialTypeName : 
+						 MaterialType.DefaultNames.all()) {
+						 if(materialTypeService.
+								 findByName(materialTypeName) == null) {
+							 materialTypeService.save(
+									 createMaterialType(materialTypeName));
+						 }
+					 }
 				}
-				
-				User.TECH_USER = techUser; 
-				
-				 for(String employeeTypeName : 
-					 EmployeeType.DefaultNames.all()) {
-					 if(employeeTypeService.
-							 findByName(employeeTypeName) == null) {
-						 employeeTypeService.save(
-								 createEmployeeType(employeeTypeName));
-					 }
-				 }
-				 
-				 for(String materialTypeName : 
-					 MaterialType.DefaultNames.all()) {
-					 if(materialTypeService.
-							 findByName(materialTypeName) == null) {
-						 materialTypeService.save(
-								 createMaterialType(materialTypeName));
-					 }
-				 }
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}

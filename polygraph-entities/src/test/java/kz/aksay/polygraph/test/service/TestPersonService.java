@@ -4,14 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
-
-
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import kz.aksay.polygraph.entity.Family;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.PersonService;
@@ -28,13 +25,13 @@ public class TestPersonService extends Assert {
 	private Person person;
 	
 	@BeforeClass
-	public void setUp() {
+	public void setUp() throws Exception {
 		context = ContextUtils.getApplicationContext();
 		personService = context.getBean(PersonService.class);
 		person = createPerson();
 	}
 	
-	private Person createPerson() {
+	private Person createPerson() throws Exception {
 		Person person = new Person();
 		
 		person.setCreatedBy(User.TECH_USER);
@@ -43,20 +40,12 @@ public class TestPersonService extends Assert {
 		person.setLastName("Тест");
 		person.setMiddleName("Тест");
 		person.setBirthDate(now);
-		person.setFamily(createFamily());
 		personService.save(person);
 		return person;
 	}
 	
-	private Family createFamily() {
-		Family family = new Family();
-		family.setCreatedAt(now);
-		family.setCreatedBy(User.TECH_USER);
-		return family;
-	}
-	
 	@Test
-	public void testSave() {
+	public void testSave() throws Exception {
 		person = personService.save(person);
 		assertNotNull(person);
 		assertNotNull(person.getId());

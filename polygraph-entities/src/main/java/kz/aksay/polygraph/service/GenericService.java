@@ -21,7 +21,7 @@ public abstract class GenericService<T, PK extends Serializable> {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public T save(T entity) {
+	public T save(T entity) throws Exception {
 		
 		getDao().createOrUpdate(entity);
 		

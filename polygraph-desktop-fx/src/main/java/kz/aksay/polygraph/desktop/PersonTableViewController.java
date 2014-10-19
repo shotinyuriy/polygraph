@@ -18,9 +18,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.service.PersonService;
-import kz.aksay.polygraph.session.ParameterKeys;
-import kz.aksay.polygraph.session.SessionAware;
-import kz.aksay.polygraph.session.SessionUtil;
+import kz.aksay.polygraph.util.ParameterKeys;
+import kz.aksay.polygraph.util.SessionAware;
+import kz.aksay.polygraph.util.SessionUtil;
 
 public class PersonTableViewController implements Initializable, SessionAware {
 	

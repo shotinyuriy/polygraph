@@ -17,8 +17,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import kz.aksay.polygraph.session.SessionAware;
-import kz.aksay.polygraph.session.SessionUtil;
+import kz.aksay.polygraph.util.SessionAware;
+import kz.aksay.polygraph.util.SessionUtil;
 
 public class MainMenuController implements SessionAware {
 	
@@ -53,6 +53,16 @@ public class MainMenuController implements SessionAware {
 	@FXML
 	public void openMaterialTypeList(ActionEvent actionEvent) {
 		loadFxmlAndOpenInTab("material_type_tableview.fxml", "Типы материалов");
+	}
+	
+	@FXML
+	public void openEmployeeTypeList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab("employee_type_tableview.fxml", "Типы сотрудников");
+	}
+	
+	@FXML
+	public void openMaterialList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab("material_tableview.fxml", "Материалы");
 	}
 	
 	public Node loadFxmlNode(String url) {
@@ -103,7 +113,6 @@ public class MainMenuController implements SessionAware {
 
 	@Override
 	public void setSession(Map<String, Object> session) {
-		// TODO Auto-generated method stub
-		
+		this.session = session;
 	}
 }

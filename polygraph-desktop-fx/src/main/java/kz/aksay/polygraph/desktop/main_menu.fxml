@@ -25,17 +25,19 @@
          <items>
             <AnchorPane prefHeight="554.0" prefWidth="330.0">
                <children>
-                  <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="514.0" prefWidth="202.0">
+                  <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="556.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <panes>
                       <TitledPane animated="false" prefHeight="298.0" prefWidth="202.0" text="Клиенты">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                 	<VBox >
-                                    <Button onAction="#openNewPersonForm" text="Новое физ. лицо" />
-                                    <Button onAction="#openNewOrganizaitonForm" text="Новое юр. лицо" />
-                                    <Button onAction="#openPersonsList" text="Список физ. лиц" />
-                                    <Button onAction="#openOrganizationList" text="Список юр. лиц" />
+                                 	<VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <children>
+                                       <Button onAction="#openNewPersonForm" text="Новое физ. лицо" />
+                                       <Button onAction="#openNewOrganizaitonForm" text="Новое юр. лицо" />
+                                       <Button onAction="#openPersonsList" text="Список физ. лиц" />
+                                       <Button onAction="#openOrganizationList" text="Список юр. лиц" />
+                                    </children>
                                     </VBox>
                                  </children>
                               </AnchorPane>
@@ -45,15 +47,42 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="materialTypeListButton" mnemonicParsing="false" onAction="#openMaterialTypeList" text="Типы материалов" />
+                                    <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button fx:id="materialTypeListButton" mnemonicParsing="false" onAction="#openMaterialTypeList" text="Типы материалов" />
+                                          <Button fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Типы сотрудников" />
+                                          <Button fx:id="materialListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Материалы" />
+                                       </children>
+                                    </VBox>
                                  </children></AnchorPane>
                         </content>
                       </TitledPane>
                       <TitledPane animated="false" prefHeight="460.0" prefWidth="900.0" text="Заказы">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children></AnchorPane>
                         </content>
                       </TitledPane>
+                        <TitledPane animated="false" text="Сотрудники">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" text="Новый сотрудник" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                        <TitledPane animated="false" text="Заказы">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </TitledPane>
                     </panes>
                   </Accordion>
                </children>

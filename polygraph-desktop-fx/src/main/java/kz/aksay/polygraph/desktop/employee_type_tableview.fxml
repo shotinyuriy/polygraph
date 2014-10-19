@@ -14,19 +14,18 @@
 <?import javafx.scene.control.Button?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml"
-	fx:controller="kz.aksay.polygraph.desktop.MaterialTypeTableViewController" 
+	fx:controller="kz.aksay.polygraph.desktop.EmployeeTypeTableViewController" 
 	alignment="CENTER" hgap="10.0" vgap="10.0">
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	</padding>
-	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Типы материалов"
+	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Типы сотрудниковы"
 		GridPane.columnIndex="0" GridPane.rowIndex="0">
 	</Label>
 	<TableView fx:id="tableView" GridPane.columnIndex="0"
 		GridPane.rowIndex="1" editable="true">
 		<columns>
-			<TableColumn fx:id="nameColumn" text="Название" prefWidth="100" 
-				editable="true" onEditCommit="#update">
+			<TableColumn fx:id="nameColumn" text="Название" prefWidth="100" editable="true" onEditCommit="#update">
 				<cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
 			</TableColumn>
 			<TableColumn text="Дата добавления" prefWidth="100">

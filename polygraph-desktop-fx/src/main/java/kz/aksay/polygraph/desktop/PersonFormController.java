@@ -19,12 +19,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.service.PersonService;
-import kz.aksay.polygraph.session.ParameterKeys;
-import kz.aksay.polygraph.session.ParametersAware;
-import kz.aksay.polygraph.session.ParametersUtil;
-import kz.aksay.polygraph.session.SessionAware;
-import kz.aksay.polygraph.session.SessionUtil;
 import kz.aksay.polygraph.util.ContextUtils;
+import kz.aksay.polygraph.util.ParameterKeys;
+import kz.aksay.polygraph.util.ParametersAware;
+import kz.aksay.polygraph.util.ParametersUtil;
+import kz.aksay.polygraph.util.SessionAware;
+import kz.aksay.polygraph.util.SessionUtil;
 
 public class PersonFormController implements Initializable, SessionAware, ParametersAware {
 

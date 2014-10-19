@@ -18,8 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.UserService;
-import kz.aksay.polygraph.session.SessionUtil;
 import kz.aksay.polygraph.util.ContextUtils;
+import kz.aksay.polygraph.util.SessionUtil;
 
 public class LoginController {
 

@@ -1,4 +1,4 @@
-package kz.aksay.polygraph.session;
+package kz.aksay.polygraph.util;
 
 import java.util.Map;
 

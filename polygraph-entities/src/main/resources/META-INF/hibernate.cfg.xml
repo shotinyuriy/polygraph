@@ -5,14 +5,14 @@
 
 <hibernate-configuration>
 	<session-factory>
-		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-		<property name="hibernate.connection.characterEncoding">UTF8</property>
-		<property name="hibernate.connection.useUnicode">true</property>
-		<property name="hibernate.connection.showSql">true</property>
-		<property name="hibernate.connection.username">polygraph</property>
-		<property name="hibernate.connection.password">samUJKbs2010</property>
-		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/polygraph</property>
-		<property name="hibernate.connection.charSet">UTF8</property>
+		<property name="hibernate.connection.driver_class">${hibernate.connection.driverClass}</property>
+		<property name="hibernate.connection.characterEncoding">${hibernate.connection.characterEncoding}</property>
+		<property name="hibernate.connection.useUnicode">${hibernate.connection.useUnicode}</property>
+		<property name="hibernate.connection.showSql">${hibernate.connection.showSql}</property>
+		<property name="hibernate.connection.username">${hibernate.connection.username}</property>
+		<property name="hibernate.connection.password">${hibernate.connection.password}</property>
+		<property name="hibernate.connection.url">${hibernate.connection.url}</property>
+		<property name="hibernate.connection.charSet">${hibernate.connection.charSet}</property>
 
 		
 		<property name="hbm2ddl.auto">update</property>

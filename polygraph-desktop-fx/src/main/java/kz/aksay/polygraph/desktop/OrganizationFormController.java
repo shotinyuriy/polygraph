@@ -2,6 +2,7 @@ package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.validation.ValidationException;
@@ -13,8 +14,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.service.OrganizationService;
+import kz.aksay.polygraph.util.SessionAware;
+import kz.aksay.polygraph.util.SessionUtil;
 
-public class OrganizationFormController implements Initializable {
+public class OrganizationFormController implements Initializable, SessionAware {
 
 	private OrganizationService organizationService;
 	
@@ -29,6 +32,8 @@ public class OrganizationFormController implements Initializable {
 	@FXML private TextField shortNameField;
 	
 	@FXML private Label validationLabel;
+
+	private Map<String, Object> session;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -49,11 +54,11 @@ public class OrganizationFormController implements Initializable {
 		if (organization == null) {
 			organization = new Organization();
 			organization.setCreatedAt(new Date());
-			organization.setCreatedBy(StartingPane.getCurrentUser());
+			organization.setCreatedBy(SessionUtil.retrieveUser(session));
 		}
 		else {
 			organization.setUpdatedAt(new Date());
-			organization.setUpdatedBy(StartingPane.getCurrentUser());
+			organization.setUpdatedBy(SessionUtil.retrieveUser(session));
 		}
 		organization.setInn(innField.getText());
 		organization.setFullname(fullNameField.getText());
@@ -85,6 +90,11 @@ public class OrganizationFormController implements Initializable {
 			fullNameField.setText(organization.getFullname());
 			shortNameField.setText(organization.getShortname());
 		}
+	}
+
+	@Override
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
 	}
 	
 }

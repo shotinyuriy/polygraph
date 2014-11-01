@@ -20,7 +20,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label fx:id="personIdLabel" alignment="CENTER_RIGHT" text="Id" visible="false" GridPane.columnIndex="0" />
+      <Label fx:id="personIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.columnIndex="0" />
       <Label alignment="CENTER_RIGHT" text="Фамилия" GridPane.columnIndex="1" />
       <Label alignment="CENTER_RIGHT" text="Имя" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label alignment="CENTER_RIGHT" text="Отчество" GridPane.columnIndex="1" GridPane.rowIndex="2" />

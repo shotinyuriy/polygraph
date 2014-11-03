@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class EmployeeService extends GenericService<Employee, Long>{
+public class EmployeeService extends GenericService<Employee, Long> {
 	
 	private GenericDao<Employee, Long> employeeDao;
 	private PersonService personService;
@@ -26,6 +26,7 @@ public class EmployeeService extends GenericService<Employee, Long>{
 
 	@Transactional
 	public Employee checkPersonAndSave(Employee employee) throws Exception {
+		
 		Person similarPerson = personService.findSimilarPerson(employee.getPerson());
 		if(similarPerson != null) {
 			employee.setPerson(similarPerson);
@@ -33,6 +34,7 @@ public class EmployeeService extends GenericService<Employee, Long>{
 		else {
 			personService.save(employee.getPerson());
 		}
+		
 		return save(employee);
 	}
 

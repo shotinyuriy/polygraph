@@ -47,8 +47,9 @@ public class TestPersonService extends Assert {
 	@Test
 	public void testSave() throws Exception {
 		person = personService.save(person);
-		assertNotNull(person);
-		assertNotNull(person.getId());
+		
+		assertNotNull(person, "Person should not be null");
+		assertNotNull(person.getId(), "Person should have an id");
 		
 		personService.delete(person);
 	}
@@ -57,6 +58,17 @@ public class TestPersonService extends Assert {
 	public void testFildAll() {
 		List<Person> allPersons = personService.findAll();
 		assertNotNull(allPersons);
+	}
+	
+	@Test
+	public void testFindSimilarPerson() {
+		Person similarPerson = personService.findSimilarPerson(person);
+		
+		assertNotNull(similarPerson, "similar person should be founded");
+		assertEquals(similarPerson.getFirstName(), person.getFirstName(), "similar person should have the same first name");
+		assertEquals(similarPerson.getMiddleName(), person.getMiddleName(), "similar person should have the same middle name");
+		assertEquals(similarPerson.getLastName(), person.getLastName(), "similar person should have the same last name");
+		assertEquals(similarPerson.getBirthDate(), person.getBirthDate(), "similar person should have the same birth date");
 	}
 	
 	@AfterClass

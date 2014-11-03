@@ -11,6 +11,17 @@ import kz.aksay.polygraph.entity.User;
 public abstract class SessionUtil {
 	
 	public static final String USER_KEY = "user";
+	public static final String MAIN_MENU_KEY = "mainMenu";
+	
+	public static MainMenu retrieveMainMenu(Map<String, Object> session) {
+		if(session != null) {
+			Object obj = session.get(MAIN_MENU_KEY);
+			if(obj instanceof MainMenu) {
+				return (MainMenu) obj;
+			}
+		}
+		return null;
+	}
 
 	public static User retrieveUser(Map<String, Object> session) {
 		if(session != null) {

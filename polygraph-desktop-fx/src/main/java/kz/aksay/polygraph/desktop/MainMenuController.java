@@ -17,10 +17,11 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
-public class MainMenuController implements SessionAware {
+public class MainMenuController implements MainMenu, SessionAware {
 	
 	@FXML
 	private Pane contentPane;
@@ -37,7 +38,7 @@ public class MainMenuController implements SessionAware {
 	
 	@FXML
 	public void openNewOrganizaitonForm(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("organization_form.fxml", "Новая клиент юр.лицо");
+		loadFxmlAndOpenInTab("organization_form.fxml", "Новый клиент юр.лицо");
 	}
 	
 	@FXML
@@ -65,6 +66,11 @@ public class MainMenuController implements SessionAware {
 		loadFxmlAndOpenInTab("material_tableview.fxml", "Материалы");
 	}
 	
+	@FXML
+	public void openNewEmployeeForm(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab("employee_form.fxml", "Новый сотрудник");
+	}
+	
 	public Node loadFxmlNode(String url) {
 		try {
 			Node node = (Node)FXMLLoader.load(getClass().getResource(url));
@@ -81,9 +87,18 @@ public class MainMenuController implements SessionAware {
 		setContent(node);
 	}
 	
+	@Override
 	public void loadFxmlAndOpenInTab(String url, String tabName) {
 		Node node = SessionUtil.loadFxmlNodeWithSession(
 				getClass(), url, session, null);
+		openInTab(node, tabName);
+	}
+	
+	@Override
+	public void loadFxmlAndOpenInTab(String url, String tabName, 
+			Map<String, Object> parameters) {
+		Node node = SessionUtil.loadFxmlNodeWithSession(
+				getClass(), url, session, parameters);
 		openInTab(node, tabName);
 	}
 	
@@ -97,6 +112,7 @@ public class MainMenuController implements SessionAware {
 		tab.setContent(node);
 		tab.setText(tabName);
 		tabPane.getTabs().add(tab);
+		tabPane.getSelectionModel().select(tab);
 	}
 	
 	@FXML
@@ -114,5 +130,6 @@ public class MainMenuController implements SessionAware {
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
+		session.put(SessionUtil.MAIN_MENU_KEY, this);
 	}
 }

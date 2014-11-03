@@ -1,20 +1,18 @@
 package kz.aksay.polygraph.desktop;
 import java.util.Stack;
 
-import org.springframework.context.ApplicationContext;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.util.ContextUtils;
+
+import org.springframework.context.ApplicationContext;
 
 
 public class StartingPane extends Application {

@@ -29,6 +29,18 @@ public class Person extends Customer {
 	@Column(name = "birth_date")
 	private Date birthDate;
 	
+	public String getFullName() {
+		StringBuffer fullName = new StringBuffer();
+		fullName.append(lastName);
+		if(firstName != null) {
+			fullName.append(" ").append(firstName);
+		}
+		if(middleName != null) {
+			fullName.append(" ").append(middleName);
+		}
+		return fullName.toString();
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}

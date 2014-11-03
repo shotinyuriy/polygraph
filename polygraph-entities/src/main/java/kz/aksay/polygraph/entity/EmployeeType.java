@@ -20,6 +20,30 @@ public class EmployeeType extends EntitySupport {
 	@Column(nullable=false, unique=true)
 	@Size(min=2, max=32)
 	private String name;
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof EmployeeType && obj != null) {
+			EmployeeType employeeType = (EmployeeType)obj;
+			if(employeeType.getName() == null) {
+				if(this.getName() == null) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				if(this.getName() == null) {
+					return false;
+				}
+				else {
+					return this.getName().equals(employeeType.getName());
+				}
+			}
+		}
+		return false;
+	}
 
 	public String getName() {
 		return name;

@@ -2,10 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/polygraph-entities"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Spring 4.0.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.8.0_20/lib/javafx-mx.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaxValidation"/>
+	<classpathentry kind="lib" path="D:/maven2/m2/repository_wo_jb7_libs/javax/el/javax.el-api/2.2.4/javax.el-api-2.2.4.jar"/>
+	<classpathentry kind="lib" path="D:/maven2/m2/repository_wo_jb7_libs/org/glassfish/web/javax.el/2.2.4/javax.el-2.2.4.jar"/>
+	<classpathentry kind="lib" path="D:/maven2/m2/repository_wo_jb7_libs/org/hibernate/hibernate-validator/5.1.2.Final/hibernate-validator-5.1.2.Final.jar"/>
+	<classpathentry kind="lib" path="D:/maven2/m2/repository_wo_jb7_libs/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/polygraph-entities"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_25/lib/ext/jfxrt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

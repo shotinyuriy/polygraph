@@ -30,14 +30,8 @@
 			<TableColumn prefWidth="20.0" text="id" visible="false">
           	<cellValueFactory><PropertyValueFactory property="id" /></cellValueFactory>
           </TableColumn>
-          <TableColumn prefWidth="150.0" text="Фамилия">
-          	<cellValueFactory><PropertyValueFactory property="lastName" /></cellValueFactory>
-          </TableColumn>
-          <TableColumn prefWidth="150" text="Имя">
-          	<cellValueFactory><PropertyValueFactory property="firstName" /></cellValueFactory>
-          </TableColumn>
-		  <TableColumn prefWidth="150.0" text="Отчество">
-          	<cellValueFactory><PropertyValueFactory property="middleName" /></cellValueFactory>
+          <TableColumn prefWidth="450.0" text="ФИО">
+          	<cellValueFactory><PropertyValueFactory property="fullName" /></cellValueFactory>
           </TableColumn>
           <TableColumn prefWidth="170.0" text="Дата рождения">
           	<cellValueFactory><PropertyValueFactory property="birthDate" /></cellValueFactory>

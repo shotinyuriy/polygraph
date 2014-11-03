@@ -14,10 +14,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.service.OrganizationService;
+import kz.aksay.polygraph.util.ParameterKeys;
+import kz.aksay.polygraph.util.ParametersAware;
+import kz.aksay.polygraph.util.ParametersUtil;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
-public class OrganizationFormController implements Initializable, SessionAware {
+public class OrganizationFormController implements Initializable, SessionAware, 
+	ParametersAware {
 
 	private OrganizationService organizationService;
 	
@@ -35,11 +39,26 @@ public class OrganizationFormController implements Initializable, SessionAware {
 
 	private Map<String, Object> session;
 	
+	private Map<String, Object> parameters;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		organizationService = StartingPane.getBean(OrganizationService.class);
+		
+		initializeByParameters();
 	}
 	
+	private void initializeByParameters() {
+		if(parameters!=null) {
+			Long organizationId 
+				= ParametersUtil.extractParameter(
+						parameters, ParameterKeys.ORGANIZATION_ID, Long.class);
+			if(organizationId != null) {
+				fillForm(organizationId);
+			}
+		}
+	}
+
 	@FXML
 	public void save(ActionEvent actionEvent) {
 		Long id = null;
@@ -95,6 +114,12 @@ public class OrganizationFormController implements Initializable, SessionAware {
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
+	}
+
+	@Override
+	public void setParameters(Map<String, Object> parameters) {
+		this.parameters = parameters;
+		initializeByParameters();
 	}
 	
 }

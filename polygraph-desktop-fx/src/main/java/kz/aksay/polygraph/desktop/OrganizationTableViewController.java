@@ -1,24 +1,30 @@
 package kz.aksay.polygraph.desktop;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.GridPane;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.service.OrganizationService;
+import kz.aksay.polygraph.util.MainMenu;
+import kz.aksay.polygraph.util.ParameterKeys;
+import kz.aksay.polygraph.util.SessionAware;
+import kz.aksay.polygraph.util.SessionUtil;
 
-public class OrganizationTableViewController implements Initializable {
+public class OrganizationTableViewController implements Initializable, 
+	SessionAware {
 	
 	private OrganizationService organizationService;
 	
 	@FXML
 	private TableView<Organization> organizationTable;
+
+	private Map<String, Object> session;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -28,22 +34,18 @@ public class OrganizationTableViewController implements Initializable {
 	
 	public void openOrganizationForm(ActionEvent actionEvent) {
 		Organization organization = organizationTable.getSelectionModel().getSelectedItem();
-		
-		GridPane gridPane = null;
-		try {
-			URL url = getClass().getResource("organization_form.fxml");
-			FXMLLoader fxmlLoader = new FXMLLoader(url);
-			gridPane = (GridPane)fxmlLoader.load();
-			fxmlLoader.getRoot();
-			OrganizationFormController organizationFormController 
-				= (OrganizationFormController)fxmlLoader.getController();
-			organizationFormController.fillForm(organization.getId());
-			StartingPane.pushScene(gridPane);
-		} catch (IOException e) {
-			e.printStackTrace();
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put(ParameterKeys.ORGANIZATION_ID, organization.getId());
+		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+		if(mainMenu != null) {
+			mainMenu.loadFxmlAndOpenInTab("organization_form.fxml", 
+					organization.getShortname(), parameters);
 		}
-		 
-		
+	}
+
+	@Override
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
 	}
 
 }

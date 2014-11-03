@@ -4,23 +4,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="personContainer" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.PersonFormController">
-  <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Label fx:id="personIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.columnIndex="0" />
+<GridPane fx:id="personContainer" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.PersonFormController" alignment="CENTER">
+      <Label fx:id="personIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" />
       <Label alignment="CENTER_RIGHT" text="Фамилия" GridPane.columnIndex="1" />
       <Label alignment="CENTER_RIGHT" text="Имя" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label alignment="CENTER_RIGHT" text="Отчество" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -30,8 +16,7 @@
       <TextField fx:id="firstNameField" GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <TextField fx:id="middleNameField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#savePerson" text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      	<Button fx:id="closeButton" alignment="CENTER" contentDisplay="RIGHT" onAction="#closeForm" text="Закрыть" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <Button fx:id="closeButton" alignment="CENTER" contentDisplay="RIGHT" onAction="#closeForm" text="Закрыть" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <Label fx:id="birthDateValidator" GridPane.columnIndex="3" GridPane.rowIndex="3" />
       <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-   </children>
 </GridPane>

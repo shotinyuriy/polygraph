@@ -1,23 +1,19 @@
 package kz.aksay.polygraph.desktop;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import com.sun.javafx.collections.ObservableListWrapper;
-
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.GridPane;
 import kz.aksay.polygraph.entity.Person;
+import kz.aksay.polygraph.entityfx.PersonFX;
 import kz.aksay.polygraph.service.PersonService;
+import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
@@ -27,7 +23,7 @@ public class PersonTableViewController implements Initializable, SessionAware {
 	private PersonService personService;
 	
 	@FXML
-	private TableView<Person> personTable;
+	private TableView<PersonFX> personTable;
 
 	private Map<String, Object> session;
 	
@@ -37,20 +33,22 @@ public class PersonTableViewController implements Initializable, SessionAware {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
 		List<Person> personList = personService.findAll();
-		
-		personTable.getItems().setAll(personList);
+		List<PersonFX> personFXList = PersonFX.convertListEntityToFX(personList);
+		personTable.getItems().setAll(personFXList);
 	}
 	
 	public void openPersonForm(ActionEvent actionEvent) {
-		Person person = personTable.getSelectionModel().getSelectedItem();
-		
-		if(person != null) {
-			Map<String, Object> parameters = new HashMap<>();
-			parameters.put(ParameterKeys.PERSON_ID, person.getId());
-			SessionUtil.loadFxmlNodeWithSession(
-					getClass(), "person_form.fxml", session, parameters);
+		PersonFX personFX = personTable.getSelectionModel().getSelectedItem();
+		if(personFX != null) {
+			Person person = personFX.getPerson();
+			if(person != null) {
+				Map<String, Object> parameters = new HashMap<>();
+				parameters.put(ParameterKeys.PERSON_ID, person.getId());
+				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+				mainMenu.loadFxmlAndOpenInTab(
+						"person_form.fxml", person.getFullName(), parameters);
+			}
 		}
 	}
 

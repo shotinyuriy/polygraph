@@ -7,6 +7,8 @@ import kz.aksay.polygraph.entity.MaterialType;
 
 public class MaterialTypeFX {
 	
+	private final MaterialType materialType;
+	
 	public static List<MaterialTypeFX> convertListEntityToFX(List<MaterialType> materialTypes) {
 		List<MaterialTypeFX> materialTypesFx = new LinkedList<>();
 		for(MaterialType materialType : materialTypes) {
@@ -15,13 +17,10 @@ public class MaterialTypeFX {
 		}
 		return materialTypesFx;
 	}
-	
-	private MaterialType materialType;
 
 	public MaterialTypeFX(MaterialType materialType) {
 		this.materialType = materialType;
 	}
-	
 
 	public MaterialType getMaterialType() {
 		return this.materialType;

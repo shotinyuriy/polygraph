@@ -20,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.service.PersonService;
 import kz.aksay.polygraph.util.ContextUtils;
+import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.ParametersAware;
 import kz.aksay.polygraph.util.ParametersUtil;
@@ -58,10 +59,10 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 	private Label birthDateValidator;
 	
 	@FXML private Label validationLabel;
-	
-	private SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 
 	private Map<String, Object> session;
+
+	private Map<String, Object> parameters;
 	
 	@FXML
 	public void savePerson(ActionEvent actionEvent) {
@@ -89,11 +90,12 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 		person.setFirstName(firstNameField.getText());
 		person.setMiddleName(middleNameField.getText());
 		try {
-			person.setBirthDate(formatter.parse(birthDateField.getText()));
-		} 
+			person.setBirthDate(FormatUtil.dateFormatter.parse(birthDateField.getText()));
+		}
 		catch(ParseException pe) {
 			birthDateValidator.setText(
-					"Дата рождения указывается в формате ДД.ММ.ГГГГ");
+					"Дата рождения указывается в формате "
+							+FormatUtil.DATE_FORMAT_DESCRIPTION);
 		}
 		
 		try {
@@ -113,7 +115,15 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		initializeByParameters();
+	}
+	
+	private void initializeByParameters() {
+		if(parameters != null) {
+			Long personId = ParametersUtil.extractParameter(
+					parameters, ParameterKeys.PERSON_ID, Long.class);
+			this.fillForm(personId);
+		}
 	}
 	
 	public void fillForm(Long personId) {
@@ -124,7 +134,7 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 			lastNameField.setText(person.getLastName());
 			middleNameField.setText(person.getMiddleName());
 			if(person.getBirthDate() != null) {
-				birthDateField.setText(formatter.format(person.getBirthDate()));
+				birthDateField.setText(FormatUtil.dateFormatter.format(person.getBirthDate()));
 			}
 		}
 	}
@@ -136,10 +146,7 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 
 	@Override
 	public void setParameters(Map<String, Object> parameters) {
-		if(parameters != null) {
-			Long personId = ParametersUtil.extractParameter(
-					parameters, ParameterKeys.PERSON_ID, Long.class);
-			this.fillForm(personId);
-		}
+		this.parameters = parameters;
+		initializeByParameters();
 	}
 }

@@ -2,6 +2,7 @@ package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -18,6 +19,7 @@ import javafx.scene.control.TextField;
 import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entityfx.EmployeeTypeFX;
 import kz.aksay.polygraph.service.EmployeeTypeService;
 import kz.aksay.polygraph.service.MaterialTypeService;
 import kz.aksay.polygraph.util.ContextUtils;
@@ -25,7 +27,7 @@ import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
 public class EmployeeTypeTableViewController implements Initializable, SessionAware {
-	@FXML	private TableView<EmployeeType> tableView;
+	@FXML	private TableView<EmployeeTypeFX> tableView;
 	@FXML	private TextField nameField;
 	@FXML	private Label validationLabel;
 	
@@ -38,9 +40,10 @@ public class EmployeeTypeTableViewController implements Initializable, SessionAw
 	
 	@FXML
 	protected void add(ActionEvent event) {
-		ObservableList<EmployeeType> data = tableView.getItems();
+		ObservableList<EmployeeTypeFX> data = tableView.getItems();
 		EmployeeType newEmployeeType = create(nameField.getText()); 
-		data.add(newEmployeeType);
+		EmployeeTypeFX employeeTypeFX = new EmployeeTypeFX(newEmployeeType);
+		data.add(employeeTypeFX);
 		save(newEmployeeType);
 		nameField.setText("");
 		
@@ -48,8 +51,9 @@ public class EmployeeTypeTableViewController implements Initializable, SessionAw
 	
 	@FXML
 	protected void update(
-			TableColumn.CellEditEvent<EmployeeType, String> cellEditEvent) {
-		EmployeeType employeeType = cellEditEvent.getRowValue(); 
+			TableColumn.CellEditEvent<EmployeeTypeFX, String> cellEditEvent) {
+		EmployeeTypeFX employeeTypeFX = cellEditEvent.getRowValue();
+		EmployeeType employeeType = employeeTypeFX.getEmployeeType(); 
 		employeeType.setName(cellEditEvent.getNewValue());
 		employeeType.setUpdatedAt(new Date());
 		employeeType.setUpdatedBy(SessionUtil.retrieveUser(session));
@@ -77,17 +81,20 @@ public class EmployeeTypeTableViewController implements Initializable, SessionAw
 		return et;
 	}
 
-	public TableView<EmployeeType> getTableView() {
+	public TableView<EmployeeTypeFX> getTableView() {
 		return tableView;
 	}
 
-	public void setTableView(TableView<EmployeeType> tableView) {
+	public void setTableView(TableView<EmployeeTypeFX> tableView) {
 		this.tableView = tableView;
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
-		tableView.getItems().setAll(employeeTypeService.findAll());
+		List<EmployeeType> employeeTypes = employeeTypeService.findAll();
+		List<EmployeeTypeFX> employeeTypesFX 
+			= EmployeeTypeFX.contvertListEntityToFX(employeeTypes);
+		tableView.getItems().setAll(employeeTypesFX);
 	}
 
 	public void setSession(Map<String, Object> session) {

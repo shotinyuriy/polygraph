@@ -71,7 +71,7 @@
                                  <children>
                                     <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <Button mnemonicParsing="false" text="Новый сотрудник" />
+                                          <Button mnemonicParsing="false" text="Новый сотрудник" onAction="#openNewEmployeeForm"/>
                                        </children>
                                     </VBox>
                                  </children>
@@ -90,8 +90,10 @@
             <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <TabPane fx:id="tabPane" prefHeight="556.0" prefWidth="690.0" />
-               </children></AnchorPane>
-         </items></SplitPane>
+               </children>
+              </AnchorPane>
+         </items>
+         </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
         <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">

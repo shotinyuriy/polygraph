@@ -23,7 +23,7 @@ public class Employee extends EntitySupport {
 	public Person getPerson() {
 		return person;
 	}
-
+	
 	public void setPerson(Person person) {
 		this.person = person;
 	}
@@ -35,4 +35,5 @@ public class Employee extends EntitySupport {
 	public void setType(EmployeeType type) {
 		this.type = type;
 	}
+	
 }

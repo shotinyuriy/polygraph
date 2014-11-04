@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ComboBox?>
+
+<GridPane fx:id="personContainer" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.EmployeeFormController" alignment="CENTER">
+      <Label fx:id="employeeIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+      <Label alignment="CENTER_RIGHT" text="Фамилия" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+      <Label alignment="CENTER_RIGHT" text="Имя" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label alignment="CENTER_RIGHT" text="Отчество" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label alignment="CENTER_RIGHT" text="Дата рождения" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label alignment="CENTER_RIGHT" text="Тип сотрудника" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      
+      <TextField fx:id="lastNameField" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+      <TextField fx:id="firstNameField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <TextField fx:id="middleNameField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <TextField fx:id="birthDateField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <ComboBox fx:id="employeeTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
+      	text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label fx:id="birthDateValidator" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+</GridPane>

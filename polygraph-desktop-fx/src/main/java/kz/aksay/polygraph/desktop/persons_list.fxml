@@ -34,7 +34,7 @@
           	<cellValueFactory><PropertyValueFactory property="fullName" /></cellValueFactory>
           </TableColumn>
           <TableColumn prefWidth="170.0" text="Дата рождения">
-          	<cellValueFactory><PropertyValueFactory property="birthDate" /></cellValueFactory>
+          	<cellValueFactory><PropertyValueFactory property="birthDateString" /></cellValueFactory>
           </TableColumn>
         </columns>
       </TableView>

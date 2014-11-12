@@ -25,6 +25,10 @@ public class EmployeeFX {
 		}
 	}
 	
+	public Employee getEmployee() {
+		return employee;
+	}
+	
 	public Long getId() {
 		return employee.getId();
 	}
@@ -39,5 +43,9 @@ public class EmployeeFX {
 	
 	public String getBirthDateString() {
 		return personFX.getBirthDateString();
+	}
+	
+	public String toString() {
+		return personFX.getFullName()+" ("+employee.getType().getName()+")";
 	}
 }

@@ -33,6 +33,11 @@ public class Organization extends Customer {
 	public String getFullname() {
 		return fullname;
 	}
+	
+	@Override
+	public String getFullName() {
+		return fullname;
+	}
 
 	public void setFullname(String fullname) {
 		this.fullname = fullname;

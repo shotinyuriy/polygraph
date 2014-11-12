@@ -15,4 +15,6 @@ public abstract class Customer extends EntitySupport {
 	 */
 	private static final long serialVersionUID = 1838755615813471835L;
 	
+	public abstract String getFullName();
+	
 }

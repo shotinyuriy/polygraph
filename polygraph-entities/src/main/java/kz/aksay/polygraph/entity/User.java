@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -68,8 +69,8 @@ public class User implements Serializable {
 	@Column(nullable=false)
 	private Role role;
 	
-	@ManyToOne
-	@JoinColumn(name="employee_id")
+	@OneToOne
+	@JoinColumn(name="employee_id", unique=true)
 	private Employee employee;
 	
 	public String getLogin() {

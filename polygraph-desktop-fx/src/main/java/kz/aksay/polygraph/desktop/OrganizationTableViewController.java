@@ -32,6 +32,7 @@ public class OrganizationTableViewController implements Initializable,
 		organizationTable.getItems().setAll(organizationService.findAll());
 	}
 	
+	@FXML
 	public void openOrganizationForm(ActionEvent actionEvent) {
 		Organization organization = organizationTable.getSelectionModel().getSelectedItem();
 		Map<String, Object> parameters = new HashMap<>();
@@ -40,6 +41,18 @@ public class OrganizationTableViewController implements Initializable,
 		if(mainMenu != null) {
 			mainMenu.loadFxmlAndOpenInTab("organization_form.fxml", 
 					organization.getShortname(), parameters);
+		}
+	}
+	
+	@FXML
+	public void openNewOrder(ActionEvent actionEvent) {
+		Organization organization = organizationTable.getSelectionModel().getSelectedItem();
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put(ParameterKeys.CUSTOMER_ID, organization.getId());
+		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+		if(mainMenu != null) {
+			mainMenu.loadFxmlAndOpenInTab("order_form.fxml", 
+					"Новый заказ", parameters);
 		}
 	}
 

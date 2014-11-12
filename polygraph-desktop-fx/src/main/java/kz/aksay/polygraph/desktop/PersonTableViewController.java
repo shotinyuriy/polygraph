@@ -38,6 +38,7 @@ public class PersonTableViewController implements Initializable, SessionAware {
 		personTable.getItems().setAll(personFXList);
 	}
 	
+	@FXML
 	public void openPersonForm(ActionEvent actionEvent) {
 		PersonFX personFX = personTable.getSelectionModel().getSelectedItem();
 		if(personFX != null) {
@@ -48,6 +49,21 @@ public class PersonTableViewController implements Initializable, SessionAware {
 				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 				mainMenu.loadFxmlAndOpenInTab(
 						"person_form.fxml", person.getFullName(), parameters);
+			}
+		}
+	}
+	
+	@FXML
+	public void openNewOrderForm(ActionEvent actionEvent) {
+		PersonFX personFX = personTable.getSelectionModel().getSelectedItem();
+		if(personFX != null) {
+			Person person = personFX.getPerson();
+			if(person != null) {
+				Map<String, Object> parameters = new HashMap<>();
+				parameters.put(ParameterKeys.CUSTOMER_ID, person.getId());
+				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+				mainMenu.loadFxmlAndOpenInTab(
+						"order_form.fxml", "Новый заказ клиента "+person.getFullName(), parameters);
 			}
 		}
 	}

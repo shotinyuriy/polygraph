@@ -29,6 +29,7 @@ public class Person extends Customer {
 	@Column(name = "birth_date")
 	private Date birthDate;
 	
+	@Override
 	public String getFullName() {
 		StringBuffer fullName = new StringBuffer();
 		fullName.append(lastName);

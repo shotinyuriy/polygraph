@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="kz.aksay.polygraph.desktop.OrganizationTableViewController">
@@ -21,7 +22,7 @@
         </rowConstraints>
          <children>
             <Button mnemonicParsing="false" text="Поиск" GridPane.columnIndex="1" />
-            <TextField />
+            <TextField fx:id="searchField"/>
          </children>
       </GridPane>
    </top>
@@ -45,7 +46,10 @@
    </center>
 	<bottom>
 	<AnchorPane>
-		<Button onAction="#openOrganizationForm">Изменить</Button>
+		<HBox>
+			<Button onAction="#openOrganizationForm">Изменить</Button>
+			<Button onAction="#openNewOrder">Новый заказ</Button>
+		</HBox>
 	</AnchorPane>
 	</bottom>   
 </BorderPane>

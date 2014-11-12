@@ -6,8 +6,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.PersonTableViewController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.PersonTableViewController">
 
    <top>
       <GridPane BorderPane.alignment="CENTER">
@@ -20,7 +22,7 @@
         </rowConstraints>
          <children>
             <Button mnemonicParsing="false" text="Поиск" GridPane.columnIndex="1" />
-            <TextField />
+            <TextField fx:id="searchField"/>
          </children>
       </GridPane>
    </top>
@@ -41,7 +43,10 @@
    </center>
 	<bottom>
 	<AnchorPane>
+		<HBox>
 		<Button onAction="#openPersonForm">Изменить</Button>
+		<Button onAction="#openNewOrderForm">Новый заказ</Button>
+		</HBox>
 	</AnchorPane>
 	</bottom>   
 </BorderPane>

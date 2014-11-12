@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.EmployeeTableViewController">
+	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController">
 
    <top>
       <GridPane BorderPane.alignment="CENTER">
@@ -26,23 +26,23 @@
       </GridPane>
    </top>
    <center>
-      <TableView fx:id="employeeTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="ordersTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="450.0" text="ФИО">
-          	<cellValueFactory><PropertyValueFactory property="fullName" /></cellValueFactory>
+          <TableColumn prefWidth="150" text="Дата и время заказа">
+          	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
           </TableColumn>
-          <TableColumn prefWidth="100.0" text="Дата рождения">
-          	<cellValueFactory><PropertyValueFactory property="birthDateString" /></cellValueFactory>
+          <TableColumn prefWidth="200.0" text="Клиент">
+          	<cellValueFactory><PropertyValueFactory property="customerFullName" /></cellValueFactory>
           </TableColumn>
-		  <TableColumn prefWidth="100.0" text="Тип сотрудника">
-          	<cellValueFactory><PropertyValueFactory property="typeName" /></cellValueFactory>
+		  <TableColumn prefWidth="100.0" text="Исполнитель">
+          	<cellValueFactory><PropertyValueFactory property="currentExecutorDescription" /></cellValueFactory>
           </TableColumn>
         </columns>
       </TableView>
    </center>
 	<bottom>
 	<AnchorPane>
-		<Button onAction="#openEmployeeForm">Изменить</Button>
+		<Button onAction="#openOrderForm">Изменить</Button>
 	</AnchorPane>
 	</bottom>   
 </BorderPane>

@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import javax.validation.ValidationException;
@@ -19,9 +20,11 @@ import javax.validation.ValidationException;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.Person;
+import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entityfx.EmployeeTypeFX;
 import kz.aksay.polygraph.service.EmployeeService;
 import kz.aksay.polygraph.service.EmployeeTypeService;
+import kz.aksay.polygraph.service.UserService;
 import kz.aksay.polygraph.util.ContextUtils;
 import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -38,10 +41,12 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	
 	private EmployeeService employeeService;
 	private EmployeeTypeService employeeTypeService;
+	private UserService userService;
 	
 	public EmployeeFormController() {
 		employeeService = applicationContext.getBean(EmployeeService.class);
 		employeeTypeService = applicationContext.getBean(EmployeeTypeService.class);
+		userService = applicationContext.getBean(UserService.class);
 	}
 	
 	@FXML
@@ -64,7 +69,17 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	
 	@FXML private ComboBox<EmployeeTypeFX> employeeTypeCombo;
 	
+	@FXML private ComboBox<User.Role> userRoleCombo;
+	
+	@FXML private TextField loginField;
+	
+	@FXML private PasswordField passwordField;
+	
+	@FXML private PasswordField passwordConfirmField;
+	
 	@FXML private Label validationLabel;
+	
+	@FXML private Label passwordValidator;
 
 	private Map<String, Object> session;
 
@@ -72,6 +87,7 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	
 	@FXML
 	public void save(ActionEvent actionEvent) {
+		boolean isError = false;
 		
 		Long employeeId = null;
 		if(employeeIdLabel.getText() != null && !employeeIdLabel.getText().isEmpty()) {
@@ -95,6 +111,8 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 			person = employee.getPerson();
 		}
 		
+		employee.setType(retrieveEmployeeType());
+		
 		if(person == null) {
 			person = new Person();
 			person.setCreatedAt(new Date());
@@ -116,21 +134,64 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 			birthDateValidator.setText(
 					"Дата рождения указывается в формате "
 							+FormatUtil.DATE_FORMAT_DESCRIPTION);
+			isError = true;
 		}
 		
-		employee.setType(retrieveEmployeeType());
-		
+		String login = loginField.getText();
+		String password = null;
 		try {
-			employeeService.checkPersonAndSave(employee);
+			password = retrievePassword();
+		} catch (Exception e) {
+			passwordValidator.setText(e.getMessage());
+			isError = true;
 		}
-		catch(ValidationException ve) {
-			validationLabel.setText(ve.getMessage());
+		
+		
+		User user = userService.findByLogin(login);
+		if(user != null) {
+			user.setUpdatedAt(new Date());
+			user.setUpdatedBy(SessionUtil.retrieveUser(session));
 		}
-		catch(Exception e) {
-			e.printStackTrace();
+		else if(login != null && !login.trim().isEmpty()) {
+			user = new User();
+			user.setCreatedAt(new Date());
+			user.setCreatedBy(SessionUtil.retrieveUser(session));
+		}
+		
+		if(user != null) {
+			user.setEmployee(employee);
+			user.setLogin(login);
+			user.setPassword(password);
+			user.setRole(userRoleCombo.getSelectionModel().getSelectedItem());
+		}
+		
+		if( !isError ) {
+			try {
+				employeeService.checkPersonAndUserAndSave(user);
+				validationLabel.setText("Сохранение успешно");
+			}
+			catch(ValidationException ve) {
+				validationLabel.setText(ve.getMessage());
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
+	private String retrievePassword() throws Exception {
+		String password = passwordField.getText();
+		String confirmPassword = passwordConfirmField.getText();
+		if(password == null || confirmPassword == null || 
+				password.trim().isEmpty() || confirmPassword.trim().isEmpty()) {
+			throw new Exception("Пароль не может быть пустым");
+		}
+		else if(!password.equals(confirmPassword)) {
+			throw new Exception("Пароли не совпадают");
+		}
+		return password;
+	}
+
 	private EmployeeType retrieveEmployeeType() {
 		EmployeeTypeFX employeeTypeFX 
 			= employeeTypeCombo.getSelectionModel().getSelectedItem();
@@ -142,10 +203,13 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		List<EmployeeType> employeeTypes = employeeTypeService.findAll();
 		List<EmployeeTypeFX> employeeTypesFX 
 			= EmployeeTypeFX.contvertListEntityToFX(employeeTypes);
 		employeeTypeCombo.getItems().addAll(employeeTypesFX);
+		
+		userRoleCombo.getItems().addAll(User.Role.values());
 	}
 	
 	private void initializeByParameters() {

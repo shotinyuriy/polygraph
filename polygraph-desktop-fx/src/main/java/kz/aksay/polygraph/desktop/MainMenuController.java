@@ -69,6 +69,11 @@ public class MainMenuController implements MainMenu, SessionAware {
 		loadFxmlAndOpenInTab("employee_list.fxml", "Список сотрудников");
 	}
 	
+	@FXML
+	public void openOrderList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab("order_list.fxml", "Список заказов");
+	}
+	
 	public Node loadFxmlNode(String url) {
 		try {
 			Node node = (Node)FXMLLoader.load(getClass().getResource(url));

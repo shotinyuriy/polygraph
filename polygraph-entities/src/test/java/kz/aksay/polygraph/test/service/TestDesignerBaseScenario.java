@@ -2,6 +2,7 @@ package kz.aksay.polygraph.test.service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.EmployeeType;
@@ -29,10 +30,11 @@ import kz.aksay.polygraph.service.WorkTypeService;
 import kz.aksay.polygraph.test.ContextUtils;
 
 import org.springframework.context.ApplicationContext;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class TestDesignerBaseScenario {
+public class TestDesignerBaseScenario extends Assert {
 
 	private ApplicationContext context;
 	
@@ -61,6 +63,10 @@ public class TestDesignerBaseScenario {
 	private Material paperA4;
 	private ProducedWork producedWork;
 	private MaterialConsumption copyMaterialConsumption;
+	private Person customerPerson;
+	private Order secondOrder;
+	
+	private TestOrderService testOrderService; 
 
 	@BeforeClass
 	public void setUp()	{
@@ -76,16 +82,20 @@ public class TestDesignerBaseScenario {
 		materialTypeService = context.getBean(MaterialTypeService.class);
 		materialService = context.getBean(MaterialService.class);
 		materialConsumptionService = context.getBean(MaterialConsumptionService.class);
+		testOrderService = new TestOrderService();
 	}
 	
 	@Test
 	public void test() throws Exception {
 		try {
 			createPerson();
+			createPersonCustomer();
 			createEmployee();
 			createUser();
 			createOrganizationCustomer();
 			createOrder();
+			createOrderForPerson();
+			testFindAllOrders();
 			createWorkTypeXerocopy();
 			createMaterialTypePaper();
 			createMaterialPaperA4();
@@ -110,6 +120,17 @@ public class TestDesignerBaseScenario {
 		executorPerson.setMiddleName("Тестович");
 		executorPerson.setBirthDate(new Date());
 		personService.save(executorPerson);
+	}
+	
+	private void createPersonCustomer() throws Exception {
+		customerPerson = new Person();
+		customerPerson.setCreatedAt(new Date());
+		customerPerson.setCreatedBy(User.TECH_USER);
+		customerPerson.setLastName("Клиентов");
+		customerPerson.setFirstName("Тест");
+		customerPerson.setMiddleName("Тестович");
+		customerPerson.setBirthDate(new Date());
+		personService.save(customerPerson);
 	}
 	
 	
@@ -180,6 +201,16 @@ public class TestDesignerBaseScenario {
 		firstOrder.setDescription("Описание заказа на ксерокопию");
 		orderService.save(firstOrder);
 	}
+	
+	private void createOrderForPerson() throws Exception {
+		secondOrder = new Order();
+		secondOrder.setCreatedAt(new Date());
+		secondOrder.setCreatedBy(User.TECH_USER);
+		secondOrder.setCustomer(customerPerson);
+		secondOrder.setCurrentExecutor(executorEmployee);
+		secondOrder.setDescription("Описание заказа на ксерокопию");
+		orderService.save(secondOrder);
+	}
 
 	private void createProducedWork() throws Exception {
 		producedWork = new ProducedWork();
@@ -201,16 +232,28 @@ public class TestDesignerBaseScenario {
 		materialConsumptionService.save(copyMaterialConsumption);
 	}
 	
+	public void testFindAllOrders() {
+		testOrderService.setUp();
+		List<Order> orders = testOrderService.testFindAll();
+		assertNotNull(orders);
+		assertTrue(orders.size() >= 2);
+		for(Order order : orders) {
+			System.out.println(String.format("%s %s %S", order.getId(), order.getCustomer().getFullName(), order.getCurrentExecutor().getId()));
+		}
+	}
+	
 	private void deleteAll() {		
 		if(copyMaterialConsumption != null) materialConsumptionService.delete(copyMaterialConsumption);
 		if(producedWork != null) producedWorkService.delete(producedWork);
 		if(paperA4 != null) materialService.delete(paperA4);
 		if(paper != null) materialTypeService.delete(paper);
 		if(xerocopy != null) workTypeService.delete(xerocopy);
+		if(secondOrder != null) orderService.delete(secondOrder);
 		if(firstOrder != null) orderService.delete(firstOrder);
 		if(organizationCustomer != null) organizationService.delete(organizationCustomer);
 		if(executorUser != null) userService.delete(executorUser);
 		if(executorEmployee != null) employeeService.delete(executorEmployee);
 		if(executorPerson != null) personService.delete(executorPerson);
+		if(customerPerson != null) personService.delete(customerPerson);
 	}
 }

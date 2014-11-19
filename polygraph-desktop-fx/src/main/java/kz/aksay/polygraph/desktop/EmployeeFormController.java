@@ -43,6 +43,10 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	private EmployeeTypeService employeeTypeService;
 	private UserService userService;
 	
+	private Employee employee;
+	private Person person;
+	private User user;
+	
 	public EmployeeFormController() {
 		employeeService = applicationContext.getBean(EmployeeService.class);
 		employeeTypeService = applicationContext.getBean(EmployeeTypeService.class);
@@ -68,17 +72,11 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	private Label birthDateValidator;
 	
 	@FXML private ComboBox<EmployeeTypeFX> employeeTypeCombo;
-	
 	@FXML private ComboBox<User.Role> userRoleCombo;
-	
 	@FXML private TextField loginField;
-	
 	@FXML private PasswordField passwordField;
-	
 	@FXML private PasswordField passwordConfirmField;
-	
 	@FXML private Label validationLabel;
-	
 	@FXML private Label passwordValidator;
 
 	private Map<String, Object> session;
@@ -88,81 +86,87 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	@FXML
 	public void save(ActionEvent actionEvent) {
 		boolean isError = false;
+		try {
 		
-		Long employeeId = null;
-		if(employeeIdLabel.getText() != null && !employeeIdLabel.getText().isEmpty()) {
-			employeeId = Long.valueOf(employeeIdLabel.getText());
-		}
-		
-		Employee employee = null;
-		Person person = null;
-		if(employeeId != null) {
-			employee = employeeService.find(employeeId);
-		}
-		if (employee == null) {
-			employee = new Employee();
-			employee.setCreatedAt(new Date());
-			employee.setCreatedBy(SessionUtil.retrieveUser(session));
-		}
-		else {
-			employee.setUpdatedAt(new Date());
-			employee.setUpdatedBy(SessionUtil.retrieveUser(session));
+			if(employee != null) {
+				employee = employeeService.find(employee.getId());
+			}
+			if (employee == null) {
+				employee = new Employee();
+				employee.setCreatedAt(new Date());
+				employee.setCreatedBy(SessionUtil.retrieveUser(session));
+			}
+			else {
+				employee.setUpdatedAt(new Date());
+				employee.setUpdatedBy(SessionUtil.retrieveUser(session));
+				
+				person = employee.getPerson();
+			}
 			
-			person = employee.getPerson();
+			employee.setType(retrieveEmployeeType());
+			
+			if(person == null) {
+				person = new Person();
+				person.setCreatedAt(new Date());
+				person.setCreatedBy(SessionUtil.retrieveUser(session));
+				employee.setPerson(person);
+			} else {
+				person.setUpdatedAt(new Date());
+				person.setUpdatedBy(SessionUtil.retrieveUser(session));
+			}
+			
+			person.setLastName(lastNameField.getText());
+			person.setFirstName(firstNameField.getText());
+			person.setMiddleName(middleNameField.getText());
+			
+			try {
+				person.setBirthDate(FormatUtil.dateFormatter.parse(birthDateField.getText()));
+			}
+			catch(ParseException pe) {
+				birthDateValidator.setText(
+						"Дата рождения указывается в формате "
+								+FormatUtil.DATE_FORMAT_DESCRIPTION);
+				isError = true;
+			}
+			
+			String login = loginField.getText();
+			String password = null;
+			try {
+				password = retrievePassword();
+			} catch (Exception e) {
+				passwordValidator.setText(e.getMessage());
+				isError = true;
+			}
+			
+			if(user != null) {
+				user = userService.find(user.getId());
+			}
+			
+			User userByLogin = userService.findByLogin(login);
+			
+			if(user != null) {
+				if(userByLogin != null && !user.equals(userByLogin)) {
+					throw new Exception("Логин уже занят другим сотрудником!");
+				}
+				user.setUpdatedAt(new Date());
+				user.setUpdatedBy(SessionUtil.retrieveUser(session));
+			}
+			else if(login != null && !login.trim().isEmpty()) {
+				user = new User();
+				user.setCreatedAt(new Date());
+				user.setCreatedBy(SessionUtil.retrieveUser(session));
+			}
+			
+			if(user != null) {
+				user.setEmployee(employee);
+				user.setLogin(login);
+				user.setPassword(password);
+				user.setRole(userRoleCombo.getSelectionModel().getSelectedItem());
+			}
 		}
-		
-		employee.setType(retrieveEmployeeType());
-		
-		if(person == null) {
-			person = new Person();
-			person.setCreatedAt(new Date());
-			person.setCreatedBy(SessionUtil.retrieveUser(session));
-			employee.setPerson(person);
-		} else {
-			person.setUpdatedAt(new Date());
-			person.setUpdatedBy(SessionUtil.retrieveUser(session));
-		}
-		
-		person.setLastName(lastNameField.getText());
-		person.setFirstName(firstNameField.getText());
-		person.setMiddleName(middleNameField.getText());
-		
-		try {
-			person.setBirthDate(FormatUtil.dateFormatter.parse(birthDateField.getText()));
-		}
-		catch(ParseException pe) {
-			birthDateValidator.setText(
-					"Дата рождения указывается в формате "
-							+FormatUtil.DATE_FORMAT_DESCRIPTION);
-			isError = true;
-		}
-		
-		String login = loginField.getText();
-		String password = null;
-		try {
-			password = retrievePassword();
-		} catch (Exception e) {
-			passwordValidator.setText(e.getMessage());
-			isError = true;
-		}
-		
-		
-		User user = userService.findByLogin(login);
-		if(user != null) {
-			user.setUpdatedAt(new Date());
-			user.setUpdatedBy(SessionUtil.retrieveUser(session));
-		}
-		else if(login != null && !login.trim().isEmpty()) {
-			user = new User();
-			user.setCreatedAt(new Date());
-			user.setCreatedBy(SessionUtil.retrieveUser(session));
-		}
-		
-		if(user != null) {
-			user.setEmployee(employee);
-			user.setLogin(login);
-			user.setPassword(password);
-			user.setRole(userRoleCombo.getSelectionModel().getSelectedItem());
+		catch(Exception e) {
+			validationLabel.setText(e.getMessage());
+			isError = false;
 		}
 		
 		if( !isError ) {
@@ -222,8 +226,10 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	
 	public void fillForm(Long employeeId) {
 		if(employeeId != null) {
-			Employee employee = employeeService.find(employeeId);
+			employee = employeeService.find(employeeId);
+			 
 			if(employee != null) {
+				 
 				employeeIdLabel.setText(employee.getId().toString());
 				Person person = employee.getPerson();
 				if(person != null) {
@@ -236,7 +242,16 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 					}
 				}
 				selectEqualEmployeeType(employee.getType());
+				
+				user = userService.findByEmployee(employee);
+				if(user != null) {
+					loginField.setText(user.getLogin());
+					passwordField.setText(user.getPassword());
+					passwordConfirmField.setText(user.getPassword());
+					userRoleCombo.getSelectionModel().select(user.getRole());
+				}
 			}
+			
 		}
 	}
 
@@ -264,3 +279,4 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 		initializeByParameters();
 	}
 }
+

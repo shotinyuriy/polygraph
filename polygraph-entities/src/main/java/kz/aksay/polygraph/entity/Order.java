@@ -1,10 +1,16 @@
 package kz.aksay.polygraph.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="\"order\"")
@@ -23,6 +29,8 @@ public class Order extends EntitySupport {
 	@JoinColumn(name="current_executor_id")
 	private Employee currentExecutor;
 	
+	@Transient
+	private Set<ProducedWork> producedWorks;
 
 	@Column
 	private String description;
@@ -49,5 +57,13 @@ public class Order extends EntitySupport {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Set<ProducedWork> getProducedWorks() {
+		return producedWorks;
+	}
+
+	public void setProducedWorks(Set<ProducedWork> producedWorks) {
+		this.producedWorks = producedWorks;
 	}
 }

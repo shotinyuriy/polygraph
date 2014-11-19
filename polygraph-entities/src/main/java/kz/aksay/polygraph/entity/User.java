@@ -73,6 +73,30 @@ public class User implements Serializable {
 	@JoinColumn(name="employee_id", unique=true)
 	private Employee employee;
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof User && obj != null) {
+			User user = (User)obj;
+			if(user.getId() == null) {
+				if(this.getId() == null) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				if(this.getId() == null) {
+					return false;
+				}
+				else {
+					return this.getId().equals(user.getId());
+				}
+			}
+		}
+		return false;
+	}
+	
 	public String getLogin() {
 		return login;
 	}

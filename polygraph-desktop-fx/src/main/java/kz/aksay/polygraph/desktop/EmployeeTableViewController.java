@@ -1,6 +1,7 @@
 package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class EmployeeTableViewController implements Initializable,
 	public void initialize(URL location, ResourceBundle resources) {
 		employeeService = StartingPane.getBean(EmployeeService.class);
 		List<Employee> employees = employeeService.findAll();
-		List<EmployeeFX> employeesFX 
+		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employees);
 		employeeTable.getItems().addAll(employeesFX);
 	}

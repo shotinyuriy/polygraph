@@ -3,6 +3,7 @@ package kz.aksay.polygraph.service;
 import javax.annotation.PostConstruct;
 
 import kz.aksay.polygraph.dao.GenericDao;
+import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.User;
 
 import org.hibernate.Criteria;
@@ -24,9 +25,9 @@ public class UserService extends GenericService<User, Long> {
 		User user = null;
 		
 		if (login != null && !login.isEmpty()) {
-			Criteria criteria = userDao.getSession().createCriteria(userDao.clazz());
+			Criteria criteria = getDao().getSession().createCriteria(userDao.clazz());
 			criteria.add(Restrictions.like("login", login));
-			user = userDao.readUniqueByCriteria(criteria);
+			user = getDao().readUniqueByCriteria(criteria);
 		}
 		return user;
 	}
@@ -34,10 +35,20 @@ public class UserService extends GenericService<User, Long> {
 	public User findByLoginAndPassword(String login, String password) {
 		User user = null;
 		if (login != null && !login.isEmpty()) {
-			Criteria criteria = userDao.getSession().createCriteria(userDao.clazz());
+			Criteria criteria = getDao().getSession().createCriteria(userDao.clazz());
 			criteria.add(Restrictions.like("login", login));
 			criteria.add(Restrictions.like("password", password));
-			user = userDao.readUniqueByCriteria(criteria);
+			user = getDao().readUniqueByCriteria(criteria);
+		}
+		return user;
+	}
+	
+	public User findByEmployee(Employee employee) {
+		User user = null;
+		if(employee != null) {
+			Criteria criteria = getDao().getSession().createCriteria(User.class);
+			criteria.add(Restrictions.eq("employee.id", employee.getId()));
+			user = getDao().readUniqueByCriteria(criteria);
 		}
 		return user;
 	}
@@ -51,4 +62,5 @@ public class UserService extends GenericService<User, Long> {
 	protected GenericDao<User, Long> getDao() {
 		return userDao;
 	}
+	
 }

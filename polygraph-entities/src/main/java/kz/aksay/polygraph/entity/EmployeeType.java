@@ -25,8 +25,8 @@ public class EmployeeType extends EntitySupport {
 	public boolean equals(Object obj) {
 		if(obj instanceof EmployeeType && obj != null) {
 			EmployeeType employeeType = (EmployeeType)obj;
-			if(employeeType.getName() == null) {
-				if(this.getName() == null) {
+			if(employeeType.getId() == null) {
+				if(this.getId() == null) {
 					return true;
 				}
 				else {
@@ -34,11 +34,11 @@ public class EmployeeType extends EntitySupport {
 				}
 			}
 			else {
-				if(this.getName() == null) {
+				if(this.getId() == null) {
 					return false;
 				}
 				else {
-					return this.getName().equals(employeeType.getName());
+					return this.getId().equals(employeeType.getId());
 				}
 			}
 		}

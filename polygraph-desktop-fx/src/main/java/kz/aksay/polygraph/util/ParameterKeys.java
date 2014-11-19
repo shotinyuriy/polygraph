@@ -6,4 +6,7 @@ public abstract class ParameterKeys {
 	public static final String EMPLOYEE_ID = "employeeId";
 	public static final String ORDER_ID = "orderId";
 	public static final String CUSTOMER_ID = "customerId";
+	
+	public static final String ORDER_FORM = "orderForm";
+	public static final String PRODUCED_WORK = "producedWork";
 }

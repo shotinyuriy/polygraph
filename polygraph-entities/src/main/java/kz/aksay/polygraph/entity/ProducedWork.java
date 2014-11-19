@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import kz.aksay.polygraph.entity.EntitySupport;
 
@@ -19,7 +20,7 @@ public class ProducedWork extends EntitySupport {
 	 */
 	private static final long serialVersionUID = -9184662638673352545L;
 
-	@OneToMany(mappedBy="producedWork")
+	@Transient
 	private Set<MaterialConsumption> materialConsumption;
 	
 	@ManyToOne
@@ -33,6 +34,9 @@ public class ProducedWork extends EntitySupport {
 	@ManyToOne
 	@JoinColumn(name="exeutor_id")
 	private Employee executor;
+	
+	@Transient
+	private boolean dirty;
 
 	public Employee getExecutor() {
 		return executor;
@@ -64,5 +68,13 @@ public class ProducedWork extends EntitySupport {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 }

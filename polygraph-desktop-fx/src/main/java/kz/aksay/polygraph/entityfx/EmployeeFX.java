@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.entityfx;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,8 +11,8 @@ public class EmployeeFX {
 	private Employee employee;
 	private PersonFX personFX;
 	
-	public static List<EmployeeFX> contvertListEntityToFX(List<Employee> employees) {
-		List<EmployeeFX> employeesFX = new LinkedList<>();
+	public static Collection<EmployeeFX> contvertListEntityToFX(Collection<Employee> employees) {
+		Collection<EmployeeFX> employeesFX = new LinkedList<>();
 		for(Employee employee : employees) {
 			employeesFX.add(new EmployeeFX(employee));
 		}

@@ -53,6 +53,7 @@
                                           <Button fx:id="materialTypeListButton" mnemonicParsing="false" onAction="#openMaterialTypeList" text="Типы материалов" />
                                           <Button fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Типы сотрудников" />
                                           <Button fx:id="materialListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Материалы" />
+                                          <Button fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" />
                                        </children>
                                     </VBox>
                                  </children></AnchorPane>

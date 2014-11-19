@@ -2,6 +2,7 @@ package kz.aksay.polygraph.test.service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.Employee;
@@ -219,6 +220,7 @@ public class TestDesignerBaseScenario extends Assert {
 		producedWork.setOrder(firstOrder);
 		producedWork.setWorkType(xerocopy);
 		producedWork.setExecutor(executorEmployee);
+		producedWork.setDirty(true);
 		producedWorkService.save(producedWork);
 	}
 	
@@ -243,17 +245,17 @@ public class TestDesignerBaseScenario extends Assert {
 	}
 	
 	private void deleteAll() {		
-		if(copyMaterialConsumption != null) materialConsumptionService.delete(copyMaterialConsumption);
-		if(producedWork != null) producedWorkService.delete(producedWork);
-		if(paperA4 != null) materialService.delete(paperA4);
-		if(paper != null) materialTypeService.delete(paper);
-		if(xerocopy != null) workTypeService.delete(xerocopy);
-		if(secondOrder != null) orderService.delete(secondOrder);
-		if(firstOrder != null) orderService.delete(firstOrder);
-		if(organizationCustomer != null) organizationService.delete(organizationCustomer);
-		if(executorUser != null) userService.delete(executorUser);
-		if(executorEmployee != null) employeeService.delete(executorEmployee);
-		if(executorPerson != null) personService.delete(executorPerson);
-		if(customerPerson != null) personService.delete(customerPerson);
+		if(copyMaterialConsumption != null && copyMaterialConsumption.getId() != null) materialConsumptionService.delete(copyMaterialConsumption);
+		if(producedWork != null && producedWork.getId() != null) producedWorkService.delete(producedWork);
+		if(paperA4 != null && paperA4.getId() != null) materialService.delete(paperA4);
+		if(paper != null && paper.getId() != null) materialTypeService.delete(paper);
+		if(xerocopy != null && xerocopy.getId() != null) workTypeService.delete(xerocopy);
+		if(secondOrder != null && secondOrder.getId() != null) orderService.delete(secondOrder);
+		if(firstOrder != null && firstOrder.getId() != null) orderService.delete(firstOrder);
+		if(organizationCustomer != null && organizationCustomer.getId() != null) organizationService.delete(organizationCustomer);
+		if(executorUser != null && executorUser.getId() != null) userService.delete(executorUser);
+		if(executorEmployee != null && executorEmployee.getId() != null) employeeService.delete(executorEmployee);
+		if(executorPerson != null && executorPerson.getId() != null) personService.delete(executorPerson);
+		if(customerPerson != null && customerPerson.getId() != null) personService.delete(customerPerson);
 	}
 }

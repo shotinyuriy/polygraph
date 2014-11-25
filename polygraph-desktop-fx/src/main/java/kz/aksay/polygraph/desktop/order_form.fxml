@@ -2,16 +2,18 @@
 
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.Scene?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
+	<GridPane fx:id="orderContainer" hgap="10.0"  prefHeight="400.0" prefWidth="600.0" vgap="10.0"  alignment="CENTER" VBox.vgrow="ALWAYS">
 
-<GridPane fx:id="orderContainer" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
-prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.OrderFormController" alignment="CENTER">
       <Label fx:id="orderIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
       <Label fx:id="customerIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
       
@@ -24,38 +26,39 @@ prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx
       <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
       
       <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      
-      <TableView fx:id="producedWorksTableView" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="3">
+	 </GridPane>
+	  
+      <TableView fx:id="producedWorksTableView" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="3"
+      	maxWidth="1080.0" prefWidth="600.0" prefHeight="240" VBox.vgrow="ALWAYS">
       	<columns>
-      		<TableColumn text="Дата и время начала">
+      		<TableColumn text="Дата и время начала" prefWidth="150.0">
       			<cellValueFactory><PropertyValueFactory property="beginDateTimeString"/></cellValueFactory>
       		</TableColumn>
-      		<TableColumn text="Дата и время завершения">
-      			<cellValueFactory><PropertyValueFactory property="endDateTimeString"/></cellValueFactory>
+      		<TableColumn text="Дата и время завершения"  prefWidth="150.0">
+      			<cellValueFactory><PropertyValueFactory property="finishDateTimeString"/></cellValueFactory>
       		</TableColumn>
-      		<TableColumn text="Тип работ">
+      		<TableColumn text="Тип работ" prefWidth="150.0">
       			<cellValueFactory><PropertyValueFactory property="workTypeName"/></cellValueFactory>
       		</TableColumn>
-      		<TableColumn text="Исполнитель">
+      		<TableColumn text="Исполнитель" prefWidth="150.0">
       			<cellValueFactory><PropertyValueFactory property="executorName"/></cellValueFactory>
       		</TableColumn>
       	</columns>
       </TableView>
-      
-      <HBox GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="3">
-	      <Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" 
-	      	text="Добавить"  />
-	      	
-		  <Button fx:id="editProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editProducedWork" 
-	      	text="Изменить" />
-      </HBox>
-      
-      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
-      	text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-      
-      
-      
-</GridPane>
+     
+      <VBox VBox.vgrow="NEVER">
+	      <HBox GridPane.columnIndex="1" GridPane.rowIndex="7" GridPane.columnSpan="3">
+		      <Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" 
+		      	text="Добавить"  />
+		      	
+			  <Button fx:id="editProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editProducedWork" 
+		      	text="Изменить" />
+	      </HBox>
+	     
+	      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
+	      	text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+	  </VBox>
+</VBox>
 
 
 

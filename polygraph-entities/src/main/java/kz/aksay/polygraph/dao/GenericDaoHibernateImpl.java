@@ -67,7 +67,9 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	public PK create(T entity) throws Exception {
 		validate(entity);
 		getSession().saveOrUpdate(entity);
-		return (PK) getSession().save(entity);
+		PK pk = (PK) getSession().save(entity);
+		getSession().flush();
+		return pk;
 	}
 
 	@SuppressWarnings("unchecked")

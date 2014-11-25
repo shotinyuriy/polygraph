@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import kz.aksay.polygraph.dao.GenericDao;
+import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
 
@@ -19,10 +20,11 @@ public class OrderService extends GenericService<Order, Long> {
 	
 	private ProducedWorkService producedWorkService;
 	
+	
 	@Override
 	@Transactional
 	public Order find(Long id) {
-		Order order = super.find(id);
+		Order order = getDao().read(id);
 		if(order != null) {
 			List<ProducedWork> producedWorks = producedWorkService.findAllByOrderId(id);
 			order.setProducedWorks(new HashSet<ProducedWork>());
@@ -38,7 +40,7 @@ public class OrderService extends GenericService<Order, Long> {
 		if(order.getProducedWorks() != null) {
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setOrder(order);
-				producedWorkService.save(producedWork);
+				producedWork = producedWorkService.save(producedWork);
 			}
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setDirty(false);

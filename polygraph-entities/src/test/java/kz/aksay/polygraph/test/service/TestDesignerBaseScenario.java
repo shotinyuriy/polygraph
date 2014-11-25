@@ -190,7 +190,7 @@ public class TestDesignerBaseScenario extends Assert {
 		paperA4.setCreatedAt(new Date());
 		paperA4.setCreatedBy(User.TECH_USER);
 		paperA4.setName("А4");
-		materialService.save(paperA4);
+		paperA4 = materialService.save(paperA4);
 	}
 
 	private void createOrder() throws Exception {
@@ -222,6 +222,8 @@ public class TestDesignerBaseScenario extends Assert {
 		producedWork.setExecutor(executorEmployee);
 		producedWork.setDirty(true);
 		producedWorkService.save(producedWork);
+		 
+		System.out.println("ProducedWorkId "+producedWork.getId());
 	}
 	
 	private void createMaterialConsumption() throws Exception {
@@ -231,6 +233,7 @@ public class TestDesignerBaseScenario extends Assert {
 		copyMaterialConsumption.setMaterial(paperA4);
 		copyMaterialConsumption.setProducedWork(producedWork);
 		copyMaterialConsumption.setQuantity(BigDecimal.valueOf(1.0));
+		copyMaterialConsumption.setDirty(true);
 		materialConsumptionService.save(copyMaterialConsumption);
 	}
 	

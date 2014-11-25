@@ -1,6 +1,8 @@
 package kz.aksay.polygraph.entity;
+import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,6 +36,9 @@ public class ProducedWork extends EntitySupport {
 	@ManyToOne
 	@JoinColumn(name="exeutor_id")
 	private Employee executor;
+	
+	@Column(name="finished_at")
+	private Date finishedAt;
 	
 	@Transient
 	private boolean dirty;
@@ -76,5 +81,13 @@ public class ProducedWork extends EntitySupport {
 
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
+	}
+
+	public Date getFinishedAt() {
+		return finishedAt;
+	}
+
+	public void setFinishedAt(Date finishedAt) {
+		this.finishedAt = finishedAt;
 	}
 }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,14 +18,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.entity.Customer;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
-import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
@@ -133,22 +130,6 @@ public class OrderFormController implements
 		stage.show();
 	}
 	
-	private Long retrieveOrderId() {
-		String orderIdString = orderIdLabel.getText();
-		if(orderIdString != null && !orderIdString.trim().isEmpty()) {
-			return Long.valueOf(orderIdString);
-		}
-		return null;
-	}
-		
-	private Long retrieveCustomerId() {
-		String customerIdString = customerIdLabel.getText();
-		if(customerIdString != null && !customerIdString.trim().isEmpty()) {
-			return Long.valueOf(customerIdString);
-		}
-		return null;
-	}
-	
 	@Override
 	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
@@ -218,7 +199,9 @@ public class OrderFormController implements
 
 	@Override
 	public void saveProducedWork(ProducedWorkFX producedWorkFX) {
+		producedWorksTableView.getItems().remove(producedWorkFX);
 		producedWorkFX.setDirty(true);
+		producedWorksTableView.getItems().add(producedWorkFX);
 	}
 
 	

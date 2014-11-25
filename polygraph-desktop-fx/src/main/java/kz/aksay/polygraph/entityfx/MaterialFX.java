@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.Material;
+import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.util.FormatUtil;
 
 public class MaterialFX {
@@ -26,6 +27,11 @@ public class MaterialFX {
 	
 	public Material getMaterial() {
 		return material;
+	}
+	
+	@Override
+	public String toString() {
+		return getFullName();
 	}
 	
 	public String getMaterialTypeName() {
@@ -69,5 +75,14 @@ public class MaterialFX {
 		else {
 			return null;
 		}
+	}
+	
+	public String getFullName() {
+		String fullName = material.getName();
+		MaterialType materialType = material.getMaterialType();
+		if(materialType != null) {
+			fullName = materialType.getName()+" "+fullName;
+		}
+		return fullName;
 	}
 }

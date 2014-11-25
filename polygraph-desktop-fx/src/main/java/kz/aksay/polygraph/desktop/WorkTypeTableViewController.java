@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
+import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
 import kz.aksay.polygraph.service.WorkTypeService;
@@ -24,12 +26,13 @@ public class WorkTypeTableViewController implements SessionAware, Initializable 
 	private WorkTypeService workTypeService;
 	private Map<String, Object> session;
 	
+	@FXML private TableColumn<WorkTypeFX, String> nameColumn;
 	@FXML private TableView<WorkTypeFX> tableView;
 	@FXML private TextField nameField;
 	@FXML private Label validationLabel;
 	
 	@FXML
-	public void add(ActionEvent actionEvent) {
+	protected void add(ActionEvent actionEvent) {
 		try {
 			validationLabel.setText(null);
 			String name = nameField.getText();
@@ -54,7 +57,7 @@ public class WorkTypeTableViewController implements SessionAware, Initializable 
 	}
 	
 	@FXML
-	public void update(
+	protected void update(
 			TableColumn.CellEditEvent<WorkTypeFX, String> cellEditEvent) {
 		try {
 			WorkTypeFX workTypeFX = cellEditEvent.getRowValue();
@@ -82,6 +85,9 @@ public class WorkTypeTableViewController implements SessionAware, Initializable 
 		List<WorkType> workTypes = workTypeService.findAll();
 		tableView.getItems().addAll(
 				WorkTypeFX.convertListEntityToFX(workTypes));
+		
+		nameColumn.setCellFactory(
+				TextFieldTableCell.<WorkTypeFX>forTableColumn());
 	}
 	
 }

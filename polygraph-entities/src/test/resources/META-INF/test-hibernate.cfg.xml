@@ -19,8 +19,7 @@
 		
 		<mapping package="kz.aksay.polygraph.entity"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Customer"></mapping>
-		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>
-		<mapping class="kz.aksay.polygraph.entity.EmployeeType"></mapping>		
+		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>		
 		<mapping class="kz.aksay.polygraph.entity.Material"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.MaterialConsumption"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.MaterialType"></mapping>

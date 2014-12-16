@@ -22,10 +22,32 @@ import javax.persistence.Table;
 @Table(name="\"user\"")
 public class User implements Serializable {
 	
+	/**
+	 * 
+	 * @author Chernypko
+	 * Change this correctly, because of ordinal use
+	 */
 	public static enum Role {
-		ADMIN,
-		DIRECTOR,
-		DESIGNER
+		ADMIN("АДМИНИСТРАТОР"),
+		DIRECTOR("ДИЗАЙНЕР"),
+		DESIGNER("ДИРЕКТОР"),
+		MANAGER("БУХГАЛТЕР"),
+		ACCOUNTANT("МЕНЕДЖЕР");
+		
+		private String name;
+		
+		private Role(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		@Override
+		public String toString() {
+			return this.name;
+		}
 	}
 	
 	public static User TECH_USER;
@@ -65,7 +87,7 @@ public class User implements Serializable {
 	@Column(name="password", nullable=false)
 	private String password;
 	
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private Role role;
 	

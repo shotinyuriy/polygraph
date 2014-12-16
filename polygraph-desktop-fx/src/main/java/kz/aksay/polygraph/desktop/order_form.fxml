@@ -29,7 +29,7 @@
 	 </GridPane>
 	  
       <TableView fx:id="producedWorksTableView" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="3"
-      	maxWidth="1080.0" prefWidth="600.0" prefHeight="240" VBox.vgrow="ALWAYS">
+      	maxWidth="1080.0" prefWidth="750.0" prefHeight="240" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
       	<columns>
       		<TableColumn text="Дата и время начала" prefWidth="150.0">
       			<cellValueFactory><PropertyValueFactory property="beginDateTimeString"/></cellValueFactory>
@@ -42,6 +42,9 @@
       		</TableColumn>
       		<TableColumn text="Исполнитель" prefWidth="150.0">
       			<cellValueFactory><PropertyValueFactory property="executorName"/></cellValueFactory>
+      		</TableColumn>
+      		<TableColumn text="Стоимость" prefWidth="150.0">
+      			<cellValueFactory><PropertyValueFactory property="cost"/></cellValueFactory>
       		</TableColumn>
       	</columns>
       </TableView>

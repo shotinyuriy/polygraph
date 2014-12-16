@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.Employee;
-import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.MaterialType;
@@ -18,7 +17,6 @@ import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.service.EmployeeService;
-import kz.aksay.polygraph.service.EmployeeTypeService;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.service.MaterialTypeService;
@@ -40,7 +38,6 @@ public class TestDesignerBaseScenario extends Assert {
 	private ApplicationContext context;
 	
 	private UserService userService;
-	private EmployeeTypeService employeeTypeService;
 	private EmployeeService employeeService;
 	private PersonService personService;
 	private OrganizationService organizationService;
@@ -73,7 +70,6 @@ public class TestDesignerBaseScenario extends Assert {
 	public void setUp()	{
 		context = ContextUtils.getApplicationContext();
 		userService = context.getBean(UserService.class);
-		employeeTypeService = context.getBean(EmployeeTypeService.class);
 		employeeService = context.getBean(EmployeeService.class);
 		personService = context.getBean(PersonService.class);
 		organizationService = context.getBean(OrganizationService.class);
@@ -140,8 +136,6 @@ public class TestDesignerBaseScenario extends Assert {
 		executorEmployee.setCreatedAt(new Date());
 		executorEmployee.setCreatedBy(User.TECH_USER);
 		executorEmployee.setPerson(executorPerson);
-		executorEmployee.setType(
-				employeeTypeService.findByName(EmployeeType.DefaultNames.DESIGNER));
 		employeeService.save(executorEmployee);
 	}
 	

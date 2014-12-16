@@ -1,4 +1,5 @@
 package kz.aksay.polygraph.entity;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -39,6 +40,9 @@ public class ProducedWork extends EntitySupport {
 	
 	@Column(name="finished_at")
 	private Date finishedAt;
+	
+	@Column(name="cost")
+	private BigDecimal cost;
 	
 	@Transient
 	private boolean dirty;
@@ -89,5 +93,13 @@ public class ProducedWork extends EntitySupport {
 
 	public void setFinishedAt(Date finishedAt) {
 		this.finishedAt = finishedAt;
+	}
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
 	}
 }

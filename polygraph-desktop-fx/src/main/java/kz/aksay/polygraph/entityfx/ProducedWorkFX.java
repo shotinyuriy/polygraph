@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.entityfx;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -47,6 +48,13 @@ public class ProducedWorkFX {
 	
 	public WorkTypeFX getWorkTypeFX() {
 		return workTypeFX;
+	}
+	
+	public BigDecimal getCost() {
+		if(producedWork.getCost() != null) {
+			return producedWork.getCost();
+		}
+		return BigDecimal.ZERO;
 	}
 	
 	public String getBeginDateTimeString() {

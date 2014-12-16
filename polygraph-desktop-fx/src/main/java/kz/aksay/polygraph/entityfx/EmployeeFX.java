@@ -35,7 +35,7 @@ public class EmployeeFX {
 	}
 	
 	public String getTypeName() {
-		return employee.getType().getName();
+		return employee.getUser().getRole().getName();
 	}
 	
 	public String getFullName() {
@@ -47,6 +47,6 @@ public class EmployeeFX {
 	}
 	
 	public String toString() {
-		return personFX.getFullName()+" ("+employee.getType().getName()+")";
+		return personFX.getFullName()+" ("+this.getTypeName()+")";
 	}
 }

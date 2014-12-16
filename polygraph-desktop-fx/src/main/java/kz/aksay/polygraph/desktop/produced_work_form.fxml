@@ -15,11 +15,13 @@
 	<GridPane vgap="10.0" hgap="10.0">
 	      <Label fx:id="producedWorkIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 	
-	      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-	      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+	      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="Исполнитель" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+	      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+	      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 	      
 	      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 		  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+		  <TextField fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
 	</GridPane>
 	
 	<TableView fx:id="materialConsumptionsTableView">

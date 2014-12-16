@@ -18,12 +18,9 @@ import javafx.scene.control.TextField;
 import javax.validation.ValidationException;
 
 import kz.aksay.polygraph.entity.Employee;
-import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
-import kz.aksay.polygraph.entityfx.EmployeeTypeFX;
 import kz.aksay.polygraph.service.EmployeeService;
-import kz.aksay.polygraph.service.EmployeeTypeService;
 import kz.aksay.polygraph.service.UserService;
 import kz.aksay.polygraph.util.ContextUtils;
 import kz.aksay.polygraph.util.FormatUtil;
@@ -40,7 +37,6 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	private ApplicationContext applicationContext = ContextUtils.getApplicationContext();
 	
 	private EmployeeService employeeService;
-	private EmployeeTypeService employeeTypeService;
 	private UserService userService;
 	
 	private Employee employee;
@@ -49,7 +45,6 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	
 	public EmployeeFormController() {
 		employeeService = applicationContext.getBean(EmployeeService.class);
-		employeeTypeService = applicationContext.getBean(EmployeeTypeService.class);
 		userService = applicationContext.getBean(UserService.class);
 	}
 	
@@ -71,7 +66,6 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	@FXML
 	private Label birthDateValidator;
 	
-	@FXML private ComboBox<EmployeeTypeFX> employeeTypeCombo;
 	@FXML private ComboBox<User.Role> userRoleCombo;
 	@FXML private TextField loginField;
 	@FXML private PasswordField passwordField;
@@ -102,8 +96,6 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 				
 				person = employee.getPerson();
 			}
-			
-			employee.setType(retrieveEmployeeType());
 			
 			if(person == null) {
 				person = new Person();
@@ -196,23 +188,8 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 		return password;
 	}
 
-	private EmployeeType retrieveEmployeeType() {
-		EmployeeTypeFX employeeTypeFX 
-			= employeeTypeCombo.getSelectionModel().getSelectedItem();
-		if(employeeTypeFX != null) {
-			return employeeTypeFX.getEmployeeType();
-		}
-		return null;
-	}
-
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		
-		List<EmployeeType> employeeTypes = employeeTypeService.findAll();
-		List<EmployeeTypeFX> employeeTypesFX 
-			= EmployeeTypeFX.contvertListEntityToFX(employeeTypes);
-		employeeTypeCombo.getItems().addAll(employeeTypesFX);
-		
+	public void initialize(URL location, ResourceBundle resources) {		
 		userRoleCombo.getItems().addAll(User.Role.values());
 	}
 	
@@ -241,7 +218,6 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 								person.getBirthDate()));
 					}
 				}
-				selectEqualEmployeeType(employee.getType());
 				
 				user = userService.findByEmployee(employee);
 				if(user != null) {
@@ -252,19 +228,6 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 				}
 			}
 			
-		}
-	}
-
-	private void selectEqualEmployeeType(EmployeeType type) {
-		if(type != null) {
-			for(EmployeeTypeFX employeeTypeFX : employeeTypeCombo.getItems()) {
-				if(type.equals(employeeTypeFX.getEmployeeType())) {
-					employeeTypeCombo.getSelectionModel().select(employeeTypeFX);
-				}
-			}
-		}
-		else {
-			employeeTypeCombo.getSelectionModel().select(null);
 		}
 	}
 

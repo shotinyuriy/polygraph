@@ -23,4 +23,27 @@ public class WorkType extends EntitySupport {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public static class DefaultNames {
+		
+		public static final String DEVELOPMENT = "РАЗРАБОТКА"; 
+		public static final String CORRECTION = "КОРРЕКТИРОВКА";
+		public static final String SCANNING = "СКАНИРОВАНИЕ";
+		public static final String BINDING = "ПЕРЕПЛЕТ";
+		public static final String CUTTING = "РЕЗКА";
+		public static final String LAMINATION = "ЛАМИНИРОВАНИЕ";
+		
+		private static String[] defaultNames = new String[] {
+			DEVELOPMENT,
+			CORRECTION,
+			SCANNING,
+			BINDING,
+			CUTTING,
+			LAMINATION
+		};
+		
+		public static String[] all() {
+			return defaultNames;
+		}
+	}
 }

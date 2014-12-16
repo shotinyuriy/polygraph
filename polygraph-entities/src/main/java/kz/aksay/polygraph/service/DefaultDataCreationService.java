@@ -4,9 +4,9 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
-import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entity.WorkType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,11 @@ public class DefaultDataCreationService {
 	
 	private UserService userService;
 	
-	private EmployeeTypeService employeeTypeService;
-	
 	private MaterialTypeService materialTypeService;
+	
+	private WorkTypeService workTypeService;
+	
+	private MaterialService materialService;
 	
 	@Autowired
 	private PlatformTransactionManager  txManager;
@@ -40,16 +42,7 @@ public class DefaultDataCreationService {
 						techUser = userService.save(User.TECH_USER);
 					}
 					
-					User.TECH_USER = techUser; 
-					
-					 for(String employeeTypeName : 
-						 EmployeeType.DefaultNames.all()) {
-						 if(employeeTypeService.
-								 findByName(employeeTypeName) == null) {
-							 employeeTypeService.save(
-									 createEmployeeType(employeeTypeName));
-						 }
-					 }
+					User.TECH_USER = techUser;
 					 
 					 for(String materialTypeName : 
 						 MaterialType.DefaultNames.all()) {
@@ -57,6 +50,15 @@ public class DefaultDataCreationService {
 								 findByName(materialTypeName) == null) {
 							 materialTypeService.save(
 									 createMaterialType(materialTypeName));
+						 }
+					 }
+					 
+					 for(String workTypeName : 
+						 WorkType.DefaultNames.all()) {
+						 if(workTypeService.
+								 findByName(workTypeName) == null) {
+							 workTypeService.save(
+									 createWorkType(workTypeName));
 						 }
 					 }
 				}
@@ -67,20 +69,20 @@ public class DefaultDataCreationService {
 		});
 	}
 	
-	private EmployeeType createEmployeeType(String name) {
-		EmployeeType employeeType = new EmployeeType();
-		employeeType.setCreatedAt(new Date());
-		employeeType.setCreatedBy(User.TECH_USER);
-		employeeType.setName(name);
-		return employeeType;
-	}
-	
 	private MaterialType createMaterialType(String name) {
 		MaterialType materialType = new MaterialType();
 		materialType.setCreatedAt(new Date());
 		materialType.setCreatedBy(User.TECH_USER);
 		materialType.setName(name);
 		return materialType;
+	}
+	
+	private WorkType createWorkType(String name) {
+		WorkType workType = new WorkType();
+		workType.setCreatedAt(new Date());
+		workType.setCreatedBy(User.TECH_USER);
+		workType.setName(name);
+		return workType;
 	}
 	
 	public void setTxManager(PlatformTransactionManager txManager) {
@@ -93,12 +95,17 @@ public class DefaultDataCreationService {
 	}
 	
 	@Autowired
-	public void setEmployeeTypeService(EmployeeTypeService employeeTypeService) {
-		this.employeeTypeService = employeeTypeService;
-	}
-	
-	@Autowired
 	public void setMaterialtypeService(MaterialTypeService materialTypeService) {
 		this.materialTypeService = materialTypeService;
+	}
+
+	@Autowired
+	public void setWorkTypeService(WorkTypeService workTypeService) {
+		this.workTypeService = workTypeService;
+	}
+
+	@Autowired
+	public void setMaterialService(MaterialService materialService) {
+		this.materialService = materialService;
 	}
 }

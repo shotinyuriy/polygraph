@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,11 +16,10 @@ public class Employee extends EntitySupport {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="person_id")
 	private Person person;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="employee_type_id")
-	private EmployeeType type;
 
+	@OneToOne(mappedBy="employee", fetch=FetchType.EAGER)
+	private User user;
+	
 	public Person getPerson() {
 		return person;
 	}
@@ -28,12 +28,12 @@ public class Employee extends EntitySupport {
 		this.person = person;
 	}
 
-	public EmployeeType getType() {
-		return type;
+	public User getUser() {
+		return user;
 	}
 
-	public void setType(EmployeeType type) {
-		this.type = type;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

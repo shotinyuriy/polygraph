@@ -29,7 +29,7 @@ public class MaterialTypeService extends GenericService<MaterialType, Long> {
 		
 		if(materialTypeName != null && !materialTypeName.isEmpty()) {
 			Criteria findbyName = getDao().getSession().createCriteria(getDao().clazz());
-			findbyName.add(Restrictions.eq("name", materialTypeName));
+			findbyName.add(Restrictions.ilike("name", materialTypeName));
 			materialType = getDao().readUniqueByCriteria(findbyName);
 		}
 		

@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.validation.ValidationException;
+
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -24,7 +26,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.entity.Employee;
-import kz.aksay.polygraph.entity.EmployeeType;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.WorkType;
@@ -54,6 +55,7 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private ComboBox<WorkTypeFX> workTypeCombo;
 	@FXML private ComboBox<MaterialFX> materialCombo;
 	@FXML private TextField quantityField;
+	@FXML private TextField costField;
 	@FXML private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
 	@FXML private Label producedWorkIdLabel;
 	@FXML private Label validationLabel;
@@ -75,6 +77,7 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML
 	public void save(ActionEvent actionEvent) {
 		try {
+			BigDecimal cost = retrieveCost();
 			EmployeeFX executorFX 
 				= executorCombo.getSelectionModel().getSelectedItem();
 			WorkTypeFX workTypeFX 
@@ -101,6 +104,7 @@ public class ProducedWorkFormController implements Initializable,
 			
 			producedWork.setExecutor(executor);
 			producedWork.setWorkType(workType);
+			producedWork.setCost(cost);
 			
 			if(producedWorkFX == null) {
 				producedWorkFX = new ProducedWorkFX(producedWork);
@@ -115,6 +119,17 @@ public class ProducedWorkFormController implements Initializable,
 		} catch (Exception e) {
 			e.printStackTrace();
 			validationLabel.setText(e.getMessage());
+		}
+	}
+	
+	private BigDecimal retrieveCost() {
+		try {
+			String costString = costField.getText();
+			BigDecimal cost = new BigDecimal(costString);
+			return cost;
+		}
+		catch(NumberFormatException nfe) {
+			throw new ValidationException("Стоимость указана в некорректном формате!");
 		}
 	}
 	
@@ -192,6 +207,7 @@ public class ProducedWorkFormController implements Initializable,
 			
 			executorCombo.setValue( producedWorkFX.getExecutorFX() );
 			workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
+			costField.setText(producedWorkFX.getCost().toString());
 			Collection<MaterialConsumption> materialConsumptions 
 				= materialConsumptionService.findAllByProducedWorkId(
 						producedWorkFX.getId());

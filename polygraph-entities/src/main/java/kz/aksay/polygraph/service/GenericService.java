@@ -20,6 +20,10 @@ public abstract class GenericService<T, PK extends Serializable> {
 		return getDao().readAll();
 	}
 	
+	public List<T> findAll(int offset, int limit) {
+		return getDao().readAll(offset, limit);
+	}
+	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public T save(T entity) throws Exception {
 		

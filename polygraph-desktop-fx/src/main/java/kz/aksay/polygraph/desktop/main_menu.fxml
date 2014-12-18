@@ -89,7 +89,7 @@
             </AnchorPane>
             <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <TabPane fx:id="tabPane" prefHeight="556.0" prefWidth="690.0" />
+                  <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="690.0"/>
                </children>
               </AnchorPane>
          </items>

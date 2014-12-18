@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.entity;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,12 +15,15 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="\"order\"")
-public class Order extends EntitySupport {
+public class Order extends EntitySupport implements MaterialConsumer {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6315648934763901488L;
+	
+	@Transient
+	private Set<MaterialConsumption> materialConsumption;
 	
 	@ManyToOne
 	@JoinColumn(name="customer_id", nullable=false)
@@ -35,6 +39,19 @@ public class Order extends EntitySupport {
 	@Column
 	private String description;
 
+	@Transient
+	public BigDecimal getTotalCost() {
+		BigDecimal totalCost = BigDecimal.ZERO;
+		if(producedWorks != null) {
+			for(ProducedWork producedWork : producedWorks) {
+				BigDecimal cost;
+				if((cost = producedWork.getCost()) != null)
+					totalCost = totalCost.add(cost);
+			}
+		}
+		return totalCost;
+	}
+	
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -65,5 +82,13 @@ public class Order extends EntitySupport {
 
 	public void setProducedWorks(Set<ProducedWork> producedWorks) {
 		this.producedWorks = producedWorks;
+	}
+
+	public Set<MaterialConsumption> getMaterialConsumption() {
+		return materialConsumption;
+	}
+
+	public void setMaterialConsumption(Set<MaterialConsumption> materialConsumption) {
+		this.materialConsumption = materialConsumption;
 	}
 }

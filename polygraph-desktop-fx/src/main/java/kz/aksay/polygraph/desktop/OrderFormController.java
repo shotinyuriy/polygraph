@@ -4,10 +4,12 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,15 +20,18 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.entity.Customer;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
+import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.service.CustomerService;
 import kz.aksay.polygraph.service.EmployeeService;
@@ -55,12 +60,17 @@ public class OrderFormController implements
 	@FXML private Label orderIdLabel;
 	@FXML private Label customerIdLabel;
 	@FXML private Label validationLabel;
+	@FXML private Label totalCostLabel;
 	
 	@FXML private Label customerField;
 	@FXML private ComboBox<EmployeeFX> currentExecutorCombo;
 	@FXML private TextArea descriptionField;
 	
-	@FXML private TableView<ProducedWorkFX> producedWorksTableView; 
+	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
+	@FXML private AnchorPane materialConsumptionPane;
+	
+	private MaterialConsumptionHolderFX materialConsumptionHolder 
+		= new MaterialConsumptionHolderFX();
 
 	@FXML
 	public void save(ActionEvent actionEvent) {
@@ -76,6 +86,7 @@ public class OrderFormController implements
 			}
 			
 			order.setDescription(descriptionField.getText());
+			order.setMaterialConsumption(materialConsumptionHolder.getMaterialConsumption());
 			
 			EmployeeFX employeeFX 
 				= currentExecutorCombo.getSelectionModel().getSelectedItem();
@@ -130,6 +141,21 @@ public class OrderFormController implements
 		stage.show();
 	}
 	
+	@FXML
+	public void deleteProducedWork(ActionEvent actionEvent) {
+		
+		List<ProducedWorkFX> producedWorksFXToRemove 
+			= producedWorksTableView.getSelectionModel().getSelectedItems();
+		
+		List<ProducedWork> producedWorksToRemove = new LinkedList<ProducedWork>();
+		for(ProducedWorkFX producedWorkFX : producedWorksFXToRemove) {
+			producedWorksToRemove.add(producedWorkFX.getProducedWork());
+		}
+		this.order.getProducedWorks().removeAll(producedWorksToRemove);
+		producedWorksTableView.getItems().removeAll(producedWorksFXToRemove);
+		
+	}
+	
 	@Override
 	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
@@ -151,10 +177,13 @@ public class OrderFormController implements
 				EmployeeFX employeeFX = orderFX.getCurrentExecutorFX();
 				currentExecutorCombo.getSelectionModel().select(employeeFX);
 				
+				materialConsumptionHolder.setMaterialConsumption(order.getMaterialConsumption());
+				
 				Collection<ProducedWorkFX> producedWorksFX 
 					= ProducedWorkFX.contvertListEntityToFX(order.getProducedWorks());
 				
 				producedWorksTableView.getItems().addAll(producedWorksFX);
+				refreshTotalCost();
 			} else {
 				isNewOrder = true;
 				order = new Order();
@@ -169,10 +198,24 @@ public class OrderFormController implements
 			}
 		}
 	}
+	
+	@Override
+	public void refreshTotalCost() {
+		totalCostLabel.setText(order.getTotalCost().setScale(2).toString());
+	}
 
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
+		initializeMaterialConsumptionTableView();
+	}
+	
+	private void initializeMaterialConsumptionTableView() {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put(ParameterKeys.MATERIAL_CONSUMER, materialConsumptionHolder);
+		Node node = SessionUtil.loadFxmlNodeWithSession(MaterialConsumptionTableViewController.class, 
+				"material_consumption_tableview.fxml", session, parameters);
+		materialConsumptionPane.getChildren().add(node);
 	}
 
 	@Override
@@ -187,11 +230,19 @@ public class OrderFormController implements
 		currentExecutorCombo.getItems().setAll(employeesFX);
 	}
 	
+	private void refreshProducedWorkTableView() {
+		List<ProducedWorkFX> producedWorksFX = new LinkedList<>(); 
+		producedWorksFX.addAll(producedWorksTableView.getItems());
+		producedWorksTableView.getItems().removeAll(producedWorksFX);
+		producedWorksTableView.getItems().addAll(producedWorksFX);
+	}
+	
 	@Override
 	public void addProducedWork(ProducedWorkFX producedWorkFX) {
 		System.out.println("ADD NEW PRODUCED WORK "+producedWorkFX);
 		producedWorkFX.setDirty(true);
 		producedWorksTableView.getItems().add(producedWorkFX);
+		refreshProducedWorkTableView();
 		if(order != null) {
 			order.getProducedWorks().add(producedWorkFX.getProducedWork());
 		}
@@ -199,9 +250,8 @@ public class OrderFormController implements
 
 	@Override
 	public void saveProducedWork(ProducedWorkFX producedWorkFX) {
-		producedWorksTableView.getItems().remove(producedWorkFX);
 		producedWorkFX.setDirty(true);
-		producedWorksTableView.getItems().add(producedWorkFX);
+		refreshProducedWorkTableView();
 	}
 
 	

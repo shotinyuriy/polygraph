@@ -16,7 +16,7 @@ import kz.aksay.polygraph.entity.EntitySupport;
 
 @Entity
 @Table(name="produced_work")
-public class ProducedWork extends EntitySupport {
+public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	
 	/**
 	 * 
@@ -41,12 +41,24 @@ public class ProducedWork extends EntitySupport {
 	@Column(name="finished_at")
 	private Date finishedAt;
 	
-	@Column(name="cost")
+	@Column
+	private BigDecimal price = BigDecimal.ZERO;
+	
+	@Column
+	private Integer quantity = 0;
+	
+	@Transient
 	private BigDecimal cost;
 	
 	@Transient
 	private boolean dirty;
 
+	private void calcCost() {
+		if(price == null) price = BigDecimal.ZERO;
+		if(quantity == null) quantity = Integer.valueOf(0);
+		cost = price.multiply(BigDecimal.valueOf(quantity));
+	}
+	
 	public Employee getExecutor() {
 		return executor;
 	}
@@ -96,10 +108,23 @@ public class ProducedWork extends EntitySupport {
 	}
 
 	public BigDecimal getCost() {
+		calcCost();
 		return cost;
 	}
 
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 }

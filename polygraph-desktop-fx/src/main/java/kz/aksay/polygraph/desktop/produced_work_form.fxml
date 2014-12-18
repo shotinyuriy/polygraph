@@ -8,40 +8,45 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.AnchorPane?>
 
 <VBox fx:id="producedWorkContainer" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 		fx:controller="kz.aksay.polygraph.desktop.ProducedWorkFormController" alignment="CENTER" spacing="10.0">
 	
-	<GridPane vgap="10.0" hgap="10.0">
-	      <Label fx:id="producedWorkIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+	<AnchorPane>
+		<children>
+			<!-- <TabPane prefHeight="150.0" maxHeight="150.0" >
+				<tabs>
+					<Tab text="Работа">
+						<content> -->
+							<GridPane prefHeight="300.0"  maxHeight="300.0" vgap="10.0" hgap="10.0">
+							      <Label fx:id="producedWorkIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+							
+							      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="Исполнитель" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+							      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+							      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Цена" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+							      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Количество" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+							      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+							      
+							      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+								  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+								  <TextField fx:id="priceField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+								  <TextField fx:id="quantityField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+								  <Label fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+							</GridPane>
+						<!-- </content>
+					</Tab>
+				</tabs>
+			</TabPane> -->
+		</children>
+	</AnchorPane>
 	
-	      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="Исполнитель" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-	      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-	      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-	      
-	      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-		  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-		  <TextField fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-	</GridPane>
-	
-	<TableView fx:id="materialConsumptionsTableView">
-		<columns>
-			<TableColumn text="Материал">
-				<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
-			</TableColumn>
-			<TableColumn text="Количество">
-				<cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
-			</TableColumn>
-		</columns>
-	</TableView>
-	
-	<HBox spacing="10.0">
-		<Label text="Материал"/>
-		<ComboBox fx:id="materialCombo"/>
-		<Label text="Количество"/>
-		<TextField fx:id="quantityField" />
-		<Button fx:id="addMaterialConsumption" text="Добавить расход" onAction="#addConsumption"/>
-	</HBox>
+     <!-- <AnchorPane fx:id="materialConsumptionPane">
+     </AnchorPane> -->
 	
 	<HBox spacing="10.0">
 		<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 

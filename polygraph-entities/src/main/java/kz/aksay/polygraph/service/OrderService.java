@@ -2,6 +2,7 @@ package kz.aksay.polygraph.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.MaterialConsumption;
@@ -20,6 +21,7 @@ public class OrderService extends GenericService<Order, Long> {
 	
 	private ProducedWorkService producedWorkService;
 	
+	private MaterialConsumptionService materialConsumptionService;
 	
 	@Override
 	@Transactional
@@ -29,6 +31,10 @@ public class OrderService extends GenericService<Order, Long> {
 			List<ProducedWork> producedWorks = producedWorkService.findAllByOrderId(id);
 			order.setProducedWorks(new HashSet<ProducedWork>());
 			order.getProducedWorks().addAll(producedWorks);
+			
+			Set<MaterialConsumption> materialConsumptions 
+				= materialConsumptionService.findAllByOrderId(order.getId());
+			order.setMaterialConsumption(materialConsumptions);
 		}
 		return order;
 	}
@@ -44,6 +50,15 @@ public class OrderService extends GenericService<Order, Long> {
 			}
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setDirty(false);
+			}
+			
+			if(order.getMaterialConsumption() != null) {
+				for(MaterialConsumption materialConsumption : order.getMaterialConsumption() ){
+					if(materialConsumption.isDirty()) {
+						materialConsumption = materialConsumptionService.save(materialConsumption);
+						materialConsumption.setDirty(false);
+					}
+				}
 			}
 		}
 		return order;
@@ -62,5 +77,10 @@ public class OrderService extends GenericService<Order, Long> {
 	@Autowired
 	public void setProducedWorkService(ProducedWorkService producedWorkService) {
 		this.producedWorkService = producedWorkService;
+	}
+	
+	@Autowired
+	public void setMaterialConsumptionService(MaterialConsumptionService materialConsumptionService) {
+		this.materialConsumptionService = materialConsumptionService;
 	}
 }

@@ -9,4 +9,6 @@ public abstract class ParameterKeys {
 	
 	public static final String ORDER_FORM = "orderForm";
 	public static final String PRODUCED_WORK = "producedWork";
+	public static final String MATERIAL_CONSUMER = "materialConsumer";
+	public static final String MATERIAL_CONSUMPION_FX_LIST = "materialConsumptionFXList";
 }

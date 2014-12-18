@@ -3,6 +3,7 @@ package kz.aksay.polygraph.test.service;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.OrderService;
 import kz.aksay.polygraph.test.ContextUtils;
 

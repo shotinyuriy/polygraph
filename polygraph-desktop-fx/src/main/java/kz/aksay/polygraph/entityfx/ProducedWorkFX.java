@@ -59,14 +59,14 @@ public class ProducedWorkFX {
 	
 	public String getBeginDateTimeString() {
 		if(producedWork.getCreatedAt() != null) {
-			return FormatUtil.dateTimeFormatter.format(producedWork.getCreatedAt());
+			return FormatUtil.dateFormatter.format(producedWork.getCreatedAt());
 		}
 		return null;
 	}
 	
 	public String getFinishDateTimeString() {
 		if(producedWork.getFinishedAt() != null) {
-			return FormatUtil.dateTimeFormatter.format(producedWork.getFinishedAt());
+			return FormatUtil.dateFormatter.format(producedWork.getFinishedAt());
 		}
 		return null;
 	}

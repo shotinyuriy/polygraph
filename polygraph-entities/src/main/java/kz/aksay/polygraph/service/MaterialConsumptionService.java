@@ -27,6 +27,15 @@ public class MaterialConsumptionService extends
 		return materialConsumptions;
 	}
 	
+	@Transactional(readOnly=true)
+	public Set<MaterialConsumption> findAllByOrderId(Long orderId) {
+		Criteria criteria = getDao().getSession().createCriteria(MaterialConsumption.class);
+		criteria.add(Restrictions.eqOrIsNull("order.id", orderId));
+		Set<MaterialConsumption> materialConsumptions = new HashSet<>();
+		materialConsumptions.addAll(getDao().readByCriteria(criteria));
+		return materialConsumptions;
+	}
+	
 	@Override
 	protected GenericDao<MaterialConsumption, Long> getDao() {
 		return materialConsumptionDao;

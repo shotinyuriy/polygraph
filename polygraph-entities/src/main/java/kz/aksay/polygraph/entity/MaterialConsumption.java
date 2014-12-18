@@ -28,11 +28,15 @@ public class MaterialConsumption extends EntitySupport {
 	@Column
 	private BigDecimal quantity;
 	
-	
 	@ManyToOne
 	@ForeignKey(name="material_consumption_fk_produced_work")
-	@JoinColumn(name="produced_work_id", nullable=false)
+	@JoinColumn(name="produced_work_id")
 	private ProducedWork producedWork;
+	
+	@ManyToOne
+	@ForeignKey(name="material_consumption_fk_order")
+	@JoinColumn(name="order_id")
+	private Order order;
 	
 	@Transient
 	private boolean dirty = false;
@@ -53,20 +57,28 @@ public class MaterialConsumption extends EntitySupport {
 		this.quantity = quantity;
 	}
 
-	public ProducedWork getProducedWork() {
-		return producedWork;
-	}
-
-	public void setProducedWork(ProducedWork producedWork) {
-		this.producedWork = producedWork;
-	}
-
 	public boolean isDirty() {
 		return dirty;
 	}
 
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
+	}
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	public ProducedWork getProducedWork() {
+		return producedWork;
+	}
+
+	public void setProducedWork(ProducedWork producedWork) {
+		this.producedWork = producedWork;
 	}
 
 }

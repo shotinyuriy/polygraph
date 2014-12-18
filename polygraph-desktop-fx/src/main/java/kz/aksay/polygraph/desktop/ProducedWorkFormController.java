@@ -4,16 +4,20 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import javax.validation.ValidationException;
-
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -22,9 +26,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.converter.NumberStringConverter;
+
+import javax.validation.ValidationException;
+
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.ProducedWork;
@@ -34,6 +42,7 @@ import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.MaterialFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
+import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.service.EmployeeService;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
@@ -55,8 +64,9 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private ComboBox<WorkTypeFX> workTypeCombo;
 	@FXML private ComboBox<MaterialFX> materialCombo;
 	@FXML private TextField quantityField;
-	@FXML private TextField costField;
-	@FXML private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
+	@FXML private TextField priceField;
+	@FXML private Label costField;
+	@FXML private AnchorPane materialConsumptionPane;
 	@FXML private Label producedWorkIdLabel;
 	@FXML private Label validationLabel;
 	@FXML private Button finishWorkButton;
@@ -68,6 +78,13 @@ public class ProducedWorkFormController implements Initializable,
 	private ProducedWorkFX producedWorkFX;
 	private ProducedWork producedWork;
 	private OrderForm orderForm;
+	
+	private MaterialConsumptionHolderFX materialConsumptionHolder 
+		= new MaterialConsumptionHolderFX();
+	
+	private SimpleDoubleProperty price = new SimpleDoubleProperty();
+	private SimpleIntegerProperty quantity = new SimpleIntegerProperty();
+	private SimpleDoubleProperty cost = new SimpleDoubleProperty();
 	
 	private void closeByActionEvent(ActionEvent actionEvent) {
 		Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -104,15 +121,18 @@ public class ProducedWorkFormController implements Initializable,
 			
 			producedWork.setExecutor(executor);
 			producedWork.setWorkType(workType);
-			producedWork.setCost(cost);
+			producedWork.setPrice(BigDecimal.valueOf(price.get()));
+			producedWork.setQuantity(quantity.get());
 			
 			if(producedWorkFX == null) {
 				producedWorkFX = new ProducedWorkFX(producedWork);
 				fillMaterialConsumtions(producedWorkFX);
 				orderForm.addProducedWork(producedWorkFX);
+				orderForm.refreshTotalCost();
 			} else {
 				fillMaterialConsumtions(producedWorkFX);
 				orderForm.saveProducedWork(producedWorkFX);
+				orderForm.refreshTotalCost();
 			}
 			
 			closeByActionEvent(actionEvent);
@@ -134,12 +154,8 @@ public class ProducedWorkFormController implements Initializable,
 	}
 	
 	private void fillMaterialConsumtions(ProducedWorkFX producedWorkFX) {
-		Set<MaterialConsumption> materialConsumptions = new HashSet<MaterialConsumption>();
-		for(MaterialConsumptionFX materialConsumptionFX : materialConsumptionsTableView.getItems()) {
-			materialConsumptionFX.setProducedWork(producedWorkFX);
-			materialConsumptions.add(materialConsumptionFX.getMaterialConsumption());
-		}
-		producedWorkFX.setMaterialConsumption(materialConsumptions);
+		producedWorkFX.setMaterialConsumption(
+				materialConsumptionHolder.getMaterialConsumption());
 	}
 
 	@FXML
@@ -152,25 +168,6 @@ public class ProducedWorkFormController implements Initializable,
 		}
 		
 		closeByActionEvent(actionEvent);
-	}
-	
-	@FXML
-	public void addConsumption(ActionEvent actionEvent) {
-		try {
-			MaterialConsumption materialConsumption = new MaterialConsumption();
-			materialConsumption.setCreatedAt(new Date());
-			materialConsumption.setCreatedBy(SessionUtil.retrieveUser(session));
-			MaterialConsumptionFX materialConsumptionFX 
-				= new MaterialConsumptionFX(materialConsumption);
-			materialConsumptionFX.setDirty(true);
-			MaterialFX materialFX = materialCombo.getSelectionModel().getSelectedItem();
-			materialConsumptionFX.setMaterialFX(materialFX);
-			materialConsumptionFX.setQuantity(retrieveQuantity());
-			materialConsumptionsTableView.getItems().add(materialConsumptionFX);
-		}
-		catch(Exception e) {
-			validationLabel.setText(e.getMessage());
-		}
 	}
 	
 	private BigDecimal retrieveQuantity() throws Exception {
@@ -190,6 +187,7 @@ public class ProducedWorkFormController implements Initializable,
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
+		//initializeMaterialConsumptionTableView();
 	}
 
 	@Override
@@ -207,18 +205,23 @@ public class ProducedWorkFormController implements Initializable,
 			
 			executorCombo.setValue( producedWorkFX.getExecutorFX() );
 			workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
-			costField.setText(producedWorkFX.getCost().toString());
-			Collection<MaterialConsumption> materialConsumptions 
-				= materialConsumptionService.findAllByProducedWorkId(
-						producedWorkFX.getId());
-			materialConsumptionsTableView.getItems().addAll(
-					MaterialConsumptionFX.convertListEntityToFX(
-							materialConsumptions));
+			
+			quantity.set(producedWork.getQuantity());
+			price.set(producedWork.getPrice().doubleValue());
+			//materialConsumptionHolder.setMaterialConsumption(producedWork.getMaterialConsumption());
 
 			finishWorkButton.setVisible(true);
 		} else {
 			finishWorkButton.setVisible(false);
 		}
+	}
+	
+	private void initializeMaterialConsumptionTableView() {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put(ParameterKeys.MATERIAL_CONSUMER, materialConsumptionHolder);
+		Node node = SessionUtil.loadFxmlNodeWithSession(MaterialConsumptionTableViewController.class, 
+				"material_consumption_tableview.fxml", session, parameters);
+		materialConsumptionPane.getChildren().add(node);
 	}
 
 	@Override
@@ -226,7 +229,8 @@ public class ProducedWorkFormController implements Initializable,
 		employeeService = StartingPane.getBean(EmployeeService.class);
 		workTypeService = StartingPane.getBean(WorkTypeService.class);
 		materialService = StartingPane.getBean(MaterialService.class);
-		materialConsumptionService = StartingPane.getBean(MaterialConsumptionService.class);
+		materialConsumptionService = StartingPane.getBean(
+				MaterialConsumptionService.class);
 		
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employeeService.findAll());
@@ -235,10 +239,30 @@ public class ProducedWorkFormController implements Initializable,
 			= WorkTypeFX.convertListEntityToFX(workTypeService.findAll());
 		workTypeCombo.getItems().addAll(workTypesFX);
 		
-		Collection<MaterialFX> materialsFX 
-			= MaterialFX.convertListEntityToFX(materialService.findAll());
-		materialCombo.getItems().addAll(materialsFX);
+		
+		Bindings.bindBidirectional(quantityField.textProperty(), 
+                quantity, 
+                new NumberStringConverter());
+		
+		Bindings.bindBidirectional(priceField.textProperty(), 
+                price, 
+                new NumberStringConverter());
+		
+		costField.textProperty().bind(cost.asString());
+		
+		cost.bind(price.multiply(quantity));
 		
 	}
-
+	
+	public IntegerProperty getQuantityProperty() {
+		return quantity;
+	}
+	
+	public DoubleProperty getPriceProperty() {
+		return price;
+	}
+	
+	public DoubleProperty getCostProperty() {
+		return cost;
+	}
 }

@@ -92,6 +92,11 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	public List<T> readAll() {
 		return (List<T>) getSession().createCriteria(clazz()).list();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> readAll(int offset, int limit) {
+		return (List<T>) getSession().createCriteria(clazz()).setFirstResult(offset).setMaxResults(limit).list();
+	}
 
 	@Override
 	public Session getSession() {
@@ -110,7 +115,6 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> readByCriteria(Criteria criteria) {
-		// TODO Auto-generated method stub
 		return (List<T>) criteria.list();
 	}
 

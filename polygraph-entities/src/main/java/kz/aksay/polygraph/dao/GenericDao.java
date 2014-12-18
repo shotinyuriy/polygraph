@@ -24,6 +24,8 @@ public interface GenericDao <T, PK extends Serializable> {
 	
 	public List<T> readAll();
 	
+	public List<T> readAll(int offset, int limit);
+	
 	public List<T> readByCriteria(Criteria criteria);
 	
 	public <T> T readUniqueByCriteria(Criteria criteria);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+	fx:controller="kz.aksay.polygraph.desktop.MaterialConsumptionTableViewController" maxHeight="200.0">
+		<Label  text="Расход материалов" />
+		<TableView  fx:id="materialConsumptionsTableView">
+			<columns>
+				<TableColumn text="Материал">
+					<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
+				</TableColumn>
+				<TableColumn text="Количество">
+					<cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
+				</TableColumn>
+			</columns>
+		</TableView>
+		
+		<HBox  spacing="10.0">
+			<Label text="Материал"/>
+			<ComboBox fx:id="materialCombo"/>
+			<Label text="Количество"/>
+			<TextField fx:id="quantityField" />
+			<Button text="Добавить расход" onAction="#addConsumption"/>
+			<Button text="Удалить расход" onAction="#removeConsumption"/>
+		</HBox>
+		
+		<Label fx:id="validationLabel"/>
+</VBox>
+

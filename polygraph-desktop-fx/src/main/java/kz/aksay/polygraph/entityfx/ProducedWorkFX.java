@@ -19,11 +19,13 @@ public class ProducedWorkFX {
 	private WorkTypeFX workTypeFX;
 	private boolean dirty = false;
 	
-	public static Collection<ProducedWorkFX> contvertListEntityToFX(
+	public static Collection<ProducedWorkFX> convertListEntityToFX(
 			Collection<ProducedWork> producedWorks) {
 		Collection<ProducedWorkFX> producedWorksFX = new LinkedList<>();
-		for(ProducedWork producedWork : producedWorks) {
-			producedWorksFX.add(new ProducedWorkFX(producedWork));
+		if(producedWorks != null) {
+			for(ProducedWork producedWork : producedWorks) {
+				producedWorksFX.add(new ProducedWorkFX(producedWork));
+			}
 		}
 		return producedWorksFX;
 	}

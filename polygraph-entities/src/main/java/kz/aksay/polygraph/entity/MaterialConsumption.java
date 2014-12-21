@@ -40,6 +40,15 @@ public class MaterialConsumption extends EntitySupport {
 	
 	@Transient
 	private boolean dirty = false;
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("MaterialConsumption: [");
+		sb.append("dirty: ").append(dirty);
+		sb.append("]");
+		return sb.toString();
+	}
 
 	public Material getMaterial() {
 		return material;

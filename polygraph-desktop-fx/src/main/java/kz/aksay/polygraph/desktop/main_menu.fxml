@@ -11,7 +11,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+<VBox minWidth="200.0" minHeight="200.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="kz.aksay.polygraph.desktop.MainMenuController">
   <children>
     <MenuBar onMouseClicked="#exit" VBox.vgrow="NEVER">
@@ -21,8 +21,9 @@
                 <MenuItem fx:id="menuExit" mnemonicParsing="false" onAction="#exit" text="Выход" />
               </items>
             </Menu>
-         </menus></MenuBar>
-    <SplitPane dividerPositions="0.22828507795100222" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         </menus>
+    </MenuBar>
+    <SplitPane dividerPositions="0.22828507795100222" focusTraversable="true" prefHeight="600.0" prefWidth="400.0" VBox.vgrow="ALWAYS" minHeight="200.0" minWidth="200.0">
          <items>
             <AnchorPane prefHeight="554.0" prefWidth="330.0">
                <children>
@@ -87,9 +88,9 @@
                   </Accordion>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0" minHeight="200.0" minWidth="200.0">
                <children>
-                  <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="690.0"/>
+                  <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="690.0" minHeight="200.0" minWidth="200.0"/>
                </children>
               </AnchorPane>
          </items>

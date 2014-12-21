@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +23,17 @@ public class Order extends EntitySupport implements MaterialConsumer {
 	 * 
 	 */
 	private static final long serialVersionUID = -6315648934763901488L;
+	
+	public static enum State {
+		PROCESSED("В работе"),
+		FINISHED("Завершен");
+		
+		private String name;
+		
+		private State(String name) {
+			this.name = name;
+		}
+	}
 	
 	@Transient
 	private Set<MaterialConsumption> materialConsumption;
@@ -38,6 +51,10 @@ public class Order extends EntitySupport implements MaterialConsumer {
 
 	@Column
 	private String description;
+	
+	@Column
+	@Enumerated(EnumType.STRING)
+	private State state;
 
 	@Transient
 	public BigDecimal getTotalCost() {
@@ -90,5 +107,13 @@ public class Order extends EntitySupport implements MaterialConsumer {
 
 	public void setMaterialConsumption(Set<MaterialConsumption> materialConsumption) {
 		this.materialConsumption = materialConsumption;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
 	}
 }

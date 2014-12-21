@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,6 +25,17 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	 */
 	private static final long serialVersionUID = -9184662638673352545L;
 
+	public static enum State {
+		PROCESSED("В работе"),
+		FINISHED("Завершена");
+		
+		private String name;
+		
+		private State(String name) {
+			this.name = name;
+		}
+	}
+	
 	@Transient
 	private Set<MaterialConsumption> materialConsumption;
 	
@@ -52,12 +65,25 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	
 	@Transient
 	private boolean dirty;
+	
+	@Column
+	@Enumerated(EnumType.STRING)
+	private State state;
 
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("ProducedWork: [");
+		sb.append("dirty: ").append(dirty);
+		sb.append("]");
+		return sb.toString();
+	}
+	
 	private void calcCost() {
 		if(price == null) price = BigDecimal.ZERO;
 		if(quantity == null) quantity = Integer.valueOf(0);
 		cost = price.multiply(BigDecimal.valueOf(quantity));
-	}
+	}	
 	
 	public Employee getExecutor() {
 		return executor;
@@ -126,5 +152,13 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
 	}
 }

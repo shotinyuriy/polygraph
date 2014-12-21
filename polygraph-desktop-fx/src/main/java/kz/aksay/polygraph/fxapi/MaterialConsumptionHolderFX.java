@@ -1,40 +1,21 @@
 package kz.aksay.polygraph.fxapi;
 
-import java.util.HashSet;
 import java.util.Set;
 
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 
-public class MaterialConsumptionHolderFX {
+public interface MaterialConsumptionHolderFX {
 
-	private ObservableList<MaterialConsumptionFX> materialConsumptionsFX = new SimpleListProperty<>();
-	
-	public ObservableList<MaterialConsumptionFX> getMaterialConsumptionFX() {
-		return materialConsumptionsFX;
-	}
+	public ObservableList<MaterialConsumptionFX> getMaterialConsumptionFX();
 	
 	public void setMaterialConsumptionFX(
-			ObservableList<MaterialConsumptionFX> materialConsumption) {
-		this.materialConsumptionsFX = materialConsumption;
-	}
+			ObservableList<MaterialConsumptionFX> materialConsumption);
 	
-	public Set<MaterialConsumption> getMaterialConsumption() {
-		Set<MaterialConsumption> resultSet = new HashSet<>();
-		for(MaterialConsumptionFX materialConsumptionFX : materialConsumptionsFX) {
-			resultSet.add(materialConsumptionFX.getMaterialConsumption());
-		}
-		return resultSet;
-	}
-
+	public Set<MaterialConsumption> getMaterialConsumption();
+	
 	public void setMaterialConsumption(
-			Set<MaterialConsumption> materialConsumptions) {
-		materialConsumptionsFX.clear();
-		for(MaterialConsumption materialConsumption : materialConsumptions) {
-			materialConsumptionsFX.add(new MaterialConsumptionFX(materialConsumption));
-		}
-	}
+			Set<MaterialConsumption> materialConsumptions);
 
 }

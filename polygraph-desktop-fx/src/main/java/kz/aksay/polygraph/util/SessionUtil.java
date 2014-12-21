@@ -41,6 +41,7 @@ public abstract class SessionUtil {
 			FXMLLoader fxmlLoader = new FXMLLoader(url);
 			node = (Node)fxmlLoader.load();
 			Object controller = fxmlLoader.getController();
+			
 			if(controller instanceof SessionAware) {
 				SessionAware sessionAwareController = (SessionAware)controller;
 				sessionAwareController.setSession(session);
@@ -48,6 +49,11 @@ public abstract class SessionUtil {
 			if(controller instanceof ParametersAware) {
 				ParametersAware parametersAwareController = (ParametersAware)controller;
 				parametersAwareController.setParameters(parameters);
+			}
+			
+			if(controller instanceof InitializingBean) {
+				InitializingBean initializableBean = (InitializingBean)controller;
+				initializableBean.afterPropertiesSet();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

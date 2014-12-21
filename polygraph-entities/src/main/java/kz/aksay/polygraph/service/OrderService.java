@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
+
 @Service
 public class OrderService extends GenericService<Order, Long> {
 
@@ -45,8 +47,10 @@ public class OrderService extends GenericService<Order, Long> {
 		order = super.save(order);
 		if(order.getProducedWorks() != null) {
 			for(ProducedWork producedWork : order.getProducedWorks()) {
-				producedWork.setOrder(order);
-				producedWork = producedWorkService.save(producedWork);
+				if(producedWork.isDirty()) {
+					producedWork.setOrder(order);
+					producedWork = producedWorkService.save(producedWork);
+				}
 			}
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setDirty(false);
@@ -55,9 +59,12 @@ public class OrderService extends GenericService<Order, Long> {
 			if(order.getMaterialConsumption() != null) {
 				for(MaterialConsumption materialConsumption : order.getMaterialConsumption() ){
 					if(materialConsumption.isDirty()) {
+						materialConsumption.setOrder(order);
 						materialConsumption = materialConsumptionService.save(materialConsumption);
-						materialConsumption.setDirty(false);
 					}
+				}
+				for(MaterialConsumption materialConsumption : order.getMaterialConsumption()) {
+					materialConsumption.setDirty(false);;
 				}
 			}
 		}

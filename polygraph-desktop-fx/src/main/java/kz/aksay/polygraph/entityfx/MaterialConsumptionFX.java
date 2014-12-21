@@ -10,16 +10,6 @@ import kz.aksay.polygraph.entity.ProducedWork;
 
 public class MaterialConsumptionFX {
 
-	public static Collection<MaterialConsumptionFX> convertListEntityToFX(
-			Collection<MaterialConsumption> materialConsumtions) {
-		Collection<MaterialConsumptionFX> materialConsumptionsFX 
-			= new LinkedList<MaterialConsumptionFX>();
-		for(MaterialConsumption materialConsumption : materialConsumtions) {
-			materialConsumptionsFX.add(new MaterialConsumptionFX(materialConsumption));
-		}
-		return materialConsumptionsFX;
-	}
-	
 	private MaterialConsumption materialConsumption;
 	private MaterialFX materialFX;
 	
@@ -29,6 +19,18 @@ public class MaterialConsumptionFX {
 		if(material != null) {
 			materialFX = new  MaterialFX(material);
 		}
+	}
+	
+	public static Collection<MaterialConsumptionFX> convertListEntityToFX(
+			Collection<MaterialConsumption> materialConsumtions) {
+		Collection<MaterialConsumptionFX> materialConsumptionsFX 
+			= new LinkedList<MaterialConsumptionFX>();
+		if(materialConsumtions != null) {
+			for(MaterialConsumption materialConsumption : materialConsumtions) {
+				materialConsumptionsFX.add(new MaterialConsumptionFX(materialConsumption));
+			}
+		}
+		return materialConsumptionsFX;
 	}
 
 	public MaterialConsumption getMaterialConsumption() {

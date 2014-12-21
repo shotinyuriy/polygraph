@@ -19,38 +19,29 @@
 	
 	<AnchorPane>
 		<children>
-			<!-- <TabPane prefHeight="150.0" maxHeight="150.0" >
-				<tabs>
-					<Tab text="Работа">
-						<content> -->
-							<GridPane prefHeight="300.0"  maxHeight="300.0" vgap="10.0" hgap="10.0">
-							      <Label fx:id="producedWorkIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-							
-							      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="Исполнитель" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-							      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-							      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Цена" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-							      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Количество" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-							      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
-							      
-							      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-								  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-								  <TextField fx:id="priceField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-								  <TextField fx:id="quantityField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-								  <Label fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-							</GridPane>
-						<!-- </content>
-					</Tab>
-				</tabs>
-			</TabPane> -->
+			<GridPane prefHeight="300.0"  maxHeight="300.0" vgap="10.0" hgap="10.0">
+			      <Label fx:id="producedWorkIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+			
+			      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="Исполнитель" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+			      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+			      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Цена" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+			      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Количество" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+			      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+			      
+			      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+				  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+				  <TextField fx:id="priceField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+				  <TextField fx:id="quantityField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+				  <Label fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+			</GridPane>
 		</children>
 	</AnchorPane>
-	
-     <!-- <AnchorPane fx:id="materialConsumptionPane">
-     </AnchorPane> -->
 	
 	<HBox spacing="10.0">
 		<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
 	      	text="ОК" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+		<Button fx:id="saveAndOpenNewButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#saveAndOpenNew" 
+	      	text="OK+1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 		<Button fx:id="finishWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#finishWork" 
 	      	text="Завершить работу"/>
 	</HBox>

@@ -6,12 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController">
-
-   <top>
-      <GridPane BorderPane.alignment="CENTER">
+<VBox minHeight="200.0" minWidth="200.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController" >
+	<children>
+   
+      <GridPane BorderPane.alignment="CENTER"  VBox.vgrow="SOMETIMES">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="461.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="139.0" />
@@ -24,25 +25,33 @@
             <TextField fx:id="searchField"/>
          </children>
       </GridPane>
-   </top>
-   <center>
-      <TableView fx:id="ordersTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+   
+   <VBox fillWidth="true" minHeight="200.0" minWidth="200.0" VBox.vgrow="SOMETIMES">
+   	  <children>
+      <TableView fx:id="ordersTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" VBox.vgrow="SOMETIMES">
         <columns>
-          <TableColumn prefWidth="150" text="Дата и время заказа">
+          <TableColumn prefWidth="150" text="Номер заказа">
+          	<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
+          </TableColumn>
+          <TableColumn prefWidth="100.0" text="Дата заказа">
           	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
           </TableColumn>
           <TableColumn prefWidth="200.0" text="Клиент">
           	<cellValueFactory><PropertyValueFactory property="customerFullName" /></cellValueFactory>
           </TableColumn>
-		  <TableColumn prefWidth="100.0" text="Исполнитель">
+		  <TableColumn prefWidth="150.0" text="Исполнитель">
           	<cellValueFactory><PropertyValueFactory property="currentExecutorDescription" /></cellValueFactory>
           </TableColumn>
         </columns>
       </TableView>
-   </center>
-	<bottom>
-	<AnchorPane>
+      </children>
+	</VBox>
+   
+	<VBox  VBox.vgrow="ALWAYS">
+	<children>
 		<Button onAction="#openOrderForm">Изменить</Button>
-	</AnchorPane>
-	</bottom>   
-</BorderPane>
+	</children>
+	</VBox>
+	
+	</children>
+</VBox>

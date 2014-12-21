@@ -68,6 +68,8 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 			materialConsumptionFX.setMaterialFX(materialFX);
 			materialConsumptionFX.setQuantity(retrieveQuantity());
 			materialConsumptionsTableView.getItems().add(materialConsumptionFX);
+			
+			clearForm();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -75,6 +77,11 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 		}
 	}
 	
+	private void clearForm() {
+		materialCombo.getSelectionModel().select(null);
+		quantityField.setText(null);
+	}
+
 	@FXML
 	public void removeConsumption(ActionEvent actionEvent) {
 		try {

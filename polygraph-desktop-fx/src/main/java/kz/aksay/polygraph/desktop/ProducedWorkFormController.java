@@ -71,10 +71,7 @@ public class ProducedWorkFormController implements Initializable,
 	private ProducedWorkFX producedWorkFX;
 	private ProducedWork producedWork;
 	private OrderForm orderForm;
-	
-	private MaterialConsumptionHolderFX materialConsumptionHolder 
-		= new MaterialConsumptionHolderFX();
-	
+		
 	private SimpleDoubleProperty price = new SimpleDoubleProperty();
 	private SimpleIntegerProperty quantity = new SimpleIntegerProperty();
 	private SimpleDoubleProperty cost = new SimpleDoubleProperty();
@@ -85,54 +82,62 @@ public class ProducedWorkFormController implements Initializable,
 	}
 	
 	@FXML
+	public void saveAndOpenNew(ActionEvent actionEvent) {
+		saveOrAdd(actionEvent);
+		closeByActionEvent(actionEvent);
+		orderForm.openNewProducedWorkForm();
+	}
+	
+	@FXML
 	public void save(ActionEvent actionEvent) {
-		try {
-			BigDecimal cost = retrieveCost();
-			EmployeeFX executorFX 
-				= executorCombo.getSelectionModel().getSelectedItem();
-			WorkTypeFX workTypeFX 
-				= workTypeCombo.getSelectionModel().getSelectedItem();
-			Employee executor = null;
-			WorkType workType = null;
-			
-			if(executorFX != null) {
-				executor = executorFX.getEmployee();
-			}
-			if(workTypeFX != null) {
-				workType = workTypeFX.getWorkType();
-			}
-			
-			if(producedWork == null) {
-				producedWork = new ProducedWork();
-				producedWork.setCreatedAt(new Date());
-				producedWork.setCreatedBy(SessionUtil.retrieveUser(session));
-			}
-			else {
-				producedWork.setUpdatedAt(new Date());
-				producedWork.setUpdatedBy(SessionUtil.retrieveUser(session));
-			}
-			
-			producedWork.setExecutor(executor);
-			producedWork.setWorkType(workType);
-			producedWork.setPrice(BigDecimal.valueOf(price.get()));
-			producedWork.setQuantity(quantity.get());
-			
+		saveOrAdd(actionEvent);
+		closeByActionEvent(actionEvent);
+	}
+	
+	@FXML
+	public void saveOrAdd(ActionEvent actionEvent) {
+			fillProducedWork();
 			if(producedWorkFX == null) {
 				producedWorkFX = new ProducedWorkFX(producedWork);
-				fillMaterialConsumtions(producedWorkFX);
 				orderForm.addProducedWork(producedWorkFX);
 				orderForm.refreshTotalCost();
 			} else {
-				fillMaterialConsumtions(producedWorkFX);
 				orderForm.saveProducedWork(producedWorkFX);
 				orderForm.refreshTotalCost();
 			}
-			
-			closeByActionEvent(actionEvent);
-		} catch (Exception e) {
-			e.printStackTrace();
-			validationLabel.setText(e.getMessage());
+	}
+	
+	private void fillProducedWork() {
+		BigDecimal cost = retrieveCost();
+		EmployeeFX executorFX 
+			= executorCombo.getSelectionModel().getSelectedItem();
+		WorkTypeFX workTypeFX 
+			= workTypeCombo.getSelectionModel().getSelectedItem();
+		Employee executor = null;
+		WorkType workType = null;
+		
+		if(executorFX != null) {
+			executor = executorFX.getEmployee();
 		}
+		if(workTypeFX != null) {
+			workType = workTypeFX.getWorkType();
+		}
+		
+		if(producedWork == null) {
+			producedWork = new ProducedWork();
+			producedWork.setCreatedAt(new Date());
+			producedWork.setCreatedBy(SessionUtil.retrieveUser(session));
+		}
+		else {
+			producedWork.setUpdatedAt(new Date());
+			producedWork.setUpdatedBy(SessionUtil.retrieveUser(session));
+		}
+		
+		producedWork.setExecutor(executor);
+		producedWork.setWorkType(workType);
+		producedWork.setPrice(BigDecimal.valueOf(price.get()));
+		producedWork.setQuantity(quantity.get());
+		
 	}
 	
 	private BigDecimal retrieveCost() {
@@ -145,18 +150,11 @@ public class ProducedWorkFormController implements Initializable,
 			throw new ValidationException("Стоимость указана в некорректном формате!");
 		}
 	}
-	
-	private void fillMaterialConsumtions(ProducedWorkFX producedWorkFX) {
-		producedWorkFX.setMaterialConsumption(
-				materialConsumptionHolder.getMaterialConsumption());
-	}
 
 	@FXML
 	public void finishWork(ActionEvent actionEvent) {
 		if(producedWorkFX != null && producedWork != null) {
-			
 			producedWorkFX.finishWork();
-			
 			orderForm.saveProducedWork(producedWorkFX);
 		}
 		
@@ -204,17 +202,14 @@ public class ProducedWorkFormController implements Initializable,
 			//materialConsumptionHolder.setMaterialConsumption(producedWork.getMaterialConsumption());
 
 			finishWorkButton.setVisible(true);
+			
 		} else {
 			finishWorkButton.setVisible(false);
+			
+			if(orderForm != null ) {
+				executorCombo.getSelectionModel().select(orderForm.getCurrentExecutor());
+			}
 		}
-	}
-	
-	private void initializeMaterialConsumptionTableView() {
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put(ParameterKeys.MATERIAL_CONSUMER, materialConsumptionHolder);
-		Node node = SessionUtil.loadFxmlNodeWithSession(MaterialConsumptionTableViewController.class, 
-				"material_consumption_tableview.fxml", session, parameters);
-		materialConsumptionPane.getChildren().add(node);
 	}
 
 	@Override

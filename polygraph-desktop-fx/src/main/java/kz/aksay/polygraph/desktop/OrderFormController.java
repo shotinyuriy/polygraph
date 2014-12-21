@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -31,11 +31,11 @@ import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
-import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.service.CustomerService;
 import kz.aksay.polygraph.service.EmployeeService;
 import kz.aksay.polygraph.service.OrderService;
+import kz.aksay.polygraph.util.InitializingBean;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.ParametersAware;
 import kz.aksay.polygraph.util.ParametersUtil;
@@ -43,7 +43,7 @@ import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
 public class OrderFormController implements 
-	Initializable, SessionAware, ParametersAware, OrderForm {
+	Initializable, SessionAware, ParametersAware, OrderForm, InitializingBean {
 	
 	private OrderService orderService;
 	private EmployeeService employeeService;
@@ -53,7 +53,8 @@ public class OrderFormController implements
 	private Map<String, Object> session;
 	
 	private boolean isNewOrder;
-	private Order order;
+	//private Order order;
+	private OrderFX orderFX;
 	private Customer customer;
 	
 	@FXML private GridPane orderContainer;
@@ -68,33 +69,22 @@ public class OrderFormController implements
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
 	@FXML private AnchorPane materialConsumptionPane;
-	
-	private MaterialConsumptionHolderFX materialConsumptionHolder 
-		= new MaterialConsumptionHolderFX();
+	@FXML private Button addProducedWorkButton;
 
 	@FXML
 	public void save(ActionEvent actionEvent) {
 		try {
 			
 			if(isNewOrder) {
-				order.setCreatedAt(new Date());
-				order.setCreatedBy(SessionUtil.retrieveUser(session));
+				orderFX.getCreatedAtProperty().set(new Date());
+				orderFX.getCreatedByProperty().set(SessionUtil.retrieveUser(session));
 			}
 			else {
-				order.setUpdatedAt(new Date());
-				order.setUpdatedBy(SessionUtil.retrieveUser(session));
+				orderFX.getUpdatedAtProperty().set(new Date());
+				orderFX.getUpdatedByProperty().set(SessionUtil.retrieveUser(session));
 			}
-			
-			order.setDescription(descriptionField.getText());
-			order.setMaterialConsumption(materialConsumptionHolder.getMaterialConsumption());
-			
-			EmployeeFX employeeFX 
-				= currentExecutorCombo.getSelectionModel().getSelectedItem();
-			if(employeeFX != null) {
-				order.setCurrentExecutor(employeeFX.getEmployee());
-			}
-			
-			orderService.save(order);
+						
+			orderService.save(orderFX.getOrder());
 			
 			validationLabel.setText("Сохранение успешно");
 			
@@ -151,7 +141,6 @@ public class OrderFormController implements
 		for(ProducedWorkFX producedWorkFX : producedWorksFXToRemove) {
 			producedWorksToRemove.add(producedWorkFX.getProducedWork());
 		}
-		this.order.getProducedWorks().removeAll(producedWorksToRemove);
 		producedWorksTableView.getItems().removeAll(producedWorksFXToRemove);
 		
 	}
@@ -159,7 +148,6 @@ public class OrderFormController implements
 	@Override
 	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
-		initializeByParameters();
 	}
 
 	private void initializeByParameters() {
@@ -168,40 +156,39 @@ public class OrderFormController implements
 					parameters, ParameterKeys.ORDER_ID, Long.class);
 			if(orderId != null) {
 				isNewOrder = false;
-				order = orderService.find(orderId);
-				OrderFX orderFX = new OrderFX(order);
-				orderIdLabel.setText(orderId+"");
-				customerIdLabel.setText(orderFX.getCustomerId()+"");
+				Order order = orderService.find(orderId);
+				orderFX = new OrderFX(order);
+				//orderIdLabel.setText(orderId+"");
+				//customerIdLabel.setText(orderFX.getCustomerId()+"");
 				customerField.setText(orderFX.getCustomerFullName());
-				descriptionField.setText(orderFX.getDescription());
-				EmployeeFX employeeFX = orderFX.getCurrentExecutorFX();
-				currentExecutorCombo.getSelectionModel().select(employeeFX);
+				descriptionField.textProperty().bindBidirectional(orderFX.getDescriptionProperty());
+				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
+				orderFX.getCurrentExecutorProperty().bind(currentExecutorCombo.getSelectionModel().selectedItemProperty());
 				
-				materialConsumptionHolder.setMaterialConsumption(order.getMaterialConsumption());
+				producedWorksTableView.getItems().addAll(orderFX.getProducedWorkProperty());
+				orderFX.setProducedWorkProperty(producedWorksTableView.getItems());
 				
-				Collection<ProducedWorkFX> producedWorksFX 
-					= ProducedWorkFX.contvertListEntityToFX(order.getProducedWorks());
-				
-				producedWorksTableView.getItems().addAll(producedWorksFX);
 				refreshTotalCost();
 			} else {
 				isNewOrder = true;
-				order = new Order();
+				orderFX = new OrderFX(null);
 				Long customerId = ParametersUtil.extractParameter(
 						parameters, ParameterKeys.CUSTOMER_ID, Long.class);
 				customer = customerService.find(customerId);
 				if(customer != null) {
-					order.setCustomer(customer);
+					orderFX.getCustomerProperty().set(customer);
 					customerIdLabel.setText(customer.getId()+"");
 					customerField.setText(customer.getFullName());
 				}
 			}
+			
+			
 		}
 	}
 	
 	@Override
 	public void refreshTotalCost() {
-		totalCostLabel.setText(order.getTotalCost().setScale(2).toString());
+		totalCostLabel.setText(orderFX.getOrder().getTotalCost().setScale(2).toString());
 	}
 
 	@Override
@@ -212,7 +199,7 @@ public class OrderFormController implements
 	
 	private void initializeMaterialConsumptionTableView() {
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put(ParameterKeys.MATERIAL_CONSUMER, materialConsumptionHolder);
+		parameters.put(ParameterKeys.MATERIAL_CONSUMER, orderFX);
 		Node node = SessionUtil.loadFxmlNodeWithSession(MaterialConsumptionTableViewController.class, 
 				"material_consumption_tableview.fxml", session, parameters);
 		materialConsumptionPane.getChildren().add(node);
@@ -243,15 +230,28 @@ public class OrderFormController implements
 		producedWorkFX.setDirty(true);
 		producedWorksTableView.getItems().add(producedWorkFX);
 		refreshProducedWorkTableView();
-		if(order != null) {
-			order.getProducedWorks().add(producedWorkFX.getProducedWork());
-		}
 	}
 
 	@Override
 	public void saveProducedWork(ProducedWorkFX producedWorkFX) {
 		producedWorkFX.setDirty(true);
 		refreshProducedWorkTableView();
+	}
+
+	@Override
+	public EmployeeFX getCurrentExecutor() {
+		return currentExecutorCombo.getSelectionModel().getSelectedItem();
+	}
+
+	@Override
+	public void openNewProducedWorkForm() {
+		addProducedWorkButton.fire();
+	}
+
+	@Override
+	public void afterPropertiesSet() {
+		initializeByParameters();
+		initializeMaterialConsumptionTableView();
 	}
 
 	

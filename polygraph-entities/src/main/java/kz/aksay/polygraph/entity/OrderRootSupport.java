@@ -15,20 +15,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class EntitySupport implements Serializable {
+public abstract class OrderRootSupport implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5898864650094761189L;
 	
-
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
-	protected Long id;
+	@TableGenerator(name="order_sequence", table="order_sequence")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator="order_sequence")
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "created_by", nullable = false)
@@ -43,14 +44,6 @@ public abstract class EntitySupport implements Serializable {
 
 	@Column(name = "updated_at")
 	protected Date updatedAt;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public User getCreatedBy() {
 		return createdBy;
@@ -82,6 +75,14 @@ public abstract class EntitySupport implements Serializable {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

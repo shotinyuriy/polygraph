@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,9 @@ import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,6 +28,8 @@ public class OrderService extends GenericService<Order, Long> {
 	private ProducedWorkService producedWorkService;
 	
 	private MaterialConsumptionService materialConsumptionService;
+	
+	private OrderFullTextIndexService orderFullTextIndexService;
 	
 	@Override
 	@Transactional
@@ -68,7 +74,68 @@ public class OrderService extends GenericService<Order, Long> {
 				}
 			}
 		}
+		
+		orderFullTextIndexService.recreateOrderFullTextIndexes(order);
+		
 		return order;
+	}
+	
+	public List<Order> findByExample(Order example) {
+		Criteria criteria = getDao().getSession().createCriteria(Order.class);
+		
+		if( example.getState() != null )
+			criteria.add(Restrictions.eq("state", example.getState()));
+		
+		if( example.getCurrentExecutor() != null )
+			criteria.add(Restrictions.eq("currentExecutor.id", example.getCurrentExecutor().getId() ));
+		
+		return getDao().readByCriteria(criteria);
+	}
+	
+	public List<Order> findByExampleAndSearchString(Order example, String searchString) {
+		List<Order> orders = null;
+		if(searchString != null) {
+		
+			searchString = "%"+searchString.toLowerCase()+"%";
+			
+			StringBuffer selectClause = new StringBuffer();
+			selectClause.append("SELECT o FROM OrderFullTextIndex ofti ");
+			selectClause.append("INNER JOIN ofti.order o ");
+			selectClause.append("INNER JOIN ofti.fullTextIndex fti ");
+			selectClause.append("WITH fti.text LIKE :searchString");
+			
+			StringBuffer whereClause = new StringBuffer();
+			if(example != null) {
+				if(example.getState() != null) {
+					whereClause.append("o.state = :state ");
+				}
+				if(example.getCurrentExecutor() != null) {
+					if(whereClause.length() > 0) {
+						whereClause.append(" AND ");
+					}
+					whereClause.append("o.currentExecutor.id = :currentExecutorId ");
+				}
+			}
+			
+			if(whereClause.length() >0) {
+				selectClause.append(" WHERE ").append(whereClause);
+			} 
+			
+			System.out.println(selectClause);
+			
+			Query query = getDao().getSession().createQuery(selectClause.toString());
+			
+			query.setParameter("searchString", searchString);
+			if(example.getState() != null) {
+				query.setParameter("state", example.getState());
+			}
+			if(example.getCurrentExecutor() != null) {
+				query.setParameter("currentExecutorId", example.getCurrentExecutor().getId());
+			}
+			
+			orders = (List<Order>)query.list();	
+		}
+		return orders != null ? orders : new ArrayList<Order>();
 	}
 	
 	@Override
@@ -89,5 +156,11 @@ public class OrderService extends GenericService<Order, Long> {
 	@Autowired
 	public void setMaterialConsumptionService(MaterialConsumptionService materialConsumptionService) {
 		this.materialConsumptionService = materialConsumptionService;
+	}
+
+	@Autowired
+	public void setOrderFullTextIndexService(
+			OrderFullTextIndexService orderFullTextIndexService) {
+		this.orderFullTextIndexService = orderFullTextIndexService;
 	}
 }

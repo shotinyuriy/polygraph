@@ -7,24 +7,24 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 
 <VBox minHeight="200.0" minWidth="200.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController" >
+	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController" spacing="10.0">
 	<children>
    
-      <GridPane BorderPane.alignment="CENTER"  VBox.vgrow="SOMETIMES">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="461.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="139.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Button mnemonicParsing="false" text="Поиск" GridPane.columnIndex="1" />
-            <TextField fx:id="searchField"/>
-         </children>
-      </GridPane>
+      <HBox spacing="10.0" alignment="BOTTOM_CENTER">
+      	<children>
+         	<TextField fx:id="searchField" />
+            <Label text="Статус:"/>
+            <ComboBox fx:id="stateCombo"/>
+            <CheckBox fx:id="onlyMy" text="Я исполнитель"/>
+            <Button mnemonicParsing="false" text="Поиск" onAction="#findOrders"/>
+        </children>
+      </HBox>
    
    <VBox fillWidth="true" minHeight="200.0" minWidth="200.0" VBox.vgrow="SOMETIMES">
    	  <children>

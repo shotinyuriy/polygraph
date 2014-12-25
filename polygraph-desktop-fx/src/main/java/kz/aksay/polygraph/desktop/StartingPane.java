@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.util.ContextUtils;
 
@@ -35,7 +36,7 @@ public class StartingPane extends Application {
 		
 		StartingPane.primaryStage = primaryStage;
 		primaryStage.setTitle("Управление задачами");
-		Pane pane = (Pane)FXMLLoader.load(getClass().getResource(
+		Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
 				"fxml_login.fxml"));
 		Scene myScene = new Scene(pane);
 		

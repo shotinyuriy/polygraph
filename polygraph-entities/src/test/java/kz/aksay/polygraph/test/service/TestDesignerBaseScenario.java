@@ -3,6 +3,7 @@ package kz.aksay.polygraph.test.service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.Employee;
@@ -17,9 +18,11 @@ import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.service.EmployeeService;
+import kz.aksay.polygraph.service.FullTextIndexService;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.service.MaterialTypeService;
+import kz.aksay.polygraph.service.OrderFullTextIndexService;
 import kz.aksay.polygraph.service.OrderService;
 import kz.aksay.polygraph.service.OrganizationService;
 import kz.aksay.polygraph.service.PersonService;
@@ -47,6 +50,8 @@ public class TestDesignerBaseScenario extends Assert {
 	private MaterialTypeService materialTypeService;
 	private MaterialService materialService;
 	private MaterialConsumptionService materialConsumptionService;
+	private OrderFullTextIndexService orderFullTextIndexService; 
+	private FullTextIndexService fullTextIndexService;
 	
 	private final String executorLogin = "executorLogin";
 	private final String executorPassword = "exectorPassword";
@@ -62,7 +67,7 @@ public class TestDesignerBaseScenario extends Assert {
 	private ProducedWork producedWork;
 	private MaterialConsumption copyMaterialConsumption;
 	private Person customerPerson;
-	private Order secondOrder;
+	private Order secondOrder; 
 	
 	private TestOrderService testOrderService; 
 
@@ -79,6 +84,8 @@ public class TestDesignerBaseScenario extends Assert {
 		materialTypeService = context.getBean(MaterialTypeService.class);
 		materialService = context.getBean(MaterialService.class);
 		materialConsumptionService = context.getBean(MaterialConsumptionService.class);
+		orderFullTextIndexService = context.getBean(OrderFullTextIndexService.class);
+		fullTextIndexService = context.getBean(FullTextIndexService.class);
 		testOrderService = new TestOrderService();
 	}
 	
@@ -92,13 +99,16 @@ public class TestDesignerBaseScenario extends Assert {
 			createOrganizationCustomer();
 			createOrder();
 			createOrderForPerson();
+			testRecreateOrderFullTextIndexes();
 			testFindAllOrders();
 			createWorkTypeXerocopy();
 			createMaterialTypePaper();
 			createMaterialPaperA4();
 			createProducedWork();
 			createMaterialConsumption();
-		} 
+			testFindOrdersByStateAndCurrentExecutor();
+			testFindOrdersByStateAndCurrentExecutorAndString();
+		}
 		catch(Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -194,6 +204,7 @@ public class TestDesignerBaseScenario extends Assert {
 		firstOrder.setCustomer(organizationCustomer);
 		firstOrder.setCurrentExecutor(executorEmployee);
 		firstOrder.setDescription("Описание заказа на ксерокопию");
+		firstOrder.setState(Order.State.PROCESSED);
 		orderService.save(firstOrder);
 	}
 	
@@ -241,7 +252,66 @@ public class TestDesignerBaseScenario extends Assert {
 		}
 	}
 	
-	private void deleteAll() {		
+	public void testFindOrdersByStateAndCurrentExecutor() {
+		Order order = new Order();
+		
+		order.setCurrentExecutor(executorEmployee);
+		order.setState(Order.State.PROCESSED);
+		
+		List<Order> orders = orderService.findByExample(order);
+		
+		assertTrue(orders.size() >= 1);
+		
+		order = new Order();
+		
+		order.setCurrentExecutor(new Employee());
+		order.setState(Order.State.PROCESSED);
+		
+		orders = orderService.findByExample(order);
+		
+		assertTrue(orders.size() == 0);
+	}
+	
+	public void testFindOrdersByStateAndCurrentExecutorAndString() {
+		Order order = new Order();
+		
+		List<Order> orders = orderService.findByExampleAndSearchString(order, executorPerson.getFullName());
+		
+		assertTrue(orders.size() >= 1);
+		
+		List<Order> orders2 = orderService.findByExampleAndSearchString(order, executorPerson.getFirstName());
+		
+		assertTrue(orders2.size() >= 1);
+		
+		order.setState(Order.State.FINISHED);
+		List<Order> orders3 = orderService.findByExampleAndSearchString(order, secondOrder.getDescription());
+		
+		assertTrue(orders3.size() == 0);
+		
+		order.setState(null);
+		order.setCurrentExecutor(executorEmployee);
+		List<Order> orders4 = orderService.findByExampleAndSearchString(order, secondOrder.getDescription());
+		
+		assertTrue(orders4.size() >= 1);
+	}
+	
+	public void testRecreateOrderFullTextIndexes() {
+		try {
+			orderFullTextIndexService.recreateOrderFullTextIndexes(firstOrder);
+			orderFullTextIndexService.recreateOrderFullTextIndexes(secondOrder);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void deleteAll() {
+		int rowsAffected = 0;
+		
+		rowsAffected = orderFullTextIndexService.deleteAll();
+		System.out.println("DELETED ORDER FULLT TEXT INDEX "+rowsAffected);
+		rowsAffected = fullTextIndexService.deleteAll();
+		System.out.println("DELETED FULLT TEXT INDEX "+rowsAffected);
+		
 		if(copyMaterialConsumption != null && copyMaterialConsumption.getId() != null) materialConsumptionService.delete(copyMaterialConsumption);
 		if(producedWork != null && producedWork.getId() != null) producedWorkService.delete(producedWork);
 		if(paperA4 != null && paperA4.getId() != null) materialService.delete(paperA4);

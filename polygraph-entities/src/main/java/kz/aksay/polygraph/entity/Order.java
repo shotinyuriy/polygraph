@@ -9,15 +9,19 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 @Entity
 @Table(name="\"order\"")
-public class Order extends EntitySupport implements MaterialConsumer {
+public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	/**
 	 * 
@@ -32,6 +36,10 @@ public class Order extends EntitySupport implements MaterialConsumer {
 		
 		private State(String name) {
 			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
 		}
 	}
 	

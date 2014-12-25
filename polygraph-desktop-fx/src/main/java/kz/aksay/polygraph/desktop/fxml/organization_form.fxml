@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController"
-vgap="10" hgap="10" alignment="CENTER">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController"  alignment="CENTER">
 <children>
 <GridPane vgap="10" hgap="10" alignment="CENTER">
 	<Label fx:id="idLabel" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>

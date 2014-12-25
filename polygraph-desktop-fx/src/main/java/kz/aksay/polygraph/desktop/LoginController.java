@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.UserService;
 import kz.aksay.polygraph.util.ContextUtils;
@@ -55,7 +56,7 @@ public class LoginController {
 			session.put(SessionUtil.USER_KEY, user);
 			
 			Node node = SessionUtil.loadFxmlNodeWithSession(
-					getClass(), "main_menu.fxml", session, null);
+					packageInfo.class, "main_menu.fxml", session, null);
 			
 			if(node instanceof Parent) {
 				Scene scene = new Scene((Parent)node);

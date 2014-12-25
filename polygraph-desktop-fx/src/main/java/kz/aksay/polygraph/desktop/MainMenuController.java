@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
+import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
@@ -81,7 +82,7 @@ public class MainMenuController implements MainMenu, SessionAware {
 	
 	public Node loadFxmlNode(String url) {
 		try {
-			Node node = (Node)FXMLLoader.load(getClass().getResource(url));
+			Node node = (Node)FXMLLoader.load(packageInfo.class.getResource(url));
 			return node;
 		}
 		catch(IOException e) {
@@ -98,7 +99,7 @@ public class MainMenuController implements MainMenu, SessionAware {
 	@Override
 	public void loadFxmlAndOpenInTab(String url, String tabName) {
 		Node node = SessionUtil.loadFxmlNodeWithSession(
-				getClass(), url, session, null);
+				packageInfo.class, url, session, null);
 		openInTab(node, tabName);
 	}
 	
@@ -106,7 +107,7 @@ public class MainMenuController implements MainMenu, SessionAware {
 	public void loadFxmlAndOpenInTab(String url, String tabName, 
 			Map<String, Object> parameters) {
 		Node node = SessionUtil.loadFxmlNodeWithSession(
-				getClass(), url, session, parameters);
+				packageInfo.class, url, session, parameters);
 		openInTab(node, tabName);
 	}
 	
@@ -126,7 +127,7 @@ public class MainMenuController implements MainMenu, SessionAware {
 	@FXML
 	public void exit(ActionEvent actionEvent) {
 		try {
-			Pane pane = (Pane)FXMLLoader.load(getClass().getResource(
+			Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
 					"fxml_login.fxml"));
 			StartingPane.changeScene(pane);
 		}

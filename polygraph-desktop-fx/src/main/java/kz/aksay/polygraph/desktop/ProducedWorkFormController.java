@@ -73,7 +73,7 @@ public class ProducedWorkFormController implements Initializable,
 	private OrderForm orderForm;
 		
 	private SimpleDoubleProperty price = new SimpleDoubleProperty();
-	private SimpleIntegerProperty quantity = new SimpleIntegerProperty();
+	private SimpleIntegerProperty quantity = new SimpleIntegerProperty(1);
 	private SimpleDoubleProperty cost = new SimpleDoubleProperty();
 	
 	private void closeByActionEvent(ActionEvent actionEvent) {

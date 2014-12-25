@@ -28,5 +28,4 @@ public class TestOrderService extends Assert {
 		List<Order> orders = orderService.findAll();
 		return orders;
 	}
-	
 }

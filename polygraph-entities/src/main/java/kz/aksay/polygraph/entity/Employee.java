@@ -36,4 +36,18 @@ public class Employee extends EntitySupport {
 		this.user = user;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) return true;
+		if(! (obj instanceof Employee) ) return false;
+		Employee other = (Employee) obj;
+		if(other.getId() != null) {
+			if(this.id == null) return false;
+			return other.getId().equals(this.id);
+		} else {
+			if(this.id == null) return true;
+		}
+		return false;
+	}
+	
 }

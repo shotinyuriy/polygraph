@@ -18,9 +18,11 @@ public interface GenericDao <T, PK extends Serializable> {
 	
 	public T read(PK pimaryKey);
 	
-	void update(T entity) throws Exception;
+	public void update(T entity) throws Exception;
 	
-	void delete(T entity);
+	public void delete(T entity);
+	
+	public int deleteAll();
 	
 	public List<T> readAll();
 	

@@ -36,4 +36,9 @@ public abstract class GenericService<T, PK extends Serializable> {
 	public void delete(T entity) {
 		getDao().delete(entity);
 	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public int deleteAll() {
+		return getDao().deleteAll();
+	}
 }

@@ -83,14 +83,14 @@ public class OrderFullTextIndexService extends GenericService<OrderFullTextIndex
 		return rowsAffected;
 	}
 	
-	@Transactional
+/*	@Transactional
 	public int deleteAll() {
 		int rowsAffected = 0;
 		Query query = getDao().getSession().createQuery(
 				"DELETE FROM OrderFullTextIndex");
 		rowsAffected = query.executeUpdate();
 		return rowsAffected;
-	}
+	}*/
 	
 	@Transactional 
 	public void saveAll(List<OrderFullTextIndex> orderFullTextIndexes) throws Exception {

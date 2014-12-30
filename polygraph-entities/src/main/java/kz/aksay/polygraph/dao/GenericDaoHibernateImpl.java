@@ -87,6 +87,11 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	public void delete(T entity) {
 		getSession().delete(entity);
 	}
+	
+	public int deleteAll() {
+		return getSession().createQuery("DELETE FROM "+clazz().getName()).
+				executeUpdate();
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> readAll() {

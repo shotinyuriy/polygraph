@@ -16,10 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name="\"user\"")
+@Table(name="\"user\"", uniqueConstraints={@UniqueConstraint(name="UNQ_USER_LOGIN",columnNames="login")})
 public class User implements Serializable {
 	
 	/**
@@ -81,7 +82,7 @@ public class User implements Serializable {
 	@Column(name="updated_at")
 	protected Date updatedAt;
 	
-	@Column(name="login", nullable=false, unique=true)
+	@Column(name="login", nullable=false)
 	private String login;
 	
 	@Column(name="password", nullable=false)

@@ -108,7 +108,6 @@ public class ProducedWorkFormController implements Initializable,
 	}
 	
 	private void fillProducedWork() {
-		BigDecimal cost = retrieveCost();
 		EmployeeFX executorFX 
 			= executorCombo.getSelectionModel().getSelectedItem();
 		WorkTypeFX workTypeFX 
@@ -139,17 +138,6 @@ public class ProducedWorkFormController implements Initializable,
 		producedWork.setQuantity(quantity.get());
 		
 	}
-	
-	private BigDecimal retrieveCost() {
-		try {
-			String costString = costField.getText();
-			BigDecimal cost = new BigDecimal(costString);
-			return cost;
-		}
-		catch(NumberFormatException nfe) {
-			throw new ValidationException("Стоимость указана в некорректном формате!");
-		}
-	}
 
 	@FXML
 	public void finishWork(ActionEvent actionEvent) {
@@ -159,20 +147,6 @@ public class ProducedWorkFormController implements Initializable,
 		}
 		
 		closeByActionEvent(actionEvent);
-	}
-	
-	private BigDecimal retrieveQuantity() throws Exception {
-		String quantityText = quantityField.getText();
-		if(quantityText != null) {
-			quantityText = quantityText.trim();
-			try {
-				return new BigDecimal(quantityText);
-			}
-			catch(NumberFormatException e) {
-				throw new NumberFormatException("Некорректно указано количество!");
-			}
-		}
-		return BigDecimal.ZERO; 
 	}
 	
 	@Override

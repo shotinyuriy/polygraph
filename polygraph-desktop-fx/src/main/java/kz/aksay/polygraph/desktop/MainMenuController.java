@@ -11,6 +11,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
+import kz.aksay.polygraph.test.service.TestDataCreator;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
@@ -24,6 +25,11 @@ public class MainMenuController implements MainMenu, SessionAware {
 	private TabPane tabPane;
 	
 	private Map<String, Object> session;
+	
+	@FXML
+	public void generateAllEntities(ActionEvent actionEvent) {
+		StartingPane.generateAllEntities();
+	}
 	
 	@FXML
 	public void openNewPersonForm(ActionEvent actionEvent) {

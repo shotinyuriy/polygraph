@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.test.service.TestDataCreator;
 import kz.aksay.polygraph.util.ContextUtils;
 
 import org.springframework.context.ApplicationContext;
@@ -99,5 +100,10 @@ public class StartingPane extends Application {
 
 	public static void setCurrentUser(User currentUser) {
 		StartingPane.currentUser = currentUser;
+	}
+
+	public static void generateAllEntities() {
+		TestDataCreator testDataCreator = new TestDataCreator(applicationContext);
+		testDataCreator.createAllEntities();
 	}
 }

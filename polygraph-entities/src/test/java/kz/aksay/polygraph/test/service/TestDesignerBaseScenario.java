@@ -69,7 +69,9 @@ public class TestDesignerBaseScenario extends Assert {
 	private Person customerPerson;
 	private Order secondOrder; 
 	
-	private TestOrderService testOrderService; 
+	private TestOrderService testOrderService;
+
+	private TestDataCreator testDataCreator; 
 
 	@BeforeClass
 	public void setUp()	{
@@ -87,11 +89,14 @@ public class TestDesignerBaseScenario extends Assert {
 		orderFullTextIndexService = context.getBean(OrderFullTextIndexService.class);
 		fullTextIndexService = context.getBean(FullTextIndexService.class);
 		testOrderService = new TestOrderService();
+		testDataCreator = new TestDataCreator(this.context);
 	}
 	
 	@Test
 	public void test() throws Exception {
 		try {
+			testDataCreator.createAllEntities();
+			
 			createPerson();
 			createPersonCustomer();
 			createEmployee();
@@ -118,130 +123,60 @@ public class TestDesignerBaseScenario extends Assert {
 		}
 	}
 
-	private void createPerson() throws Exception {
-		executorPerson = new Person();
-		executorPerson.setCreatedAt(new Date());
-		executorPerson.setCreatedBy(User.TECH_USER);
-		executorPerson.setLastName("Тестов");
-		executorPerson.setFirstName("Тест");
-		executorPerson.setMiddleName("Тестович");
-		executorPerson.setBirthDate(new Date());
-		personService.save(executorPerson);
-	}
-	
-	private void createPersonCustomer() throws Exception {
-		customerPerson = new Person();
-		customerPerson.setCreatedAt(new Date());
-		customerPerson.setCreatedBy(User.TECH_USER);
-		customerPerson.setLastName("Клиентов");
-		customerPerson.setFirstName("Тест");
-		customerPerson.setMiddleName("Тестович");
-		customerPerson.setBirthDate(new Date());
-		personService.save(customerPerson);
-	}
 	
 	
-	private void createEmployee() throws Exception {
-		executorEmployee = new Employee();
-		executorEmployee.setCreatedAt(new Date());
-		executorEmployee.setCreatedBy(User.TECH_USER);
-		executorEmployee.setPerson(executorPerson);
-		employeeService.save(executorEmployee);
-	}
-	
-	private void createUser() throws Exception {
-		executorUser = new User();
-		executorUser.setCreatedAt(new Date());
-		executorUser.setCreatedBy(User.TECH_USER);
-		executorUser.setEmployee(executorEmployee);
-		executorUser.setLogin(executorLogin);
-		executorUser.setPassword(executorPassword);
-		executorUser.setRole(Role.DESIGNER);
-		userService.save(executorUser);
-	}
-
-	private void createOrganizationCustomer() throws Exception {
-		organizationCustomer = new Organization();
-		organizationCustomer.setCreatedAt(new Date());
-		organizationCustomer.setCreatedBy(User.TECH_USER);
-		organizationCustomer.setFullname("Тестовая Организация");
-		organizationCustomer.setShortname("Тестовая Организация");
-		organizationCustomer.setInn("1231231230");
-		organizationCustomer.setKpp("123123123");
-		organizationService.save(organizationCustomer);
-	}
-	
-	private void createWorkTypeXerocopy() throws Exception {
-		xerocopy = new WorkType();
-		xerocopy.setCreatedAt(new Date());
-		xerocopy.setCreatedBy(User.TECH_USER);
-		xerocopy.setName("КСЕРОКОПИЯ");
-		workTypeService.save(xerocopy);
-		xerocopy = workTypeService.find(xerocopy.getId());
-		System.out.println("XEROCOPY "+xerocopy);
-	}
-	
-	private void createMaterialTypePaper() throws Exception {
-		paper = new MaterialType();
-		paper.setCreatedAt(new Date());
-		paper.setCreatedBy(User.TECH_USER);
-		paper.setName("КРАСКА");
-		materialTypeService.save(paper);
-	}
-	
-	private void createMaterialPaperA4() throws Exception {
-		paperA4 = new Material();
-		paperA4.setCreatedAt(new Date());
-		paperA4.setCreatedBy(User.TECH_USER);
-		paperA4.setName("А4");
-		paperA4 = materialService.save(paperA4);
-	}
-
-	private void createOrder() throws Exception {
-		firstOrder = new Order();
-		firstOrder.setCreatedAt(new Date());
-		firstOrder.setCreatedBy(User.TECH_USER);
-		firstOrder.setCustomer(organizationCustomer);
-		firstOrder.setCurrentExecutor(executorEmployee);
-		firstOrder.setDescription("Описание заказа на ксерокопию");
-		firstOrder.setState(Order.State.PROCESSED);
-		orderService.save(firstOrder);
-	}
-	
-	private void createOrderForPerson() throws Exception {
-		secondOrder = new Order();
-		secondOrder.setCreatedAt(new Date());
-		secondOrder.setCreatedBy(User.TECH_USER);
-		secondOrder.setCustomer(customerPerson);
-		secondOrder.setCurrentExecutor(executorEmployee);
-		secondOrder.setDescription("Описание заказа на ксерокопию");
-		orderService.save(secondOrder);
+	private void createMaterialConsumption() throws Exception {
+		copyMaterialConsumption = testDataCreator.createMaterialConsumption(paperA4, firstOrder);
 	}
 
 	private void createProducedWork() throws Exception {
-		producedWork = new ProducedWork();
-		producedWork.setCreatedAt(new Date());
-		producedWork.setCreatedBy(User.TECH_USER);
-		producedWork.setOrder(firstOrder);
-		producedWork.setWorkType(xerocopy);
-		producedWork.setExecutor(executorEmployee);
-		producedWork.setDirty(true);
-		producedWorkService.save(producedWork);
-		 
-		System.out.println("ProducedWorkId "+producedWork.getId());
+		producedWork = testDataCreator.createProducedWork(
+				firstOrder, xerocopy, executorEmployee);
 	}
-	
-	private void createMaterialConsumption() throws Exception {
-		copyMaterialConsumption = new MaterialConsumption();
-		copyMaterialConsumption.setCreatedAt(new Date());
-		copyMaterialConsumption.setCreatedBy(User.TECH_USER);
-		copyMaterialConsumption.setMaterial(paperA4);
-		copyMaterialConsumption.setProducedWork(producedWork);
-		copyMaterialConsumption.setQuantity(BigDecimal.valueOf(1.0));
-		copyMaterialConsumption.setDirty(true);
-		materialConsumptionService.save(copyMaterialConsumption);
+
+	private void createMaterialPaperA4() throws Exception {
+		paperA4 = testDataCreator.createMaterial(User.TECH_USER, paper, "A4");
 	}
-	
+
+	private void createMaterialTypePaper() throws Exception {
+		paper = testDataCreator.createMaterialType(User.TECH_USER, "БУМАГА");
+	}
+
+	private void createWorkTypeXerocopy() throws Exception {
+		xerocopy = testDataCreator.createWorkType(User.TECH_USER, "КСЕРОКОПИЯ");
+	}
+
+	private void createOrderForPerson() throws Exception {
+		secondOrder = testDataCreator.createOrderForPerson(
+				customerPerson, executorEmployee);
+	}
+
+	private void createOrder() throws Exception {
+		firstOrder = testDataCreator.createOrder(
+				User.TECH_USER, customerPerson, executorEmployee);
+	}
+
+	private void createOrganizationCustomer() throws Exception {
+		organizationCustomer = testDataCreator.createOrganizationCustomer(User.TECH_USER);
+	}
+
+	private void createUser() throws Exception {
+		executorUser = testDataCreator.createUser(
+				User.TECH_USER, executorEmployee, executorLogin, executorPassword);
+	}
+
+	private void createEmployee() throws Exception {
+		executorEmployee = testDataCreator.createEmployee(User.TECH_USER, executorPerson);
+	}
+
+	private void createPersonCustomer() throws Exception {
+		customerPerson = testDataCreator.createPersonCustomer(User.TECH_USER);
+	}
+
+	private void createPerson() throws Exception {
+		executorPerson = testDataCreator.createPerson(User.TECH_USER);
+	}
+
 	public void testFindAllOrders() {
 		testOrderService.setUp();
 		List<Order> orders = testOrderService.testFindAll();
@@ -308,9 +243,18 @@ public class TestDesignerBaseScenario extends Assert {
 		int rowsAffected = 0;
 		
 		rowsAffected = orderFullTextIndexService.deleteAll();
-		System.out.println("DELETED ORDER FULLT TEXT INDEX "+rowsAffected);
 		rowsAffected = fullTextIndexService.deleteAll();
-		System.out.println("DELETED FULLT TEXT INDEX "+rowsAffected);
+		
+		/*materialConsumptionService.deleteAll();
+		producedWorkService.deleteAll();
+		materialService.deleteAll();
+		materialTypeService.deleteAll();
+		workTypeService.deleteAll();
+		orderService.deleteAll();
+		organizationService.deleteAll();
+		employeeService.deleteAll();
+		personService.deleteAll();
+		userService.deleteAll();*/
 		
 		if(copyMaterialConsumption != null && copyMaterialConsumption.getId() != null) materialConsumptionService.delete(copyMaterialConsumption);
 		if(producedWork != null && producedWork.getId() != null) producedWorkService.delete(producedWork);

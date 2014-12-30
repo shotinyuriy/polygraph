@@ -23,14 +23,14 @@ public class FullTextIndexService extends GenericService<FullTextIndex, Long> {
 		return getDao().readUniqueByCriteria(criteria);
 	}
 	
-	@Transactional
+/*	@Transactional
 	public int deleteAll() {
 		int rowsAffected = 0;
 		Query query = getDao().getSession().createQuery(
 				"DELETE FROM FullTextIndex");
 		rowsAffected = query.executeUpdate();
 		return rowsAffected;
-	}
+	}*/
 	
 	@Override
 	@Transactional

@@ -3,10 +3,11 @@ package kz.aksay.polygraph.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "organization")
+@Table(name = "organization", uniqueConstraints={@UniqueConstraint(name="UNQ_ORG_NUMBER", columnNames="inn")})
 public class Organization extends Customer {
 
 	/**
@@ -22,12 +23,12 @@ public class Organization extends Customer {
 	@Column(nullable=false)
 	private String shortname;
 
-	@Size(min=10, max=14)
+	//@Size(min=10, max=14)
 	@Column(nullable=false)
 	private String inn;
 	
-	@Size(min=9, max=14)
-	@Column(nullable=false)
+	//@Size(min=9, max=14)
+	@Column
 	private String kpp;
 
 	public String getFullname() {

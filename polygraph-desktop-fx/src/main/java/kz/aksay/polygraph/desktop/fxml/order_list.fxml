@@ -11,6 +11,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.TilePane?>
 
 <VBox minHeight="200.0" minWidth="200.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController" spacing="10.0">
@@ -26,26 +28,33 @@
         </children>
       </HBox>
    
-   <VBox fillWidth="true" minHeight="200.0" minWidth="200.0" VBox.vgrow="SOMETIMES">
-   	  <children>
-      <TableView fx:id="ordersTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" VBox.vgrow="SOMETIMES">
-        <columns>
-          <TableColumn prefWidth="150" text="Номер заказа">
-          	<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
-          </TableColumn>
-          <TableColumn prefWidth="100.0" text="Дата заказа">
-          	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
-          </TableColumn>
-          <TableColumn prefWidth="200.0" text="Клиент">
-          	<cellValueFactory><PropertyValueFactory property="customerFullName" /></cellValueFactory>
-          </TableColumn>
-		  <TableColumn prefWidth="150.0" text="Исполнитель">
-          	<cellValueFactory><PropertyValueFactory property="currentExecutorDescription" /></cellValueFactory>
-          </TableColumn>
-        </columns>
-      </TableView>
-      </children>
-	</VBox>
+   <TilePane orientation="VERTICAL">
+   		<children>
+		   <VBox fillWidth="true" minHeight="200.0" minWidth="200.0" prefHeight="480" prefWidth="640.0"  maxHeight="1000.0" VBox.vgrow="SOMETIMES">
+		   	  <children>
+			   	  <ScrollPane prefHeight="480" prefWidth="640.0">
+			   	  
+				      <TableView fx:id="ordersTableView" prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER" VBox.vgrow="SOMETIMES">
+				        <columns>
+				          <TableColumn prefWidth="150" text="Номер заказа">
+				          	<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
+				          </TableColumn>
+				          <TableColumn prefWidth="100.0" text="Дата заказа">
+				          	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
+				          </TableColumn>
+				          <TableColumn prefWidth="200.0" text="Клиент">
+				          	<cellValueFactory><PropertyValueFactory property="customerFullName" /></cellValueFactory>
+				          </TableColumn>
+						  <TableColumn prefWidth="150.0" text="Исполнитель">
+				          	<cellValueFactory><PropertyValueFactory property="currentExecutorDescription" /></cellValueFactory>
+				          </TableColumn>
+				        </columns>
+				      </TableView>
+			      </ScrollPane>
+		      </children>
+			</VBox>
+		</children>
+	</TilePane>
    
 	<VBox  VBox.vgrow="ALWAYS">
 	<children>

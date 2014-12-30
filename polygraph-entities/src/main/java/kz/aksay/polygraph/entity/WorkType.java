@@ -32,6 +32,7 @@ public class WorkType extends EntitySupport {
 		public static final String BINDING = "ПЕРЕПЛЕТ";
 		public static final String CUTTING = "РЕЗКА";
 		public static final String LAMINATION = "ЛАМИНИРОВАНИЕ";
+		public static final String COPY = "КОПИРОВАНИЕ";
 		
 		private static String[] defaultNames = new String[] {
 			DEVELOPMENT,
@@ -39,7 +40,8 @@ public class WorkType extends EntitySupport {
 			SCANNING,
 			BINDING,
 			CUTTING,
-			LAMINATION
+			LAMINATION,
+			COPY
 		};
 		
 		public static String[] all() {

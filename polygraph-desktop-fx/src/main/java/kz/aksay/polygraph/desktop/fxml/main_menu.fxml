@@ -95,7 +95,8 @@
             </AnchorPane>
             <AnchorPane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0" minHeight="200.0" minWidth="200.0">
                <children>
-                  <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="690.0" minHeight="200.0" minWidth="200.0"/>
+                  <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="690.0" minHeight="200.0" minWidth="200.0" 
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                </children>
               </AnchorPane>
          </items>

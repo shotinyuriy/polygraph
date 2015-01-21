@@ -14,11 +14,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.OrderFormController" VBox.vgrow="SOMETIMES">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
 	<children>
 		
-		<VBox >
+		<VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 		<GridPane fx:id="orderContainer" hgap="10.0"  prefHeight="600.0" prefWidth="800.0" vgap="10.0"  alignment="CENTER" VBox.vgrow="SOMETIMES">
 	
 	      <Label fx:id="orderIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
@@ -89,7 +89,4 @@
 		  
 		  </VBox>
 	  </children>
-</VBox>
-
-
-
+</AnchorPane>

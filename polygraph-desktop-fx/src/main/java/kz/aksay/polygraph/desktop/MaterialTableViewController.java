@@ -64,6 +64,21 @@ public class MaterialTableViewController implements Initializable, SessionAware 
 	}
 	
 	@FXML
+	protected void delete(ActionEvent event) {
+		MaterialFX materialFX = tableView.getSelectionModel().getSelectedItem();
+		if(materialFX != null) {
+			Material material = materialFX.getMaterial();
+			try {
+				materialService.delete(material);
+				tableView.getItems().remove(materialFX);
+			}
+			catch(ValidationException ve) {
+				validationLabel.setText(ve.getMessage());
+			}
+		}
+	}
+	
+	@FXML
 	protected void updateName(
 			TableColumn.CellEditEvent<MaterialFX, String> cellEditEvent) {
 		MaterialFX materialFx = cellEditEvent.getRowValue();

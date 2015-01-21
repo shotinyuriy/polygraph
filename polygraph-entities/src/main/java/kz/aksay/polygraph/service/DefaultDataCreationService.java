@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
+import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.WorkType;
@@ -61,6 +62,15 @@ public class DefaultDataCreationService {
 									 createWorkType(workTypeName));
 						 }
 					 }
+					 
+					 for(MaterialType materialType : materialTypeService.findAll()) {
+						 String names[] = Material.DefaultNames.materialNames.get(materialType.getName());
+						 for(String name: names) {
+							 if(materialService.findByMaterialTypeAndName(materialType, name) == null) {
+								 materialService.save(createMaterial(materialType, name));
+							 }
+						 }
+					 }
 				}
 				catch(Exception e) {
 					e.printStackTrace();
@@ -83,6 +93,15 @@ public class DefaultDataCreationService {
 		workType.setCreatedBy(User.TECH_USER);
 		workType.setName(name);
 		return workType;
+	}
+	
+	private Material createMaterial(MaterialType materialType, String name) {
+		Material material = new Material();
+		material.setCreatedAt(new Date());
+		material.setCreatedBy(User.TECH_USER);
+		material.setName(name);
+		material.setMaterialType(materialType);
+		return material;
 	}
 	
 	public void setTxManager(PlatformTransactionManager txManager) {

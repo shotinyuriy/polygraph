@@ -5,9 +5,12 @@ import java.util.Set;
 
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.MaterialConsumption;
+import kz.aksay.polygraph.entity.ProducedWork;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +37,16 @@ public class MaterialConsumptionService extends
 		Set<MaterialConsumption> materialConsumptions = new HashSet<>();
 		materialConsumptions.addAll(getDao().readByCriteria(criteria));
 		return materialConsumptions;
+	}
+	
+	@Transactional
+	public int deleteAllByProducedWork(ProducedWork producedWork) {
+		int rowsAffected = 0;
+		Query query = getDao().getSession().createQuery(
+				"DELETE FROM MaterialConsumption mc WHERE mc.producedWork = :producedWork");
+		query.setParameter("producedWork", producedWork);
+		rowsAffected = query.executeUpdate();
+		return rowsAffected;
 	}
 	
 	@Override

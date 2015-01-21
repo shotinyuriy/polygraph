@@ -256,13 +256,27 @@ public class TestDesignerBaseScenario extends Assert {
 		personService.deleteAll();
 		userService.deleteAll();*/
 		
+		int rowAffected = 0;
+		
 		if(copyMaterialConsumption != null && copyMaterialConsumption.getId() != null) materialConsumptionService.delete(copyMaterialConsumption);
-		if(producedWork != null && producedWork.getId() != null) producedWorkService.delete(producedWork);
+		if(producedWork != null && producedWork.getId() != null) {
+			materialConsumptionService.deleteAllByProducedWork(producedWork);
+			producedWorkService.delete(producedWork);
+		}
 		if(paperA4 != null && paperA4.getId() != null) materialService.delete(paperA4);
-		if(paper != null && paper.getId() != null) materialTypeService.delete(paper);
+		if(paper != null && paper.getId() != null) {
+			materialService.deleteAllByMaterialType(paper);
+			materialTypeService.delete(paper);
+		}
 		if(xerocopy != null && xerocopy.getId() != null) workTypeService.delete(xerocopy);
-		if(secondOrder != null && secondOrder.getId() != null) orderService.delete(secondOrder);
-		if(firstOrder != null && firstOrder.getId() != null) orderService.delete(firstOrder);
+		if(secondOrder != null && secondOrder.getId() != null) {
+			producedWorkService.deleteAllByOrder(secondOrder);
+			orderService.delete(secondOrder);
+		}
+		if(firstOrder != null && firstOrder.getId() != null) {
+			producedWorkService.deleteAllByOrder(firstOrder);
+			orderService.delete(firstOrder);
+		}
 		if(organizationCustomer != null && organizationCustomer.getId() != null) organizationService.delete(organizationCustomer);
 		if(executorUser != null && executorUser.getId() != null) userService.delete(executorUser);
 		if(executorEmployee != null && executorEmployee.getId() != null) employeeService.delete(executorEmployee);

@@ -49,9 +49,10 @@
 	</TableView>
 	<HBox spacing="10" alignment="bottom_right" GridPane.columnIndex="0"
 		GridPane.rowIndex="2">
-		<TextField fx:id="nameField" promptText="Название" prefWidth="90"/>
 		<ComboBox fx:id="materialTypeBox" />
+		<TextField fx:id="nameField" promptText="Название" prefWidth="90"/>
 		<Button text="Добавить" onAction="#add"/>
+		<Button text="Удалить" onAction="#delete"/>
 		<Label fx:id="validationLabel" text=""/>
 	</HBox>
 </GridPane>

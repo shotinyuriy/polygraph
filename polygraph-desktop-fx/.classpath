@@ -2,12 +2,28 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Spring 4.0.5"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="src/main/jars/javax.el-2.2.4.jar"/>
 	<classpathentry kind="lib" path="src/main/jars/javax.el-api-2.2.4.jar"/>
 	<classpathentry kind="lib" path="src/main/jars/jfxrt.jar"/>
 	<classpathentry kind="lib" path="src/main/jars/validation-api-1.1.0.Final.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/polygraph-entities"/>
+	<classpathentry kind="lib" path="/dependencies/jars/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/hibernate-commons-annotations-4.0.5.Final.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/hibernate-validator-5.1.2.Final.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/javassist-3.18.1-GA.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/javax.el-api-2.2.4.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/junit.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/mysql-connector-java-5.0.5.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-aop-4.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-beans-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-context-4.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-context-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-core-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-expression-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-orm-4.0.5.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-orm-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-tx-4.0.5.RELEASE.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -124,4 +124,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	public void setState(State state) {
 		this.state = state;
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Order [");
+		sb.append("id: ").append(getId());
+		sb.append("]");
+		
+		return sb.toString();
+	}
 }

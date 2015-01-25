@@ -25,5 +25,8 @@
 	<classpathentry kind="lib" path="/dependencies/jars/spring-orm-4.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-orm-4.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-tx-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/jasperreports-6.0.0.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/jasperreports-fonts-6.0.0.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/jasperreports-functions-6.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

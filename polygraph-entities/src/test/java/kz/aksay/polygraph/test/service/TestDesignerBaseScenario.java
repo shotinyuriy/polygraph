@@ -1,6 +1,7 @@
 package kz.aksay.polygraph.test.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -70,7 +71,7 @@ public class TestDesignerBaseScenario extends Assert {
 	private Order secondOrder; 
 	
 	private TestOrderService testOrderService;
-
+	private TestMaterialConsumptionService testMaterialConsumptionService;
 	private TestDataCreator testDataCreator; 
 
 	@BeforeClass
@@ -89,6 +90,8 @@ public class TestDesignerBaseScenario extends Assert {
 		orderFullTextIndexService = context.getBean(OrderFullTextIndexService.class);
 		fullTextIndexService = context.getBean(FullTextIndexService.class);
 		testOrderService = new TestOrderService();
+		testMaterialConsumptionService = new TestMaterialConsumptionService();
+		testMaterialConsumptionService.setUp();
 		testDataCreator = new TestDataCreator(this.context);
 	}
 	
@@ -113,6 +116,8 @@ public class TestDesignerBaseScenario extends Assert {
 			createMaterialConsumption();
 			testFindOrdersByStateAndCurrentExecutor();
 			testFindOrdersByStateAndCurrentExecutorAndString();
+			testMaterialConsumptionService();
+			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -237,6 +242,12 @@ public class TestDesignerBaseScenario extends Assert {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void testMaterialConsumptionService() {
+		List<MaterialConsumption> expected = new ArrayList<>();
+		expected.add(copyMaterialConsumption);
+		testMaterialConsumptionService.testFindByExample(copyMaterialConsumption, expected);
 	}
 	
 	private void deleteAll() {

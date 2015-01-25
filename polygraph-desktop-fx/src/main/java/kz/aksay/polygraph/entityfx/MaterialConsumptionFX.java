@@ -6,7 +6,9 @@ import java.util.LinkedList;
 
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
+import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.util.FormatUtil;
 
 public class MaterialConsumptionFX {
 
@@ -68,5 +70,15 @@ public class MaterialConsumptionFX {
 	
 	public void setQuantity(BigDecimal quantity) {
 		this.materialConsumption.setQuantity(quantity);
+	}
+	
+	public String getOrderCreatedAtString() {
+		Order order = getMaterialConsumption().getOrder();
+		if(order  != null ) {
+			if( order.getCreatedAt() != null ) {
+				return FormatUtil.dateFormatter.format(order.getCreatedAt());
+			}
+		}
+		return null;
 	}
 }

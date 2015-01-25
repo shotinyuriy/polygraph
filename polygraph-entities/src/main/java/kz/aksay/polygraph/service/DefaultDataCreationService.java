@@ -65,9 +65,11 @@ public class DefaultDataCreationService {
 					 
 					 for(MaterialType materialType : materialTypeService.findAll()) {
 						 String names[] = Material.DefaultNames.materialNames.get(materialType.getName());
-						 for(String name: names) {
-							 if(materialService.findByMaterialTypeAndName(materialType, name) == null) {
-								 materialService.save(createMaterial(materialType, name));
+						 if(names != null) {
+							 for(String name: names) {
+								 if(materialService.findByMaterialTypeAndName(materialType, name) == null) {
+									 materialService.save(createMaterial(materialType, name));
+								 }
 							 }
 						 }
 					 }

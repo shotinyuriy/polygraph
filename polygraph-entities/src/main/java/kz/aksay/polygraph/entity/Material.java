@@ -41,6 +41,16 @@ public class Material extends EntitySupport {
 		this.name = name;
 	}
 	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Material [");
+		sb.append("id: ").append(id).append(", ");
+		sb.append("name: ").append(materialType.getName()).append(" ").append(name).append(", ");
+		sb.append("]");
+		
+		return sb.toString();
+	}
+	
 	public static class DefaultNames {
 		public static final Map<String, String[]> materialNames;
 		

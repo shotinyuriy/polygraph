@@ -45,9 +45,24 @@ public class MaterialConsumption extends EntitySupport {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("MaterialConsumption: [");
+		sb.append("id: ").append(id).append(", ");
+		sb.append("material: ").append(material).append(", ");
+		sb.append("order: ").append(order).append(", ");
 		sb.append("dirty: ").append(dirty);
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object == null) return false;
+		if(!(object instanceof MaterialConsumption)) return false;
+		MaterialConsumption other = (MaterialConsumption) object;
+		if(id != null) {
+			if(other.getId() == null) return false;
+			if(!id.equals(other.getId())) return false;
+		}
+		return true;
 	}
 
 	public Material getMaterial() {

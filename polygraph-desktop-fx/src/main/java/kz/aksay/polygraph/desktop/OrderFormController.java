@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -18,20 +21,28 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import kz.aksay.polygraph.api.ICustomerService;
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Customer;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entity.Order.State;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
+import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.service.CustomerService;
 import kz.aksay.polygraph.service.EmployeeService;
@@ -46,9 +57,9 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class OrderFormController implements 
 	Initializable, SessionAware, ParametersAware, OrderForm, InitializingBean {
 	
-	private OrderService orderService;
-	private EmployeeService employeeService;
-	private CustomerService customerService;
+	private IOrderService orderService = StartingPane.getBean(IOrderService.class);
+	private IEmployeeService employeeService = StartingPane.getBean(IEmployeeService.class);
+	private ICustomerService customerService = StartingPane.getBean(ICustomerService.class);
 	
 	private Map<String, Object> parameters;
 	private Map<String, Object> session;
@@ -67,6 +78,7 @@ public class OrderFormController implements
 	@FXML private Label customerField;
 	@FXML private ComboBox<EmployeeFX> currentExecutorCombo;
 	@FXML private TextArea descriptionField;
+	@FXML private ComboBox<StateFX> currentStatusCombo;
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
 	@FXML private AnchorPane materialConsumptionPane;
@@ -166,6 +178,17 @@ public class OrderFormController implements
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
 				orderFX.getCurrentExecutorProperty().bind(currentExecutorCombo.getSelectionModel().selectedItemProperty());
 				
+				currentStatusCombo.getSelectionModel().select(new StateFX(orderFX.getStateProperty().get(), orderFX.getStateProperty().get().getName()));
+				currentStatusCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StateFX>() {
+					@Override
+					public void changed(
+							ObservableValue<? extends StateFX> observable,
+							StateFX oldValue, StateFX newValue) {
+						orderFX.getStateProperty().set(newValue.getState());
+					}
+				});
+				
+				
 				producedWorksTableView.getItems().addAll(orderFX.getProducedWorkProperty());
 				orderFX.setProducedWorkProperty(producedWorksTableView.getItems());
 				
@@ -204,18 +227,41 @@ public class OrderFormController implements
 		Node node = SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
 				"material_consumption_tableview.fxml", session, parameters);
 		materialConsumptionPane.getChildren().add(node);
+		currentStatusCombo.getItems().clear();
+		currentStatusCombo.getItems().addAll(StateFX.VALUES);
+		
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		orderService = StartingPane.getBean(OrderService.class);
-		employeeService = StartingPane.getBean(EmployeeService.class);
-		customerService = StartingPane.getBean(CustomerService.class);
 		
 		List<Employee> employees = employeeService.findAll();
 		Collection<EmployeeFX> employeesFX = EmployeeFX.contvertListEntityToFX(employees);
 		
 		currentExecutorCombo.getItems().setAll(employeesFX);
+		
+		producedWorksTableView.setRowFactory(new Callback<TableView<ProducedWorkFX>, TableRow<ProducedWorkFX>>() {
+			
+			@Override
+			public TableRow<ProducedWorkFX> call(TableView<ProducedWorkFX> param) {
+				// TODO Auto-generated method stub
+				TableRow<ProducedWorkFX> tableRow = new TableRow<>();
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							editProducedWork(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				return tableRow;
+			}
+		});
 	}
 	
 	private void refreshProducedWorkTableView() {

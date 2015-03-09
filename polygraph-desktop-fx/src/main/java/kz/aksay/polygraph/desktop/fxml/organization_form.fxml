@@ -13,15 +13,22 @@
 	<Label text="Краткое наименование" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 	<Label text="ИНН" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 	<Label text="КПП" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+	<Label text="E-mail" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+	<Label text="Моб." GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+	<Label text="Тел." GridPane.rowIndex="7" GridPane.columnIndex="1"/>
 	<TextField fx:id="fullNameField" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
 	<TextField fx:id="shortNameField" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
 	<TextField fx:id="innField" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
 	<TextField fx:id="kppField" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
-	<Button text="Сохранить" GridPane.rowIndex="5" GridPane.columnIndex="1"
+	<TextField fx:id="emailField" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+	<TextField fx:id="mobileField" GridPane.rowIndex="6" GridPane.columnIndex="2"/>
+	<TextField fx:id="phoneField" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
+	
+	<Button text="Сохранить" GridPane.rowIndex="8" GridPane.columnIndex="1"
 		onAction="#save" />
-	<Button text="Отмена" GridPane.rowIndex="5" GridPane.columnIndex="2"
+	<Button text="Отмена" GridPane.rowIndex="8" GridPane.columnIndex="2"
 		onAction="#cancel" />
-	<Label text="" fx:id="validationLabel" GridPane.rowIndex="6" 
+	<Label text="" fx:id="validationLabel" GridPane.rowIndex="9" 
 		GridPane.columnIndex="1" GridPane.rowSpan="2"/>
 </GridPane>
 </children>

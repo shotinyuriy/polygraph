@@ -14,6 +14,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
+import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.entity.MaterialConsumer;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
@@ -37,8 +39,8 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 	@FXML private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
 	@FXML private Label validationLabel;
 
-	private MaterialService materialService;
-	private MaterialConsumptionService materialConsumptionService;
+	private IMaterialService materialService;
+	private IMaterialConsumptionService materialConsumptionService;
 	
 	 
 	
@@ -128,8 +130,8 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		materialService = StartingPane.getBean(MaterialService.class);
-		materialConsumptionService = StartingPane.getBean(MaterialConsumptionService.class);
+		materialService = StartingPane.getBean(IMaterialService.class);
+		materialConsumptionService = StartingPane.getBean(IMaterialConsumptionService.class);
 		Collection<MaterialFX> materialsFX 
 			= MaterialFX.convertListEntityToFX(materialService.findAll());
 		materialCombo.getItems().addAll(materialsFX);

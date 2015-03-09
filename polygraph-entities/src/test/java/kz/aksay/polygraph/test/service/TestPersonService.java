@@ -9,6 +9,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.PersonService;
@@ -18,7 +19,7 @@ public class TestPersonService extends Assert {
 	
 	private ApplicationContext context;
 	
-	private PersonService personService;
+	private IPersonService personService;
 	
 	private Date now = new Date();
 	
@@ -27,7 +28,7 @@ public class TestPersonService extends Assert {
 	@BeforeClass
 	public void setUp() throws Exception {
 		context = ContextUtils.getApplicationContext();
-		personService = context.getBean(PersonService.class);
+		personService = context.getBean(IPersonService.class);
 		person = createPerson();
 	}
 	

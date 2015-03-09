@@ -9,11 +9,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.FullTextIndex;
 
 @Service
-public class FullTextIndexService extends GenericService<FullTextIndex, Long> {
+public class FullTextIndexService extends AbstractGenericService<FullTextIndex, Long> implements IFullTextIndexService {
 
 	private GenericDao<FullTextIndex, Long> fullTextIndexDao;
 

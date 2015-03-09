@@ -1,7 +1,6 @@
 package kz.aksay.polygraph.service;
 
-import javax.annotation.PostConstruct;
-
+import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.User;
@@ -10,16 +9,12 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
-public class UserService extends GenericService<User, Long> {
-	private GenericDao<User, Long> userDao;
+public class UserService extends AbstractGenericService<User, Long>
+	implements IUserService {
 	
-
+	private GenericDao<User, Long> userDao;
 
 	public User findByLogin(String login) {
 		User user = null;

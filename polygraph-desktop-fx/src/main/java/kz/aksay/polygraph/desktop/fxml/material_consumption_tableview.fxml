@@ -15,10 +15,10 @@
 		<Label  text="Расход материалов" />
 		<TableView  fx:id="materialConsumptionsTableView">
 			<columns>
-				<TableColumn text="Материал">
+				<TableColumn text="Материал" prefWidth="250.0">
 					<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
 				</TableColumn>
-				<TableColumn text="Количество">
+				<TableColumn text="Количество" prefWidth="150.0">
 					<cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
 				</TableColumn>
 			</columns>

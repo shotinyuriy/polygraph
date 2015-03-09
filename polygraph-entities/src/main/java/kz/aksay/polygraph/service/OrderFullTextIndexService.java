@@ -12,15 +12,18 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kz.aksay.polygraph.api.IFullTextIndexService;
+import kz.aksay.polygraph.api.IOrderFullTextIndexService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.FullTextIndex;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.OrderFullTextIndex;
 
 @Service
-public class OrderFullTextIndexService extends GenericService<OrderFullTextIndex, Long> {
+public class OrderFullTextIndexService extends AbstractGenericService<OrderFullTextIndex, Long> 
+	implements IOrderFullTextIndexService {
 
-	private FullTextIndexService fullTextIndexService;
+	private IFullTextIndexService fullTextIndexService;
 	
 	private GenericDao<OrderFullTextIndex, Long> orderFullTextIndexDao;
 	
@@ -109,7 +112,7 @@ public class OrderFullTextIndexService extends GenericService<OrderFullTextIndex
 
 	@Autowired
 	public void setFullTextIndexService(
-			FullTextIndexService fullTextIndexService) {
+			IFullTextIndexService fullTextIndexService) {
 		this.fullTextIndexService = fullTextIndexService;
 	}
 

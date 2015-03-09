@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
+import kz.aksay.polygraph.api.IOrderFullTextIndexService;
+import kz.aksay.polygraph.api.IOrderService;
+import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
@@ -21,15 +25,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 
 @Service
-public class OrderService extends GenericService<Order, Long> {
+public class OrderService extends AbstractGenericService<Order, Long> 
+	implements IOrderService {
 
 	private GenericDao<Order, Long> orderDao;
 	
-	private ProducedWorkService producedWorkService;
+	private IProducedWorkService producedWorkService;
 	
-	private MaterialConsumptionService materialConsumptionService;
+	private IMaterialConsumptionService materialConsumptionService;
 	
-	private OrderFullTextIndexService orderFullTextIndexService;
+	private IOrderFullTextIndexService orderFullTextIndexService;
 	
 	@Override
 	@Transactional
@@ -149,18 +154,18 @@ public class OrderService extends GenericService<Order, Long> {
 	}
 
 	@Autowired
-	public void setProducedWorkService(ProducedWorkService producedWorkService) {
+	public void setProducedWorkService(IProducedWorkService producedWorkService) {
 		this.producedWorkService = producedWorkService;
 	}
 	
 	@Autowired
-	public void setMaterialConsumptionService(MaterialConsumptionService materialConsumptionService) {
+	public void setMaterialConsumptionService(IMaterialConsumptionService materialConsumptionService) {
 		this.materialConsumptionService = materialConsumptionService;
 	}
 
 	@Autowired
 	public void setOrderFullTextIndexService(
-			OrderFullTextIndexService orderFullTextIndexService) {
+			IOrderFullTextIndexService orderFullTextIndexService) {
 		this.orderFullTextIndexService = orderFullTextIndexService;
 	}
 }

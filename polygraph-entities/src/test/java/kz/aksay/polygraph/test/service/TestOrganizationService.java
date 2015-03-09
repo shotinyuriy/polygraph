@@ -7,6 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.OrganizationService;
@@ -15,12 +16,12 @@ import kz.aksay.polygraph.test.ContextUtils;
 public class TestOrganizationService extends Assert {
 	private ApplicationContext context;
 	
-	private OrganizationService organizationService;
+	private IOrganizationService organizationService;
 	
 	@BeforeClass
 	public void setUp() {
 		context = ContextUtils.getApplicationContext();
-		organizationService = context.getBean(OrganizationService.class);
+		organizationService = context.getBean(IOrganizationService.class);
 	}
 	
 	private Organization createOrganization() throws Exception {

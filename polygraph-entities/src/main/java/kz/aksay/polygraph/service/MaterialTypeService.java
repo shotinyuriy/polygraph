@@ -5,11 +5,13 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kz.aksay.polygraph.api.IMaterialTypeService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.MaterialType;
 
 @Service
-public class MaterialTypeService extends GenericService<MaterialType, Long> {
+public class MaterialTypeService extends AbstractGenericService<MaterialType, Long> 
+	implements IMaterialTypeService {
 
 	private GenericDao<MaterialType, Long> materialTypeDao;
 

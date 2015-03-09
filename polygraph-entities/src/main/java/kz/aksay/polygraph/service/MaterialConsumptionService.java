@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MaterialConsumptionService extends
-		GenericService<MaterialConsumption, Long> {
+		AbstractGenericService<MaterialConsumption, Long> implements IMaterialConsumptionService {
 
 	private GenericDao<MaterialConsumption, Long> materialConsumptionDao;
 	

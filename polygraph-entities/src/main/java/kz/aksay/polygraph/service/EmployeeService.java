@@ -1,5 +1,8 @@
 package kz.aksay.polygraph.service;
 
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IPersonService;
+import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Person;
@@ -12,11 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class EmployeeService extends GenericService<Employee, Long> {
+public class EmployeeService extends AbstractGenericService<Employee, Long> implements IEmployeeService {
 	
 	private GenericDao<Employee, Long> employeeDao;
-	private PersonService personService;
-	private UserService userService;
+	private IPersonService personService;
+	private IUserService userService;
 
 	@Autowired
 	public void setEmployeeDao(GenericDao<Employee, Long> employeeDao) {
@@ -50,21 +53,21 @@ public class EmployeeService extends GenericService<Employee, Long> {
 		}
 	}
 
-	public PersonService getPersonService() {
+	public IPersonService getPersonService() {
 		return personService;
 	}
 
 	@Autowired
-	public void setPersonService(PersonService personService) {
+	public void setPersonService(IPersonService personService) {
 		this.personService = personService;
 	}
 
-	public UserService getUserService() {
+	public IUserService getUserService() {
 		return userService;
 	}
 
 	@Autowired
-	public void setUserService(UserService userService) {
+	public void setUserService(IUserService userService) {
 		this.userService = userService;
 	}
 	 

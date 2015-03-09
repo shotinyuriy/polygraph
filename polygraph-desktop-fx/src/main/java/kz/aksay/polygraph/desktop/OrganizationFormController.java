@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.service.OrganizationService;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -23,7 +24,8 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class OrganizationFormController implements Initializable, SessionAware, 
 	ParametersAware {
 
-	private OrganizationService organizationService;
+	private IOrganizationService organizationService 
+		= StartingPane.getBean(IOrganizationService.class);;
 	
 	@FXML private Label idLabel;
 	
@@ -36,14 +38,19 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	@FXML private TextField shortNameField;
 	
 	@FXML private Label validationLabel;
+	
+	@FXML private TextField emailField;
+	
+	@FXML private TextField mobileField;
+	
+	@FXML private TextField phoneField;
 
 	private Map<String, Object> session;
 	
 	private Map<String, Object> parameters;
 	
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		organizationService = StartingPane.getBean(OrganizationService.class);
+	public void initialize(URL location, ResourceBundle resources) { 
 		
 		initializeByParameters();
 	}
@@ -83,6 +90,9 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		organization.setFullname(fullNameField.getText());
 		organization.setKpp(kppField.getText());
 		organization.setShortname(shortNameField.getText());
+		organization.setEmail(emailField.getText());
+		organization.setMobile(mobileField.getText());
+		organization.setPhone(phoneField.getText());
 		
 		try {
 			organizationService.save(organization);
@@ -108,6 +118,9 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			kppField.setText(organization.getKpp());
 			fullNameField.setText(organization.getFullname());
 			shortNameField.setText(organization.getShortname());
+			emailField.setText(organization.getEmail());
+			mobileField.setText(organization.getMobile());
+			phoneField.setText(organization.getPhone());
 		}
 	}
 

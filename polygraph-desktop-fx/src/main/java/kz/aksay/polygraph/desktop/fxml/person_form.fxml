@@ -11,12 +11,18 @@ prefHeight="400.0" prefWidth="600.0" vgap="10.0" xmlns="http://javafx.com/javafx
       <Label alignment="CENTER_RIGHT" text="Имя" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label alignment="CENTER_RIGHT" text="Отчество" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Label alignment="CENTER_RIGHT" text="Дата рождения" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      	<Label text="E-mail" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+		<Label text="Моб." GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+		<Label text="Тел." GridPane.rowIndex="6" GridPane.columnIndex="1"/>
       <TextField fx:id="birthDateField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
       <TextField fx:id="lastNameField" GridPane.columnIndex="2" />
       <TextField fx:id="firstNameField" GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <TextField fx:id="middleNameField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#savePerson" text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Button fx:id="closeButton" alignment="CENTER" contentDisplay="RIGHT" onAction="#closeForm" text="Закрыть" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-      <Label fx:id="birthDateValidator" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      	<TextField fx:id="emailField" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+		<TextField fx:id="mobileField" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+		<TextField fx:id="phoneField" GridPane.rowIndex="6" GridPane.columnIndex="2"/>
+      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#savePerson" text="Сохранить" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Button fx:id="closeButton" alignment="CENTER" contentDisplay="RIGHT" onAction="#closeForm" text="Закрыть" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+      <Label fx:id="birthDateValidator" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 </GridPane>

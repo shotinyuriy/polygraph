@@ -3,27 +3,33 @@ package kz.aksay.polygraph.service;
 import java.io.Serializable;
 import java.util.List;
 
+import kz.aksay.polygraph.api.IGenericService;
 import kz.aksay.polygraph.dao.GenericDao;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-public abstract class GenericService<T, PK extends Serializable> {
+public abstract class AbstractGenericService<T, PK extends Serializable> 
+	implements IGenericService<T, PK> {
 	
 	protected abstract GenericDao<T, PK> getDao();
 	
+	@Override
 	public T find(PK id) {
 		return getDao().read(id);
 	}
 	
+	@Override
 	public List<T> findAll() {
 		return getDao().readAll();
 	}
 	
+	@Override
 	public List<T> findAll(int offset, int limit) {
 		return getDao().readAll(offset, limit);
 	}
 	
+	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public T save(T entity) throws Exception {
 		
@@ -32,11 +38,13 @@ public abstract class GenericService<T, PK extends Serializable> {
 		return entity;
 	}
 	
+	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void delete(T entity) {
 		getDao().delete(entity);
 	}
 	
+	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public int deleteAll() {
 		return getDao().deleteAll();

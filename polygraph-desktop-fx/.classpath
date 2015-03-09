@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="/dependencies/jars/junit.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/mysql-connector-java-5.0.5.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-aop-4.0.5.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="/dependencies/jars/spring-beans-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-beans-4.0.5.RELEASE.jar" sourcepath="E:/Projects/m2/org/springframework/spring-beans/4.0.5.RELEASE/spring-beans-4.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-context-4.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-context-4.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-core-4.0.5.RELEASE.jar"/>

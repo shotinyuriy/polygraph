@@ -5,12 +5,14 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.WorkType;
 
 @Service
-public class WorkTypeService extends GenericService<WorkType, Long> {
+public class WorkTypeService extends AbstractGenericService<WorkType, Long>
+	implements IWorkTypeService {
 
 	private GenericDao<WorkType, Long> workTypeDao;
 	

@@ -6,10 +6,16 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.entity.Organization;
+import kz.aksay.polygraph.entityfx.PersonFX;
 import kz.aksay.polygraph.service.OrganizationService;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -19,7 +25,8 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class OrganizationTableViewController implements Initializable, 
 	SessionAware {
 	
-	private OrganizationService organizationService;
+	private IOrganizationService organizationService 
+		= StartingPane.getBean(OrganizationService.class);
 	
 	@FXML
 	private TableView<Organization> organizationTable;
@@ -27,9 +34,31 @@ public class OrganizationTableViewController implements Initializable,
 	private Map<String, Object> session;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		organizationService = StartingPane.getBean(OrganizationService.class);
+	public void initialize(URL location, ResourceBundle resources) { 
 		organizationTable.getItems().setAll(organizationService.findAll());
+		
+		organizationTable.setRowFactory(new Callback<TableView<Organization>, TableRow<Organization>>() {
+			
+			@Override
+			public TableRow<Organization> call(TableView<Organization> param) {
+				// TODO Auto-generated method stub
+				TableRow<Organization> tableRow = new TableRow<>();
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							openOrganizationForm(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				return tableRow;
+			}
+		});
 	}
 	
 	@FXML

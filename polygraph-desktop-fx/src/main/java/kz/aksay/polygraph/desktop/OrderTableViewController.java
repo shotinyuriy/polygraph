@@ -6,17 +6,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
+import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.service.OrderService;
 import kz.aksay.polygraph.util.MainMenu;
@@ -28,13 +38,15 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class OrderTableViewController implements Initializable,
 		SessionAware {
 
-	private OrderService orderService; 
+	private IOrderService orderService = StartingPane.getBean(IOrderService.class); 
+	private IEmployeeService employeeService = StartingPane.getBean(IEmployeeService.class);
 	
 	private Map<String, Object> session;
 	
 	@FXML TableView<OrderFX> ordersTableView;
 	@FXML TextField searchField; 
 	@FXML ComboBox<StateFX> stateCombo;
+	@FXML ComboBox<EmployeeFX> executorCombo;
 	@FXML CheckBox onlyMy;
 	
 	@Override
@@ -44,15 +56,52 @@ public class OrderTableViewController implements Initializable,
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		orderService = StartingPane.getBean(OrderService.class);
 		
 		List<Order> orders = orderService.findAll();
 		List<OrderFX> ordersFX = OrderFX.convertListEntityToFX(orders);
+		
+		List<Employee> employees = employeeService.findAll();
+		
+		onlyMy.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable,
+					Boolean oldValue, Boolean newValue) {
+				findOrders();
+			}
+		});
 		
 		ordersTableView.getItems().addAll(ordersFX);
 		
 		stateCombo.getItems().addAll(StateFX.VALUES);
 		stateCombo.getSelectionModel().select(0);
+		
+		executorCombo.getItems().add(EmployeeFX.ALL_EMPLOYEES);
+		executorCombo.getItems().addAll(EmployeeFX.contvertListEntityToFX(employees));
+		
+		
+		ordersTableView.setRowFactory(new Callback<TableView<OrderFX>, TableRow<OrderFX>>() {
+			
+			@Override
+			public TableRow<OrderFX> call(TableView<OrderFX> param) {
+				// TODO Auto-generated method stub
+				TableRow<OrderFX> tableRow = new TableRow<>();
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							openOrderForm(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				return tableRow;
+			}
+		});
 	}
 	
 	@FXML
@@ -66,6 +115,14 @@ public class OrderTableViewController implements Initializable,
 				orderExample.setCurrentExecutor(user.getEmployee());
 			} else {
 				orderExample.setCurrentExecutor(new Employee());
+			}
+		}
+		
+		if(orderExample.getCurrentExecutor() == null) { 
+			if(executorCombo.getSelectionModel().getSelectedItem() == null)
+				orderExample.setCurrentExecutor(null);
+			else {
+				orderExample.setCurrentExecutor(executorCombo.getSelectionModel().getSelectedItem().getEmployee());
 			}
 		}
 		
@@ -83,6 +140,7 @@ public class OrderTableViewController implements Initializable,
 			List<OrderFX> ordersFX = OrderFX.convertListEntityToFX(orders);
 			ordersTableView.getItems().addAll(ordersFX);
 		}
+		
 	}
 
 	@FXML

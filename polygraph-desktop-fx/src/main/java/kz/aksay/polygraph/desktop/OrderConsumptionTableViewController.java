@@ -1,6 +1,8 @@
 package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -8,16 +10,24 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.desktop.controls.DateField;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
+import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
+import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.SessionAware;
@@ -26,14 +36,15 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class OrderConsumptionTableViewController implements Initializable,
 		SessionAware {
 
-	private MaterialConsumptionService materialConsumptionService; 
+	private IMaterialConsumptionService materialConsumptionService = 
+			StartingPane.getBean(IMaterialConsumptionService.class);; 
 	
 	private Map<String, Object> session;
 	
 	@FXML TableView<MaterialConsumptionFX> orderConsumptionsTableView; 
 	@FXML ComboBox<StateFX> stateCombo;
-	@FXML DateField fromDate;
-	@FXML DateField toDate;
+	@FXML DatePicker fromDate;
+	@FXML DatePicker toDate;
 	
 	@Override
 	public void setSession(Map<String, Object> session) {
@@ -41,9 +52,7 @@ public class OrderConsumptionTableViewController implements Initializable,
 	}
 	
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		materialConsumptionService = StartingPane.getBean(MaterialConsumptionService.class);
-		
+	public void initialize(URL location, ResourceBundle resources) {		
 		List<MaterialConsumption> materialConsumptions= materialConsumptionService.findAll();
 		Collection<MaterialConsumptionFX> ordersFX = MaterialConsumptionFX.convertListEntityToFX(materialConsumptions);
 		
@@ -51,6 +60,31 @@ public class OrderConsumptionTableViewController implements Initializable,
 		
 		stateCombo.getItems().addAll(StateFX.VALUES);
 		stateCombo.getSelectionModel().select(0);
+		fromDate.setValue(LocalDate.now().minusMonths(1));
+		toDate.setValue(LocalDate.now());
+		
+		orderConsumptionsTableView.setRowFactory(new Callback<TableView<MaterialConsumptionFX>, TableRow<MaterialConsumptionFX>>() {
+			
+			@Override
+			public TableRow<MaterialConsumptionFX> call(TableView<MaterialConsumptionFX> param) {
+				// TODO Auto-generated method stub
+				TableRow<MaterialConsumptionFX> tableRow = new TableRow<>();
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							openOrderForm(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				return tableRow;
+			}
+		});
 	}
 	
 	@FXML
@@ -62,14 +96,13 @@ public class OrderConsumptionTableViewController implements Initializable,
 		
 		List<MaterialConsumption> materialConsumptions = null;
 		
-		if(fromDate.getDate() != null) {
-			System.out.println("fromDate: "+fromDate.getDate());
-			orderExample.setCreatedAt(fromDate.getDate());
+		if(fromDate.getValue() != null) {
+			orderExample.setCreatedAt(
+					FormatUtil.convertLocalDate(fromDate.getValue()));
 		}
 		
-		if(toDate.getDate() != null) {
-			System.out.println("toDate: "+toDate.getDate());
-			orderExample.setUpdatedAt(toDate.getDate());
+		if(toDate.getValue() != null) {
+			orderExample.setUpdatedAt(FormatUtil.convertLocalDate(toDate.getValue()));
 		}
 		
 		materialConsumptionExample.setOrder(orderExample);

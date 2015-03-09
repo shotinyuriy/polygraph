@@ -41,6 +41,15 @@ public abstract class Customer {
 
 	@Column(name = "updated_at")
 	protected Date updatedAt;
+	
+	@Column
+	protected String email;
+	
+	@Column
+	protected String mobile;
+	
+	@Column
+	protected String phone;
 
 	public abstract String getFullName();
 	
@@ -82,6 +91,30 @@ public abstract class Customer {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	
 }

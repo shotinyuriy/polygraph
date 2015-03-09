@@ -4,21 +4,21 @@ import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.test.ContextUtils;
-
 import static org.testng.Assert.*;
 
 public class TestMaterialConsumptionService {
 	
 	private ApplicationContext context = ContextUtils.getApplicationContext();
-	private MaterialConsumptionService materialConsumptionService;
+	private IMaterialConsumptionService materialConsumptionService;
 	
 	
 	public void setUp() {
 		materialConsumptionService = context.getBean(
-				MaterialConsumptionService.class);
+				IMaterialConsumptionService.class);
 	}
 	
 	public void testFindByExample(MaterialConsumption materialConsumptionExample, List<MaterialConsumption> expected) {

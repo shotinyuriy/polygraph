@@ -13,13 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
+import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.dao.GenericDao;
 
 @Service
-public class ProducedWorkService extends GenericService<ProducedWork, Long> {
+public class ProducedWorkService extends AbstractGenericService<ProducedWork, Long>
+	implements IProducedWorkService {
 	
 	private GenericDao<ProducedWork, Long> producedWorkDao;
-	private MaterialConsumptionService materialConsumptionService;
+	private IMaterialConsumptionService materialConsumptionService;
 
 	@Transactional(readOnly=true)
 	public List<ProducedWork> findAllByOrderId(Long orderId) {
@@ -71,7 +74,7 @@ public class ProducedWorkService extends GenericService<ProducedWork, Long> {
 	}
 
 	@Autowired
-	public void setMaterialConsumptionService(MaterialConsumptionService materialConsumptionService) {
+	public void setMaterialConsumptionService(IMaterialConsumptionService materialConsumptionService) {
 		this.materialConsumptionService = materialConsumptionService;
 	}
 }

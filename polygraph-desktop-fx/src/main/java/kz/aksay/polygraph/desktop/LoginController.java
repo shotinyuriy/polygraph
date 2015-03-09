@@ -15,7 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.UserService;
@@ -26,7 +30,7 @@ public class LoginController {
 
 	private ApplicationContext applicationContext = ContextUtils.getApplicationContext();
 	
-	private UserService userService;
+	private IUserService userService;
 	
 	@FXML
 	private TextField loginField;
@@ -38,12 +42,23 @@ public class LoginController {
 	private Label errorLabel;
 	
 	public LoginController() {
-		userService = applicationContext.getBean(UserService.class);
+		userService = applicationContext.getBean(IUserService.class);
 	}
 	
 	@FXML
-	public void login(ActionEvent actionEvent) throws IOException {
-		
+	public void actionLogin(ActionEvent actionEvent) throws IOException {
+		login();
+	}
+	
+	
+	@FXML
+	public void keyLogin(KeyEvent keyEvent) throws IOException {
+		if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+			login();
+		}
+	}
+	
+	public void login() throws IOException {
 		
 		User user = userService.findByLoginAndPassword(
 				loginField.getText(), passwordField.getText());
@@ -64,4 +79,5 @@ public class LoginController {
 			}
 		}
 	}
+
 }

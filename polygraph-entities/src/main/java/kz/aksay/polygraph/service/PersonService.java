@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.service;
 
+import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Person;
 
@@ -9,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonService extends GenericService<Person, Long> {
+public class PersonService extends AbstractGenericService<Person, Long> 
+	implements IPersonService {
 	
 	private GenericDao<Person, Long> personDao;
 	

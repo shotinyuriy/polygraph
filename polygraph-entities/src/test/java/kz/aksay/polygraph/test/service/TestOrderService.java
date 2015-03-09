@@ -2,6 +2,7 @@ package kz.aksay.polygraph.test.service;
 
 import java.util.List;
 
+import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.OrderService;
@@ -16,11 +17,11 @@ public class TestOrderService extends Assert {
 
 	private ApplicationContext context = ContextUtils.getApplicationContext();
 	
-	private OrderService orderService;
+	private IOrderService orderService;
 	
 	@BeforeClass
 	public void setUp() {
-		orderService = context.getBean(OrderService.class);
+		orderService = context.getBean(IOrderService.class);
 	}
 	
 	@Test

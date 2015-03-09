@@ -21,12 +21,13 @@
 	
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
    		<top>
-	      <HBox spacing="10.0" alignment="BOTTOM_LEFT">
+	      <HBox spacing="20.0" alignment="BOTTOM_LEFT">
 	      	<children>
-	         	<TextField fx:id="searchField" />
+	         	<TextField fx:id="searchField" prefWidth="300.0"/>
 	            <Label text="Статус:"/>
 	            <ComboBox fx:id="stateCombo"/>
-	            <CheckBox fx:id="onlyMy" text="Я исполнитель"/>
+	            <CheckBox fx:id="onlyMy" text="Я исполнитель" />
+	            <ComboBox fx:id="executorCombo"/>
 	            <Button mnemonicParsing="false" text="Поиск" onAction="#findOrders"/>
 	        </children>
 	      </HBox>

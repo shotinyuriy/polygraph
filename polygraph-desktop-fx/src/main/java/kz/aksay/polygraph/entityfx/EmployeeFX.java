@@ -8,8 +8,13 @@ import kz.aksay.polygraph.entity.Employee;
 
 public class EmployeeFX {
 
+	public static final EmployeeFX ALL_EMPLOYEES;
 	private Employee employee;
 	private PersonFX personFX;
+	
+	static {  
+		ALL_EMPLOYEES = new EmployeeFX(null);
+	}
 	
 	public static Collection<EmployeeFX> contvertListEntityToFX(Collection<Employee> employees) {
 		Collection<EmployeeFX> employeesFX = new LinkedList<>();
@@ -35,7 +40,10 @@ public class EmployeeFX {
 	}
 	
 	public String getTypeName() {
-		return employee.getUser().getRole().getName();
+		if(employee != null && employee.getUser() != null && employee.getUser().getRole() != null) {
+			return employee.getUser().getRole().getName();
+		}
+		return null;
 	}
 	
 	public String getFullName() {
@@ -47,6 +55,7 @@ public class EmployeeFX {
 	}
 	
 	public String toString() {
+		if(personFX == null || personFX.getPerson() == null) return "Все";
 		return personFX.getFullName()+" ("+this.getTypeName()+")";
 	}
 }

@@ -30,8 +30,8 @@ public class User implements Serializable {
 	 */
 	public static enum Role {
 		ADMIN("АДМИНИСТРАТОР"),
-		DIRECTOR("ДИЗАЙНЕР"),
-		DESIGNER("ДИРЕКТОР"),
+		DIRECTOR("ДИРЕКТОР"),
+		DESIGNER("ДИЗАЙНЕР"),
 		MANAGER("БУХГАЛТЕР"),
 		ACCOUNTANT("МЕНЕДЖЕР");
 		
@@ -118,6 +118,14 @@ public class User implements Serializable {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("{login:").append(login)
+		.append(", cteatedAt:").append(createdAt).append("}");
+		return sb.toString();
 	}
 	
 	public String getLogin() {

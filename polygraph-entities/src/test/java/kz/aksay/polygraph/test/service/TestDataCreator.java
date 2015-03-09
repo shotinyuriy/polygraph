@@ -9,6 +9,18 @@ import java.util.Random;
 import org.springframework.context.ApplicationContext;
 
 import sun.security.util.Password;
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IFullTextIndexService;
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
+import kz.aksay.polygraph.api.IMaterialService;
+import kz.aksay.polygraph.api.IMaterialTypeService;
+import kz.aksay.polygraph.api.IOrderFullTextIndexService;
+import kz.aksay.polygraph.api.IOrderService;
+import kz.aksay.polygraph.api.IOrganizationService;
+import kz.aksay.polygraph.api.IPersonService;
+import kz.aksay.polygraph.api.IProducedWorkService;
+import kz.aksay.polygraph.api.IUserService;
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Customer;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Material;
@@ -45,18 +57,18 @@ public class TestDataCreator {
 	private static final int PERSON_COUNT = 50;
 	
 	private ApplicationContext context;
-	private UserService userService;
-	private EmployeeService employeeService;
-	private PersonService personService;
-	private OrganizationService organizationService;
-	private OrderService orderService;
-	private ProducedWorkService producedWorkService;
-	private WorkTypeService workTypeService;
-	private MaterialTypeService materialTypeService;
-	private MaterialService materialService;
-	private MaterialConsumptionService materialConsumptionService;
-	private OrderFullTextIndexService orderFullTextIndexService;
-	private FullTextIndexService fullTextIndexService;
+	private IUserService userService;
+	private IEmployeeService employeeService;
+	private IPersonService personService;
+	private IOrganizationService organizationService;
+	private IOrderService orderService;
+	private IProducedWorkService producedWorkService;
+	private IWorkTypeService workTypeService;
+	private IMaterialTypeService materialTypeService;
+	private IMaterialService materialService;
+	private IMaterialConsumptionService materialConsumptionService;
+	private IOrderFullTextIndexService orderFullTextIndexService;
+	private IFullTextIndexService fullTextIndexService;
 
 	public TestDataCreator(ApplicationContext context) {
 		this.context = context;
@@ -64,18 +76,18 @@ public class TestDataCreator {
 	}
 
 	public void setUp() {
-		userService = context.getBean(UserService.class);
-		employeeService = context.getBean(EmployeeService.class);
-		personService = context.getBean(PersonService.class);
-		organizationService = context.getBean(OrganizationService.class);
-		orderService = context.getBean(OrderService.class);
-		producedWorkService = context.getBean(ProducedWorkService.class);
-		workTypeService = context.getBean(WorkTypeService.class);
-		materialTypeService = context.getBean(MaterialTypeService.class);
-		materialService = context.getBean(MaterialService.class);
-		materialConsumptionService = context.getBean(MaterialConsumptionService.class);
-		orderFullTextIndexService = context.getBean(OrderFullTextIndexService.class);
-		fullTextIndexService = context.getBean(FullTextIndexService.class);
+		userService = context.getBean(IUserService.class);
+		employeeService = context.getBean(IEmployeeService.class);
+		personService = context.getBean(IPersonService.class);
+		organizationService = context.getBean(IOrganizationService.class);
+		orderService = context.getBean(IOrderService.class);
+		producedWorkService = context.getBean(IProducedWorkService.class);
+		workTypeService = context.getBean(IWorkTypeService.class);
+		materialTypeService = context.getBean(IMaterialTypeService.class);
+		materialService = context.getBean(IMaterialService.class);
+		materialConsumptionService = context.getBean(IMaterialConsumptionService.class);
+		orderFullTextIndexService = context.getBean(IOrderFullTextIndexService.class);
+		fullTextIndexService = context.getBean(IFullTextIndexService.class);
 	}
 	
 	public void createAllEntities() {
@@ -116,14 +128,24 @@ public class TestDataCreator {
 	
 	public List<User> createUsers(User creator, List<Employee> employees) {
 		List<User> users = new ArrayList<>(employees.size());
+		int roleIndex = 0;
+		int roleCount = Role.values().length;
+		
+		Role role = null;
 		for(Employee employee : employees) {
+			role = Role.values()[roleIndex];
 			String login = generateLogin(employee);
 			String password = login;
 			try {
-				users.add(createUser(creator, employee, login, password));
+				users.add(createUser(creator, employee, login, password, role));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			if(roleIndex < roleCount-1)
+				roleIndex++;
+			else
+				roleIndex = 0;
 		}
 		return users;
 	}
@@ -217,14 +239,14 @@ public class TestDataCreator {
 		return executorEmployee;
 	}
 	
-	public User createUser(User creator, Employee executorEmployee, String executorLogin, String executorPassword) throws Exception {
+	public User createUser(User creator, Employee executorEmployee, String executorLogin, String executorPassword, Role role) throws Exception {
 		User executorUser = new User();
 		executorUser.setCreatedAt(new Date());
 		executorUser.setCreatedBy(creator);
 		executorUser.setEmployee(executorEmployee);
 		executorUser.setLogin(executorLogin);
 		executorUser.setPassword(executorPassword);
-		executorUser.setRole(Role.DESIGNER);
+		executorUser.setRole(role);
 		executorUser = userService.save(executorUser);
 		return executorUser;
 	}

@@ -14,6 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
@@ -23,7 +24,7 @@ import kz.aksay.polygraph.util.SessionUtil;
 
 public class WorkTypeTableViewController implements SessionAware, Initializable {
 
-	private WorkTypeService workTypeService;
+	private IWorkTypeService workTypeService;
 	private Map<String, Object> session;
 	
 	@FXML private TableColumn<WorkTypeFX, String> nameColumn;
@@ -80,7 +81,7 @@ public class WorkTypeTableViewController implements SessionAware, Initializable 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		workTypeService = StartingPane.getBean(WorkTypeService.class);
+		workTypeService = StartingPane.getBean(IWorkTypeService.class);
 		
 		List<WorkType> workTypes = workTypeService.findAll();
 		tableView.getItems().addAll(

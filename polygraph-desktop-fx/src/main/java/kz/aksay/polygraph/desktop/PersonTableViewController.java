@@ -7,9 +7,14 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entityfx.PersonFX;
 import kz.aksay.polygraph.service.PersonService;
@@ -20,22 +25,42 @@ import kz.aksay.polygraph.util.SessionUtil;
 
 public class PersonTableViewController implements Initializable, SessionAware {
 	
-	private PersonService personService;
+	private IPersonService personService 
+		= StartingPane.getBean(IPersonService.class);
 	
 	@FXML
 	private TableView<PersonFX> personTable;
 
 	private Map<String, Object> session;
-	
-	public PersonTableViewController() {
-		personService = StartingPane.getBean(PersonService.class);
-	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		List<Person> personList = personService.findAll();
 		List<PersonFX> personFXList = PersonFX.convertListEntityToFX(personList);
 		personTable.getItems().setAll(personFXList);
+		
+		personTable.setRowFactory(new Callback<TableView<PersonFX>, TableRow<PersonFX>>() {
+			
+			@Override
+			public TableRow<PersonFX> call(TableView<PersonFX> param) {
+				// TODO Auto-generated method stub
+				TableRow<PersonFX> tableRow = new TableRow<>();
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							openPersonForm(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				return tableRow;
+			}
+		});
 	}
 	
 	@FXML

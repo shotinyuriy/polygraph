@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC 
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">${hibernate.connection.driverClass}</property>
+		<property name="hibernate.connection.characterEncoding">${hibernate.connection.characterEncoding}</property>
+		<property name="hibernate.connection.useUnicode">${hibernate.connection.useUnicode}</property>
+		<property name="hibernate.connection.showSql">${hibernate.connection.showSql}</property>
+		<property name="hibernate.connection.username">${hibernate.connection.username}</property>
+		<property name="hibernate.connection.password">${hibernate.connection.password}</property>
+		<property name="hibernate.connection.url">${hibernate.connection.url}</property>
+		<property name="hibernate.connection.charSet">${hibernate.connection.charSet}</property>
+
+		
+		<property name="hbm2ddl.auto">update</property>
+		
+		<mapping package="kz.aksay.polygraph.entity"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Customer"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>		
+		<mapping class="kz.aksay.polygraph.entity.FullTextIndex"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Material"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.MaterialConsumption"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.MaterialType"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Organization"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Order"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.OrderFullTextIndex"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Person"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.ProducedWork"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.User"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.WorkType"></mapping>
+		
+		
+	</session-factory>
+</hibernate-configuration>

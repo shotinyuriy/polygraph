@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import kz.aksay.polygraph.desktop.controls.DateField?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.DatePicker?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="kz.aksay.polygraph.desktop.OrderConsumptionTableViewController">
@@ -28,9 +29,9 @@
 	            <Label text="Статус:"/>
 	            <ComboBox fx:id="stateCombo"/>
 	            <Label text="Дата заказа с :"/>
-	            <DateField fx:id="fromDate" />
+	            <DatePicker fx:id="fromDate" />
 	            <Label text="по :"/>
-	            <DateField fx:id="toDate" />
+	            <DatePicker fx:id="toDate" />
 	            <Button mnemonicParsing="false" text="Поиск" onAction="#findMaterialConsumptions"/>
 	        </children>
 	      </FlowPane>

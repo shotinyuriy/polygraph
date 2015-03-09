@@ -20,12 +20,12 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField GridPane.columnIndex="1" text="techUser" fx:id="loginField"/>
             <Label text="Логин" />
             <Label text="Пароль" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" onAction="#login" text="Войти" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" text="test" fx:id="passwordField"/>
+            <TextField GridPane.columnIndex="1" text="techUser" fx:id="loginField" onKeyPressed="#keyLogin"/>
+            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" text="test" fx:id="passwordField" onKeyPressed="#keyLogin"/>
             <Label fx:id="errorLabel" textFill="#e81e08" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" onAction="#actionLogin" text="Войти" GridPane.columnIndex="1" GridPane.rowIndex="2" onKeyPressed="#keyLogin"/>
          </children>
       </GridPane>
    </children>

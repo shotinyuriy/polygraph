@@ -17,6 +17,8 @@ import javafx.scene.control.TextField;
 
 import javax.validation.ValidationException;
 
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
@@ -36,16 +38,16 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 
 	private ApplicationContext applicationContext = ContextUtils.getApplicationContext();
 	
-	private EmployeeService employeeService;
-	private UserService userService;
+	private IEmployeeService employeeService;
+	private IUserService userService;
 	
 	private Employee employee;
 	private Person person;
 	private User user;
 	
 	public EmployeeFormController() {
-		employeeService = applicationContext.getBean(EmployeeService.class);
-		userService = applicationContext.getBean(UserService.class);
+		employeeService = applicationContext.getBean(IEmployeeService.class);
+		userService = applicationContext.getBean(IUserService.class);
 	}
 	
 	@FXML

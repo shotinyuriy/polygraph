@@ -7,6 +7,18 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IFullTextIndexService;
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
+import kz.aksay.polygraph.api.IMaterialService;
+import kz.aksay.polygraph.api.IMaterialTypeService;
+import kz.aksay.polygraph.api.IOrderFullTextIndexService;
+import kz.aksay.polygraph.api.IOrderService;
+import kz.aksay.polygraph.api.IOrganizationService;
+import kz.aksay.polygraph.api.IPersonService;
+import kz.aksay.polygraph.api.IProducedWorkService;
+import kz.aksay.polygraph.api.IUserService;
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
@@ -41,18 +53,18 @@ public class TestDesignerBaseScenario extends Assert {
 
 	private ApplicationContext context;
 	
-	private UserService userService;
-	private EmployeeService employeeService;
-	private PersonService personService;
-	private OrganizationService organizationService;
-	private OrderService orderService;
-	private ProducedWorkService producedWorkService;
-	private WorkTypeService workTypeService;
-	private MaterialTypeService materialTypeService;
-	private MaterialService materialService;
-	private MaterialConsumptionService materialConsumptionService;
-	private OrderFullTextIndexService orderFullTextIndexService; 
-	private FullTextIndexService fullTextIndexService;
+	private IUserService userService;
+	private IEmployeeService employeeService;
+	private IPersonService personService;
+	private IOrganizationService organizationService;
+	private IOrderService orderService;
+	private IProducedWorkService producedWorkService;
+	private IWorkTypeService workTypeService;
+	private IMaterialTypeService materialTypeService;
+	private IMaterialService materialService;
+	private IMaterialConsumptionService materialConsumptionService;
+	private IOrderFullTextIndexService orderFullTextIndexService; 
+	private IFullTextIndexService fullTextIndexService;
 	
 	private final String executorLogin = "executorLogin";
 	private final String executorPassword = "exectorPassword";
@@ -77,18 +89,18 @@ public class TestDesignerBaseScenario extends Assert {
 	@BeforeClass
 	public void setUp()	{
 		context = ContextUtils.getApplicationContext();
-		userService = context.getBean(UserService.class);
-		employeeService = context.getBean(EmployeeService.class);
-		personService = context.getBean(PersonService.class);
-		organizationService = context.getBean(OrganizationService.class);
-		orderService = context.getBean(OrderService.class);
-		producedWorkService = context.getBean(ProducedWorkService.class);
-		workTypeService = context.getBean(WorkTypeService.class);
-		materialTypeService = context.getBean(MaterialTypeService.class);
-		materialService = context.getBean(MaterialService.class);
-		materialConsumptionService = context.getBean(MaterialConsumptionService.class);
-		orderFullTextIndexService = context.getBean(OrderFullTextIndexService.class);
-		fullTextIndexService = context.getBean(FullTextIndexService.class);
+		userService = context.getBean(IUserService.class);
+		employeeService = context.getBean(IEmployeeService.class);
+		personService = context.getBean(IPersonService.class);
+		organizationService = context.getBean(IOrganizationService.class);
+		orderService = context.getBean(IOrderService.class);
+		producedWorkService = context.getBean(IProducedWorkService.class);
+		workTypeService = context.getBean(IWorkTypeService.class);
+		materialTypeService = context.getBean(IMaterialTypeService.class);
+		materialService = context.getBean(IMaterialService.class);
+		materialConsumptionService = context.getBean(IMaterialConsumptionService.class);
+		orderFullTextIndexService = context.getBean(IOrderFullTextIndexService.class);
+		fullTextIndexService = context.getBean(IFullTextIndexService.class);
 		testOrderService = new TestOrderService();
 		testMaterialConsumptionService = new TestMaterialConsumptionService();
 		testMaterialConsumptionService.setUp();
@@ -167,7 +179,7 @@ public class TestDesignerBaseScenario extends Assert {
 
 	private void createUser() throws Exception {
 		executorUser = testDataCreator.createUser(
-				User.TECH_USER, executorEmployee, executorLogin, executorPassword);
+				User.TECH_USER, executorEmployee, executorLogin, executorPassword, Role.DESIGNER);
 	}
 
 	private void createEmployee() throws Exception {

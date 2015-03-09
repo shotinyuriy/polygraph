@@ -23,6 +23,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
+import kz.aksay.polygraph.api.IMaterialService;
+import kz.aksay.polygraph.api.IMaterialTypeService;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
@@ -44,11 +46,11 @@ public class MaterialTableViewController implements Initializable, SessionAware 
 	
 	private Map<String, Object> session;
 	
-	private MaterialTypeService materialTypeService 
-		= ContextUtils.getBean(MaterialTypeService.class);
+	private IMaterialTypeService materialTypeService 
+		= ContextUtils.getBean(IMaterialTypeService.class);
 	
-	private MaterialService materialService 
-	= ContextUtils.getBean(MaterialService.class);
+	private IMaterialService materialService 
+	= ContextUtils.getBean(IMaterialService.class);
 	
 	@FXML
 	protected void add(ActionEvent event) {

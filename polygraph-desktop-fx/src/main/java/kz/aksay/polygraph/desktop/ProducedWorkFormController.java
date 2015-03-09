@@ -28,6 +28,10 @@ import javafx.util.converter.NumberStringConverter;
 
 import javax.validation.ValidationException;
 
+import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IMaterialConsumptionService;
+import kz.aksay.polygraph.api.IMaterialService;
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.WorkType;
@@ -64,10 +68,10 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private Label validationLabel;
 	@FXML private Button finishWorkButton;
 
-	private EmployeeService employeeService;
-	private WorkTypeService workTypeService;
-	private MaterialService materialService;
-	private MaterialConsumptionService materialConsumptionService;
+	private IEmployeeService employeeService;
+	private IWorkTypeService workTypeService;
+	private IMaterialService materialService;
+	private IMaterialConsumptionService materialConsumptionService;
 	private ProducedWorkFX producedWorkFX;
 	private ProducedWork producedWork;
 	private OrderForm orderForm;
@@ -188,11 +192,11 @@ public class ProducedWorkFormController implements Initializable,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		employeeService = StartingPane.getBean(EmployeeService.class);
-		workTypeService = StartingPane.getBean(WorkTypeService.class);
-		materialService = StartingPane.getBean(MaterialService.class);
+		employeeService = StartingPane.getBean(IEmployeeService.class);
+		workTypeService = StartingPane.getBean(IWorkTypeService.class);
+		materialService = StartingPane.getBean(IMaterialService.class);
 		materialConsumptionService = StartingPane.getBean(
-				MaterialConsumptionService.class);
+				IMaterialConsumptionService.class);
 		
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employeeService.findAll());

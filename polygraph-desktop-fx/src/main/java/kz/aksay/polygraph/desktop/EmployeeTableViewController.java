@@ -8,10 +8,16 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.service.EmployeeService;
 import kz.aksay.polygraph.util.MainMenu;
@@ -22,7 +28,7 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class EmployeeTableViewController implements Initializable,
 		SessionAware {
 	
-	private EmployeeService employeeService;
+	private IEmployeeService employeeService;
 	
 	@FXML private TableView<EmployeeFX> employeeTable;
 	private Map<String, Object> session;
@@ -34,11 +40,34 @@ public class EmployeeTableViewController implements Initializable,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		employeeService = StartingPane.getBean(EmployeeService.class);
+		employeeService = StartingPane.getBean(IEmployeeService.class);
 		List<Employee> employees = employeeService.findAll();
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employees);
 		employeeTable.getItems().addAll(employeesFX);
+		
+		employeeTable.setRowFactory(new Callback<TableView<EmployeeFX>, TableRow<EmployeeFX>>() {
+			
+			@Override
+			public TableRow<EmployeeFX> call(TableView<EmployeeFX> param) {
+				// TODO Auto-generated method stub
+				TableRow<EmployeeFX> tableRow = new TableRow<>();
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							openEmployeeForm(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				return tableRow;
+			}
+		});
 	}
 	
 	@FXML

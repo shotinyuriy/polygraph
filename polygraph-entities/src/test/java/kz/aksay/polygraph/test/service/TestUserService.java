@@ -1,6 +1,7 @@
 package kz.aksay.polygraph.test.service;
 import java.util.Date;
 
+import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.UserService;
 import kz.aksay.polygraph.test.ContextUtils;
@@ -14,12 +15,12 @@ public class TestUserService extends Assert {
 	
 	private ApplicationContext context;
 	
-	private UserService userService; 
+	private IUserService userService; 
 	
 	@BeforeClass
 	public void setUp() {
 		context = ContextUtils.getApplicationContext();
-		userService = context.getBean(UserService.class);
+		userService = context.getBean(IUserService.class);
 	}
 	
 	private User createUser() throws Exception {

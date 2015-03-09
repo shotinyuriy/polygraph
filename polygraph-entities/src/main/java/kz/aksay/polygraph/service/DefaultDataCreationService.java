@@ -4,6 +4,10 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
+import kz.aksay.polygraph.api.IMaterialService;
+import kz.aksay.polygraph.api.IMaterialTypeService;
+import kz.aksay.polygraph.api.IUserService;
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
@@ -19,13 +23,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class DefaultDataCreationService {
 	
-	private UserService userService;
+	private IUserService userService;
 	
-	private MaterialTypeService materialTypeService;
+	private IMaterialTypeService materialTypeService;
 	
-	private WorkTypeService workTypeService;
+	private IWorkTypeService workTypeService;
 	
-	private MaterialService materialService;
+	private IMaterialService materialService;
 	
 	@Autowired
 	private PlatformTransactionManager  txManager;
@@ -111,22 +115,22 @@ public class DefaultDataCreationService {
 	}
 	
 	@Autowired
-	public void setUserService(UserService userService) {
+	public void setUserService(IUserService userService) {
 		this.userService = userService;
 	}
 	
 	@Autowired
-	public void setMaterialtypeService(MaterialTypeService materialTypeService) {
+	public void setMaterialtypeService(IMaterialTypeService materialTypeService) {
 		this.materialTypeService = materialTypeService;
 	}
 
 	@Autowired
-	public void setWorkTypeService(WorkTypeService workTypeService) {
+	public void setWorkTypeService(IWorkTypeService workTypeService) {
 		this.workTypeService = workTypeService;
 	}
 
 	@Autowired
-	public void setMaterialService(MaterialService materialService) {
+	public void setMaterialService(IMaterialService materialService) {
 		this.materialService = materialService;
 	}
 }

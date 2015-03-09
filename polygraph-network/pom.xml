@@ -8,18 +8,107 @@
   <name>network</name>
   <url>http://maven.apache.org</url>
 	<dependencies>
+		
 		<dependency>
 		  <groupId>org.testng</groupId>
 		  <artifactId>testng</artifactId>
 		  <version>6.8.8</version>
 		  <scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>kz.aksay.polygraph</groupId>
+			<artifactId>entities</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>4.0.5.RELEASE</version>
+        </dependency>
+        
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>4.0.5.RELEASE</version>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-access</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		
+		
 	</dependencies>
 	<build>
 		<finalName>polygraph-network</finalName>
+		<plugins>
+			
+			<plugin>
+		      <!-- Build an executable JAR -->
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-jar-plugin</artifactId>
+		      <version>2.4</version>
+		      <configuration>
+		        <archive>
+		          <manifest>
+		            <addClasspath>true</addClasspath>
+		            <mainClass>kz.aksay.polygraph.network.EchoTestStarter</mainClass>
+		            <packageName>kz.aksay.polygraph.network</packageName>
+		            <classpathPrefix>lib/</classpathPrefix>
+		          </manifest>
+		        </archive>
+		      </configuration>
+		    </plugin>
+		    
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-dependency-plugin</artifactId>
+	            <version>2.4</version>
+	            <executions>
+	                <execution>
+	                    <id>copy-dependencies</id>
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>copy-dependencies</goal>
+	                    </goals>
+	                    <configuration>
+	                        <includeScope>compile</includeScope>
+	                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
+	                    </configuration>
+	                </execution>
+	            </executions>
+            </plugin>
+		</plugins>
 	</build>
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 </project>

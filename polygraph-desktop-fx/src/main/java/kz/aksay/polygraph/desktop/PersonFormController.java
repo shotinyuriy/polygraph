@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.service.PersonService;
 import kz.aksay.polygraph.util.ContextUtils;
@@ -28,14 +29,8 @@ import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
 public class PersonFormController implements Initializable, SessionAware, ParametersAware {
-
-	private ApplicationContext applicationContext = ContextUtils.getApplicationContext();
 	
-	private PersonService personService;
-	
-	public PersonFormController() {
-		personService = applicationContext.getBean(PersonService.class);
-	}
+	private IPersonService personService = StartingPane.getBean(IPersonService.class);
 	
 	@FXML
 	private Label personIdLabel; 
@@ -54,6 +49,12 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 	
 	@FXML
 	private TextField birthDateField;
+	
+	@FXML private TextField emailField;
+	
+	@FXML private TextField mobileField;
+	
+	@FXML private TextField phoneField;
 	
 	@FXML
 	private Label birthDateValidator;
@@ -89,6 +90,9 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 		person.setLastName(lastNameField.getText());
 		person.setFirstName(firstNameField.getText());
 		person.setMiddleName(middleNameField.getText());
+		person.setEmail(emailField.getText());
+		person.setMobile(mobileField.getText());
+		person.setPhone(phoneField.getText());
 		try {
 			person.setBirthDate(FormatUtil.dateFormatter.parse(birthDateField.getText()));
 		}
@@ -136,6 +140,9 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 			if(person.getBirthDate() != null) {
 				birthDateField.setText(FormatUtil.dateFormatter.format(person.getBirthDate()));
 			}
+			emailField.setText(person.getEmail());
+			mobileField.setText(person.getMobile());
+			phoneField.setText(person.getPhone());
 		}
 	}
 

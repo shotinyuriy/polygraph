@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.util.FormatUtil;
 
 public class MaterialTypeFX {
 	
@@ -28,6 +29,10 @@ public class MaterialTypeFX {
 	
 	public String getName() {
 		return materialType.getName();
+	}
+	
+	public String getCreatedAtString() {
+		return FormatUtil.dateFormatter.format(materialType.getCreatedAt());
 	}
 	
 	public String getCreatedByLogin() {

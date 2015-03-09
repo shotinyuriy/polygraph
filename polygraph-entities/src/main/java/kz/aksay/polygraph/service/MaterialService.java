@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialType;
 
 @Service
-public class MaterialService extends GenericService<Material, Long> {
+public class MaterialService extends AbstractGenericService<Material, Long> 
+ implements IMaterialService {
 
 	private GenericDao<Material, Long> materialDao;
 

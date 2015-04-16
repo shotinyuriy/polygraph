@@ -17,4 +17,14 @@ public final class FormatUtil {
 		calendar.set( localDate.getYear(), localDate.getMonthValue()-1, localDate.getDayOfMonth() );
 		return calendar.getTime();
 	}
+	
+	public static LocalDate convertFromLocalDate(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		LocalDate localDate = LocalDate.of(
+				calendar.get(Calendar.YEAR), 
+				calendar.get(Calendar.MONTH)+1, 
+				calendar.get(Calendar.DAY_OF_MONTH));
+		return localDate;
+	}
 }

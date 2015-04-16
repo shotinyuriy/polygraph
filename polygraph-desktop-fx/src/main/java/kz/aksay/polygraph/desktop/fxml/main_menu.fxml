@@ -31,7 +31,7 @@
     </MenuBar>
     <SplitPane dividerPositions="0.22828507795100222" focusTraversable="true" prefHeight="600.0" prefWidth="400.0" VBox.vgrow="ALWAYS" minHeight="200.0" minWidth="200.0">
          <items>
-            <AnchorPane prefHeight="554.0" prefWidth="330.0" maxWidth="200.0">
+            <AnchorPane prefHeight="600.0" prefWidth="200.0" maxWidth="200.0">
                <children>
                   <Accordion maxHeight="1.7976931348623157E308" maxWidth="200.0" prefHeight="556.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <panes>
@@ -99,7 +99,7 @@
             </AnchorPane>
             <AnchorPane fx:id="contentPane" minHeight="200.0" minWidth="200.0">
                <children>
-                  <TabPane fx:id="tabPane" prefHeight="800.0" prefWidth="690.0" minHeight="200.0" minWidth="200.0" 
+                  <TabPane fx:id="tabPane" prefHeight="600.0" prefWidth="600.0" minHeight="200.0" minWidth="200.0" 
                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
               </AnchorPane>

@@ -1,5 +1,7 @@
 package kz.aksay.polygraph.network;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -13,6 +15,8 @@ public class EchoTestStarter {
 		Thread echoServerThread = new Thread(echoServer);
 		
 		echoServerThread.start();
+		
+		//BasicServer.main(new String[]{""+port});
 	}
 	
 	public void clientStart() {
@@ -30,6 +34,7 @@ public class EchoTestStarter {
 		}
 		
 		hostNames.add("127.0.0.1");
+		
 		
 		String hostName;
 		while((hostName = hostNames.poll()) != null) {

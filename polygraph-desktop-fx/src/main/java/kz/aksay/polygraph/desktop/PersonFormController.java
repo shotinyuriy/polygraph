@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -48,7 +49,7 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 	private TextField middleNameField;
 	
 	@FXML
-	private TextField birthDateField;
+	private DatePicker birthDateField;
 	
 	@FXML private TextField emailField;
 	
@@ -93,14 +94,8 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 		person.setEmail(emailField.getText());
 		person.setMobile(mobileField.getText());
 		person.setPhone(phoneField.getText());
-		try {
-			person.setBirthDate(FormatUtil.dateFormatter.parse(birthDateField.getText()));
-		}
-		catch(ParseException pe) {
-			birthDateValidator.setText(
-					"Дата рождения указывается в формате "
-							+FormatUtil.DATE_FORMAT_DESCRIPTION);
-		}
+		person.setBirthDate(
+				FormatUtil.convertLocalDate(birthDateField.getValue()));
 		
 		try {
 			personService.save(person);
@@ -138,7 +133,8 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 			lastNameField.setText(person.getLastName());
 			middleNameField.setText(person.getMiddleName());
 			if(person.getBirthDate() != null) {
-				birthDateField.setText(FormatUtil.dateFormatter.format(person.getBirthDate()));
+				birthDateField.setValue(
+						FormatUtil.convertFromLocalDate(person.getBirthDate()));
 			}
 			emailField.setText(person.getEmail());
 			mobileField.setText(person.getMobile());

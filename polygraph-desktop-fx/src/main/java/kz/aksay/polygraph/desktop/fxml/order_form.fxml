@@ -19,34 +19,35 @@
 	<children>
 		<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
 			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-		<VBox  maxWidth="1024.0" >
-			<AnchorPane>
-			<children>
-				<GridPane fx:id="orderContainer" hgap="10.0"  prefHeight="600.0" 
-					prefWidth="800.0" vgap="10.0" 
-					alignment="CENTER_LEFT" 
-					AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
-					AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-			
-			      <Label fx:id="orderIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-			      <Label fx:id="customerIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-			      
-			      <Label alignment="CENTER_RIGHT" text="Заказчик" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-			      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-			      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-			       <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-			      
-			      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-			      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-			      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-			      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-			      
-			      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-				 </GridPane>
-			 </children>
-			 </AnchorPane>
+		<VBox maxWidth="800">
+			<VBox VBox.vgrow="SOMETIMES" alignment="TOP_LEFT">
+				<AnchorPane>
+					<children>
+						<GridPane fx:id="orderContainer" hgap="10.0" vgap="10.0" 
+							alignment="CENTER_LEFT" 
+							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
+							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+					
+					      <Label fx:id="orderIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+					      <Label fx:id="customerIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+					      
+					      <Label alignment="CENTER_RIGHT" text="Заказчик" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+					      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+					       <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+					      
+					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+					      
+					      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+						 </GridPane>
+					 </children>
+				 </AnchorPane>
+			 </VBox>
 		  
-			  <VBox VBox.vgrow="SOMETIMES" alignment="CENTER_LEFT">
+			  <VBox VBox.vgrow="SOMETIMES" alignment="TOP_LEFT">
 			  <children>
 			      <TableView fx:id="producedWorksTableView" 
 			      	maxWidth="1080.0" prefWidth="750.0" minHeight="240.0" prefHeight="240" maxHeight="240.0" VBox.vgrow="ALWAYS" HBox.hgrow="SOMETIMES">

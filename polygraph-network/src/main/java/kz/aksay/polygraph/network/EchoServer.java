@@ -13,6 +13,8 @@ import java.net.Socket;
 import kz.aksay.polygraph.network.db.DBManager;
 import kz.aksay.polygraph.util.ContextUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -21,6 +23,7 @@ public class EchoServer implements Runnable {
 	private int port;
 	private ApplicationContext context;
 	private DBManager dbManager;
+	private static final Logger LOG = LoggerFactory.getLogger(ServerSocketThread.class);
 	
 	public EchoServer(int port) {
 		this.port = port;
@@ -34,35 +37,59 @@ public class EchoServer implements Runnable {
 		
 		try (
 				ServerSocket serverSocket = new ServerSocket( portNumber );
-				
-				Socket clientSocket = serverSocket.accept();
-				
-				ObjectOutputStream out = 
-						new ObjectOutputStream( clientSocket.getOutputStream());
-				
-				/*BufferedReader in = new BufferedReader(
-						new InputStreamReader(clientSocket.getInputStream()));*/
-				ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
 		) {
-			
-			Object inputObject;
-			
-			while( !Thread.interrupted() && (inputObject = ois.readObject()) != null ) {
-				
-				Serializable outputObject = null;
-				if( inputObject instanceof NetworkRequest ) {
-					NetworkRequest networkRequest = (NetworkRequest) inputObject;
-					outputObject = dbManager.handleRequest( networkRequest );					
+			while (true) {
+				try (
+						Socket clientSocket = serverSocket.accept();
+				)
+				{
+					try
+					 (		
+							 ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+							 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+					)
+					{
+						System.out.println("Client connected "+clientSocket.getInetAddress());
+						
+						Object inputObject;
+						
+						out.writeObject("Nice to meet you!");
+						
+						while( !Thread.interrupted() && (inputObject = ois.readObject()) != null ) {
+							System.out.println("inpputObject "+inputObject);
+							Serializable outputObject = null;
+							if( inputObject instanceof NetworkRequest ) {
+								NetworkRequest networkRequest = (NetworkRequest) inputObject;
+								outputObject = dbManager.handleRequest( networkRequest );					
+							}
+							out.writeObject( outputObject );
+						}
+						
+					} catch (IOException e) {
+						LOG.error("Exception caught when trying to listen on port "
+								+ portNumber + " or listening for a connection");
+						LOG.error(e.toString(), e);
+					} catch (ClassNotFoundException e) {
+						LOG.error(e.toString(), e);
+					} finally {
+						try {
+							System.out.println("Client disconnected "+clientSocket.getInetAddress());
+							clientSocket.close();
+						} catch (IOException e) {
+							LOG.error(e.toString(), e);
+						}
+					}
+				} catch (IOException e) {
+					System.out.println("Exception caught when trying to listen on port "
+							+ portNumber + " or listening for a connection");
+					System.out.println(e.getMessage());
 				}
-				out.writeObject( outputObject );
 			}
-			
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			System.out.println("Exception caught when trying to listen on port "
 					+ portNumber + " or listening for a connection");
 			System.out.println(e.getMessage());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 

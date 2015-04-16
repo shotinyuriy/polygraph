@@ -55,30 +55,34 @@ public class EchoClient implements Runnable
 	        	ObjectOutputStream out = new ObjectOutputStream(echoSocket.getOutputStream());
 	        	ObjectInputStream in = 
 	        			new ObjectInputStream(echoSocket.getInputStream());
-	        	BufferedReader stdIn = 
-	        			new BufferedReader(
-	        					new InputStreamReader(System.in))
 	        ) {
+    			out.writeObject("I'm connected");
     			System.out.println(hostName+" Status isConnected "+isConnected);
     			if(!isConnected) {
 	    			isConnected = true;
 	    			System.out.println(hostName+" Status isConnected "+isConnected);
 		        	String message;
-		        	while((message = stdIn.readLine()) != null ) {
-		        		if(Thread.interrupted()) break;
-		        		
-		        		System.out.println("-> "+message);
-		        		
-		        		userServiceTerminal = new UserServiceTerminal(stdIn);
-		        		NetworkRequest networkRequest = userServiceTerminal.findByLoginAndPassword();
-		        		
-		        		out.writeObject(networkRequest);
-		        		Object result = in.readObject();
-		        		if(result != null) {
-		        			System.out.println(hostName+" echo: "+result.toString()+" class : "+result.getClass());
-		        		} else {
-		        			System.out.println(hostName+" echo: ");
-		        		}
+		        	try( BufferedReader stdIn = 
+		        			new BufferedReader(
+		        					new InputStreamReader(System.in)); ) {
+			        	while((message = stdIn.readLine()) != null ) {
+			        		if(Thread.interrupted()) break;
+			        		
+			        		System.out.println("-> "+message);
+			        		
+			        		userServiceTerminal = new UserServiceTerminal(stdIn);
+			        		NetworkRequest networkRequest = userServiceTerminal.findByLoginAndPassword();
+			        		
+			        		out.writeObject(networkRequest);
+			        		Object result = in.readObject();
+			        		if(result != null) {
+			        			System.out.println(hostName+" server response: "+result.toString()+" response class : "+result.getClass());
+			        		} else {
+			        			System.out.println(hostName+" server response: ");
+			        		}
+			        	}
+		        	} catch(IOException ioe) {
+		        		LOG.error(ioe.toString());
 		        	}
     			}
 	        } catch (UnknownHostException e) {

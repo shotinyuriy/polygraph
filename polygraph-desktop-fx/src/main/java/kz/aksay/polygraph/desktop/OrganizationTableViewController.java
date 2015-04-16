@@ -26,7 +26,7 @@ public class OrganizationTableViewController implements Initializable,
 	SessionAware {
 	
 	private IOrganizationService organizationService 
-		= StartingPane.getBean(OrganizationService.class);
+		= StartingPane.getBean(IOrganizationService.class);
 	
 	@FXML
 	private TableView<Organization> organizationTable;

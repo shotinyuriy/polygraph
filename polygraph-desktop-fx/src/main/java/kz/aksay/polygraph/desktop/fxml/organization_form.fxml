@@ -26,8 +26,6 @@
 	
 	<Button text="Сохранить" GridPane.rowIndex="8" GridPane.columnIndex="1"
 		onAction="#save" />
-	<Button text="Отмена" GridPane.rowIndex="8" GridPane.columnIndex="2"
-		onAction="#cancel" />
 	<Label text="" fx:id="validationLabel" GridPane.rowIndex="9" 
 		GridPane.columnIndex="1" GridPane.rowSpan="2"/>
 </GridPane>

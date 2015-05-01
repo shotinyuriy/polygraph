@@ -34,8 +34,9 @@ public class BasicServer {
         	System.out.println("While waiting for client message...");
             try {
                 Socket socket = server.accept();
-                System.out.println("socket connected "+socket.getInetAddress());
-                new ConnectionHandler(socket);
+                ConnectionHandler connectionHandler = new ConnectionHandler(socket);
+                Thread t = new Thread(connectionHandler);
+                t.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -48,9 +49,8 @@ class ConnectionHandler implements Runnable {
     private Socket socket;
 
     public ConnectionHandler(Socket socket) {
+    	System.out.println("socket connected "+socket.getInetAddress());
         this.socket = socket;
-        Thread t = new Thread(this);
-        t.start();
     }
 
     public void run() {
@@ -60,8 +60,8 @@ class ConnectionHandler implements Runnable {
             String message = (String) ois.readObject();
             System.out.println("Message Received: " + message);
        // Send a response information to the client application
-           ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-           oos.writeObject("Response");
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject("Response");
 
             ois.close();
             oos.close();

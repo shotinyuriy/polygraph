@@ -10,7 +10,7 @@ public class EchoTestStarter {
 	public void serverStart() {
 		int port = 8310;
 		
-		EchoServer echoServer = new EchoServer(8310);
+		EchoServer echoServer = new EchoServer(port);
 		
 		Thread echoServerThread = new Thread(echoServer);
 		
@@ -29,9 +29,9 @@ public class EchoTestStarter {
 		
 		int startIp = 101;
 		int offset = 15;
-		for(int i = startIp; i <= startIp + offset; i++) {
+		/*for(int i = startIp; i <= startIp + offset; i++) {
 			hostNames.add("192.168.10."+i);
-		}
+		}*/
 		
 		hostNames.add("127.0.0.1");
 		

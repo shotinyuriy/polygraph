@@ -1,6 +1,8 @@
 package kz.aksay.polygraph.desktop;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,8 +11,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.sun.xml.internal.ws.api.server.Container;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.swing.JRViewer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,13 +42,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import kz.aksay.polygraph.api.ICustomerService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
+import kz.aksay.polygraph.desktop.reports.PrintFacade;
 import kz.aksay.polygraph.entity.Customer;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
@@ -74,6 +94,7 @@ public class OrderFormController implements
 	@FXML private Label customerIdLabel;
 	@FXML private Label validationLabel;
 	@FXML private Label totalCostLabel;
+	@FXML private Label errorLabel;
 	
 	@FXML private Label customerField;
 	@FXML private ComboBox<EmployeeFX> currentExecutorCombo;
@@ -104,6 +125,40 @@ public class OrderFormController implements
 		} catch (Exception e) {
 			e.printStackTrace();
 			validationLabel.setText(e.getMessage());
+		}
+	}
+	
+	@FXML
+	public void print(ActionEvent actionEvent) {
+		
+		try {
+			JasperPrint jasperPrint = PrintFacade.generateOrderDetails(orderFX);
+			SwingNode jrViewerNode = new SwingNode();
+			PrintFacade.embedJRViewerIntoSwingNode(jrViewerNode, jasperPrint);
+			StackPane stackPane = new StackPane();
+			stackPane.getChildren().add(jrViewerNode);
+			Stage stage = new Stage(); 
+			stage.setScene(new Scene(stackPane));
+			stage.setTitle("Предварительный просмотр");
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
+			stage.show();
+		} catch (JRException e) {
+			errorLabel.setText(e.getLocalizedMessage());
+		}
+	}
+	
+	@FXML
+	public void exportToDocx(ActionEvent actionEvent) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Укажите файл для сохранения");
+		File file = fileChooser.showOpenDialog(StartingPane.getPrimaryStage());
+		if(file != null) {
+			try {
+				PrintFacade.generateOrderDetails(orderFX);
+			} catch (JRException e) {
+				errorLabel.setText(e.getLocalizedMessage());
+			}
 		}
 	}
 	

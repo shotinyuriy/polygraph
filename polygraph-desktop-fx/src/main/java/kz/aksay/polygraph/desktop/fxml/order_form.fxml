@@ -94,8 +94,16 @@
 			     <AnchorPane fx:id="materialConsumptionPane">
 			     </AnchorPane>
 			     
-			      <Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
-			      	text="Сохранить" />
+			     <HBox>
+			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
+			      		text="Сохранить" />
+			      	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" 
+			      		text="Печать" />
+			      	<Button fx:id="exportToDocxButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#exportToDocx" 
+			      		text="Экспорт в DOCX" />
+			    </HBox>
+			    
+			    <Label fx:id="errorLabel"/>
 				</children>	      	
 			  </VBox>
 		  

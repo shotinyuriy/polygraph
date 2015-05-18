@@ -51,6 +51,10 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	@JoinColumn(name="exeutor_id")
 	private Employee executor;
 	
+	@ManyToOne
+	@JoinColumn(name="equipment_id")
+	private Equipment equipment;
+	
 	@Column(name="finished_at")
 	private Date finishedAt;
 	
@@ -83,7 +87,7 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 		if(price == null) price = BigDecimal.ZERO;
 		if(quantity == null) quantity = Integer.valueOf(0);
 		cost = price.multiply(BigDecimal.valueOf(quantity));
-	}	
+	}
 	
 	public Employee getExecutor() {
 		return executor;

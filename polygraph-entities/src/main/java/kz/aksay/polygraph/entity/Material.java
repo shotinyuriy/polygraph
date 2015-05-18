@@ -12,10 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "material")
 public class Material extends EntitySupport {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -7597841704963862971L;
 
 	@ManyToOne

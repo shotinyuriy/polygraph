@@ -3,10 +3,10 @@ package kz.aksay.polygraph.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import kz.aksay.polygraph.entity.Customer;
+import kz.aksay.polygraph.entity.Subject;
 
 @Repository
-public class CustomerDao extends GenericDaoHibernateImpl<Customer, Long> {
+public class CustomerDao extends GenericDaoHibernateImpl<Subject, Long> {
 
 	private PersonDao personDao;
 	private OrganizationDao organizationDao;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrderDetails" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b864bfb-97e3-4346-8b0a-607705d6f4ac">
-	<property name="ireport.zoom" value="1.3310000000000006"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrderDetails" language="groovy" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b864bfb-97e3-4346-8b0a-607705d6f4ac">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="244"/>
 	<parameter name="orderNumber" class="java.lang.String"/>
 	<parameter name="customerName" class="java.lang.String"/>
 	<parameter name="orderName" class="java.lang.String"/>
@@ -12,13 +12,19 @@
 	<field name="description" class="java.lang.String"/>
 	<field name="price" class="java.lang.Double"/>
 	<field name="amount" class="java.lang.Double"/>
+	<variable name="totalAmount" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+	</variable>
+	<variable name="totalPrice" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{price}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<pageHeader>
 		<band height="109" splitType="Stretch">
 			<staticText>
-				<reportElement x="415" y="0" width="40" height="20" uuid="91f74057-f1cb-476d-96b9-06b9bfaad225"/>
+				<reportElement x="255" y="0" width="40" height="20" uuid="91f74057-f1cb-476d-96b9-06b9bfaad225"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -26,7 +32,7 @@
 				<text><![CDATA[Дата]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="29" width="144" height="20" uuid="509d3de7-6b76-4787-8218-ec50532cb320"/>
+				<reportElement x="0" y="29" width="113" height="20" uuid="509d3de7-6b76-4787-8218-ec50532cb320"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -34,7 +40,7 @@
 				<text><![CDATA[Заказ №]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="49" width="144" height="20" uuid="c42acefd-2098-465c-8320-58e3e306bc07"/>
+				<reportElement x="0" y="49" width="113" height="20" uuid="c42acefd-2098-465c-8320-58e3e306bc07"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -42,7 +48,7 @@
 				<text><![CDATA[Заказчик]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="69" width="144" height="20" uuid="e3aa787a-505e-4eb7-95c9-2bfcfc2259cf"/>
+				<reportElement x="0" y="69" width="113" height="20" uuid="e3aa787a-505e-4eb7-95c9-2bfcfc2259cf"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -50,7 +56,7 @@
 				<text><![CDATA[Наименование заказа]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="89" width="144" height="20" uuid="c066c4a8-2456-4aac-ac56-b2e91e0b1ac6"/>
+				<reportElement x="0" y="89" width="113" height="20" uuid="c066c4a8-2456-4aac-ac56-b2e91e0b1ac6"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -58,39 +64,39 @@
 				<text><![CDATA[Тираж]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="455" y="0" width="100" height="20" uuid="25ed132b-6ff5-4b04-9be5-6c18c575d09e"/>
+				<reportElement x="295" y="0" width="86" height="20" uuid="25ed132b-6ff5-4b04-9be5-6c18c575d09e"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{orderDate}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="144" y="29" width="411" height="20" uuid="616fcf5a-193d-4b53-89a3-0f85e26e0c4a"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="29" width="268" height="20" uuid="616fcf5a-193d-4b53-89a3-0f85e26e0c4a"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{orderNumber}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="144" y="69" width="411" height="20" uuid="078f3368-f32c-44b6-acd4-ba2a691beae9"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="69" width="268" height="20" uuid="078f3368-f32c-44b6-acd4-ba2a691beae9"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{orderName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="144" y="49" width="411" height="20" uuid="df38e2e4-aecc-4cce-8bd7-c9a7e0810b92"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="49" width="268" height="20" uuid="df38e2e4-aecc-4cce-8bd7-c9a7e0810b92"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{customerName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="144" y="89" width="411" height="20" uuid="26db5560-1b76-44d1-b6b2-b6fde9978992"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="113" y="89" width="268" height="20" uuid="26db5560-1b76-44d1-b6b2-b6fde9978992"/>
 				<box leftPadding="1" rightPadding="1"/>
 				<textElement>
 					<font pdfEncoding="Cp1251" isPdfEmbedded="true"/>
@@ -100,9 +106,9 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="22" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="31" height="20" uuid="a7040c59-dce1-44c7-a5b7-71efa48dbb86"/>
+				<reportElement x="0" y="0" width="23" height="20" uuid="a7040c59-dce1-44c7-a5b7-71efa48dbb86"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -115,7 +121,7 @@
 				<text><![CDATA[№]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="0" width="326" height="20" uuid="e1c91e6d-7f85-41b1-9029-42a987bc501a"/>
+				<reportElement x="23" y="0" width="222" height="20" uuid="e1c91e6d-7f85-41b1-9029-42a987bc501a"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -128,7 +134,7 @@
 				<text><![CDATA[Работа, материалы]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="357" y="0" width="198" height="20" uuid="20b17b60-8ec1-4592-b6fb-4736b7ce643e"/>
+				<reportElement x="245" y="0" width="136" height="20" uuid="20b17b60-8ec1-4592-b6fb-4736b7ce643e"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -143,9 +149,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="31" height="20" uuid="24c94d22-dc5f-48b0-b69a-1204695d5a0e"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="23" height="20" uuid="24c94d22-dc5f-48b0-b69a-1204695d5a0e"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -158,7 +164,7 @@
 				<textFieldExpression><![CDATA[$F{number}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="31" y="0" width="326" height="20" uuid="b02f4321-b02e-483a-8e00-18195333c073"/>
+				<reportElement stretchType="RelativeToTallestObject" x="23" y="0" width="222" height="20" uuid="b02f4321-b02e-483a-8e00-18195333c073"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -171,7 +177,7 @@
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="357" y="0" width="100" height="20" uuid="7ded0c0e-f39c-48f4-8c83-40c410ef24d9"/>
+				<reportElement stretchType="RelativeToTallestObject" x="245" y="0" width="69" height="20" uuid="7ded0c0e-f39c-48f4-8c83-40c410ef24d9"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -184,7 +190,7 @@
 				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="457" y="0" width="98" height="20" uuid="fb516071-c8f0-4e82-8b20-aaf2f46aebc0"/>
+				<reportElement stretchType="RelativeToTallestObject" x="314" y="0" width="67" height="20" uuid="fb516071-c8f0-4e82-8b20-aaf2f46aebc0"/>
 				<box leftPadding="3" rightPadding="3">
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -199,10 +205,62 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="314" y="0" width="67" height="20" uuid="3564b77b-d6ee-45a6-b552-1154b3080471"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{totalAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="0" width="69" height="20" uuid="994e03c3-b162-4477-b0d6-b43ffcb86774"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{totalPrice}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="245" height="20" uuid="83cb6b52-cfa0-434a-b28a-94dee06d3f5e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Итого:]]></text>
+			</staticText>
+		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="53" splitType="Stretch"/>
+		<band height="90" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="27" width="73" height="20" uuid="20472a4c-89ea-4dfb-a36b-d8c766edde17"/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="73" y="27" width="75" height="20" uuid="f875c7ba-b78d-48ff-8b8b-1f4156668d8f"/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="27" width="77" height="20" uuid="e32d28c4-41f9-46d8-bc80-0686add9213a"/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
 	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch"/>

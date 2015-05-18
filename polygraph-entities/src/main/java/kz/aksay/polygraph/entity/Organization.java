@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "organization", uniqueConstraints={@UniqueConstraint(name="UNQ_ORG_NUMBER", columnNames="inn")})
-public class Organization extends Customer {
+public class Organization extends Subject {
 
 	/**
 	 * 

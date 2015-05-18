@@ -15,9 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="customer")
+@Table(name="subject")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class Customer {
+public abstract class Subject {
 
 	/**
 	 * 

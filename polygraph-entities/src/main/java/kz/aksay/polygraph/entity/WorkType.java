@@ -26,13 +26,14 @@ public class WorkType extends EntitySupport {
 	
 	public static class DefaultNames {
 		
-		public static final String DEVELOPMENT = "РАЗРАБОТКА"; 
+		public static final String DEVELOPMENT = "РАЗРАБОТКА";
 		public static final String CORRECTION = "КОРРЕКТИРОВКА";
 		public static final String SCANNING = "СКАНИРОВАНИЕ";
 		public static final String BINDING = "ПЕРЕПЛЕТ";
 		public static final String CUTTING = "РЕЗКА";
 		public static final String LAMINATION = "ЛАМИНИРОВАНИЕ";
 		public static final String COPY = "КОПИРОВАНИЕ";
+		public static final String PRINTING = "ПЕЧАТЬ";
 		
 		private static String[] defaultNames = new String[] {
 			DEVELOPMENT,
@@ -41,7 +42,8 @@ public class WorkType extends EntitySupport {
 			BINDING,
 			CUTTING,
 			LAMINATION,
-			COPY
+			COPY,
+			PRINTING
 		};
 		
 		public static String[] all() {

@@ -21,7 +21,7 @@ import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
-import kz.aksay.polygraph.entity.Customer;
+import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
@@ -97,7 +97,7 @@ public class TestDataCreator {
 		List<User> users = createUsers(User.TECH_USER, employees);
 		employeePeople = null;
 		employees = null;
-		List<Customer> customers = createCustomers(users);
+		List<Subject> customers = createCustomers(users);
 		List<Order> orders = createOrders(users, customers);
 		customers = null;
 	}
@@ -163,8 +163,8 @@ public class TestDataCreator {
 		return login;
 	}
 	
-	private List<Customer> createCustomers(List<User> creators) {
-		List<Customer> customers = new ArrayList<>();
+	private List<Subject> createCustomers(List<User> creators) {
+		List<Subject> customers = new ArrayList<>();
 		for(User creator : creators) {
 			try {
 				customers.add( createPerson(creator) );
@@ -179,11 +179,11 @@ public class TestDataCreator {
 		return customers;
 	}
 	
-	private List<Order> createOrders(List<User> creators, List<Customer> customers) {
+	private List<Order> createOrders(List<User> creators, List<Subject> customers) {
 		List<Order> orders = new ArrayList<>(customers.size()*3);
 		List<WorkType> workTypes = workTypeService.findAll();
 		Random r  = new Random();
-		for(Customer customer : customers ) {
+		for(Subject customer : customers ) {
 			for(int i = 0; i < 3; i++) {
 				int userIndex = r.nextInt(creators.size());
 				User creator = creators.get(userIndex);
@@ -299,7 +299,7 @@ public class TestDataCreator {
 		return paperA4;
 	}
 	
-	public Order createOrder(User creator, Customer customer, Employee executorEmployee) throws Exception {
+	public Order createOrder(User creator, Subject customer, Employee executorEmployee) throws Exception {
 		Order firstOrder = new Order();
 		firstOrder.setCreatedAt(new Date());
 		firstOrder.setCreatedBy(creator);
@@ -311,7 +311,7 @@ public class TestDataCreator {
 		return firstOrder;
 	}
 	
-	public Order createOrderForPerson(Customer customer, Employee executorEmployee) throws Exception {
+	public Order createOrderForPerson(Subject customer, Employee executorEmployee) throws Exception {
 		Order secondOrder = new Order();
 		secondOrder.setCreatedAt(new Date());
 		secondOrder.setCreatedBy(User.TECH_USER);

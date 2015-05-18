@@ -48,7 +48,7 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	
 	@ManyToOne
 	@JoinColumn(name="customer_id", nullable=false)
-	private Customer customer;
+	private Subject customer;
 	
 	@ManyToOne
 	@JoinColumn(name="current_executor_id")
@@ -77,11 +77,11 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 		return totalCost;
 	}
 	
-	public Customer getCustomer() {
+	public Subject getCustomer() {
 		return customer;
 	}
 
-	public void setCustomer(Customer customer) {
+	public void setCustomer(Subject customer) {
 		this.customer = customer;
 	}
 	

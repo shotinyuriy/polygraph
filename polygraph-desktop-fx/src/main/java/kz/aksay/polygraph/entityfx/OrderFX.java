@@ -18,7 +18,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import kz.aksay.polygraph.entity.Customer;
+import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Organization;
@@ -36,7 +36,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	private LongProperty idProperty;
 	private ObjectProperty<Date> createdAtProperty;
 	private ObjectProperty<User> createdByProperty;
-	private ObjectProperty<Customer> customerProperty;
+	private ObjectProperty<Subject> customerProperty;
 	private ObjectProperty<EmployeeFX> currentExecutorProperty;
 	private ObjectProperty<Date> updatedAtProperty;
 	private ObjectProperty<User> updatedByProperty;
@@ -55,7 +55,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 			createdAtProperty = new SimpleObjectProperty<Date>(order.getCreatedAt());
 			createdByProperty = new SimpleObjectProperty<User>(order.getCreatedBy());
 			currentExecutorProperty = new SimpleObjectProperty<EmployeeFX>(currentExecutorFX);
-			customerProperty = new SimpleObjectProperty<Customer>(order.getCustomer());
+			customerProperty = new SimpleObjectProperty<Subject>(order.getCustomer());
 			updatedAtProperty = new SimpleObjectProperty<Date>(order.getUpdatedAt());
 			updatedByProperty = new SimpleObjectProperty<User>(order.getUpdatedBy());
 			stateProperty = new SimpleObjectProperty<Order.State>(order.getState());
@@ -95,7 +95,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	}
 	
 	public String getCustomerFullName() {
-		Customer customer = order.getCustomer();
+		Subject customer = order.getCustomer();
 		
 		if( customer != null ) {
 			return customer.getFullName();
@@ -117,7 +117,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	}
 
 	public Long getCustomerId() {
-		Customer customer = order.getCustomer();
+		Subject customer = order.getCustomer();
 		if(customer != null) {
 			return customer.getId();
 		}
@@ -211,11 +211,11 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 		this.createdByProperty = createdByProperty;
 	}
 
-	public ObjectProperty<Customer> getCustomerProperty() {
+	public ObjectProperty<Subject> getCustomerProperty() {
 		return customerProperty;
 	}
 
-	public void setCustomerProperty(ObjectProperty<Customer> customerProperty) {
+	public void setCustomerProperty(ObjectProperty<Subject> customerProperty) {
 		this.customerProperty = customerProperty;
 	}
 

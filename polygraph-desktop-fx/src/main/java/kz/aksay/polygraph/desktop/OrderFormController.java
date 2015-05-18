@@ -54,7 +54,7 @@ import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.desktop.reports.PrintFacade;
-import kz.aksay.polygraph.entity.Customer;
+import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Order.State;
@@ -87,7 +87,7 @@ public class OrderFormController implements
 	private boolean isNewOrder;
 	//private Order order;
 	private OrderFX orderFX;
-	private Customer customer;
+	private Subject customer;
 	
 	@FXML private GridPane orderContainer;
 	@FXML private Label orderIdLabel;

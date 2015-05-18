@@ -1,13 +1,16 @@
 package kz.aksay.polygraph.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.api.IMaterialTypeService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
+import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.User;
@@ -30,6 +33,8 @@ public class DefaultDataCreationService {
 	private IWorkTypeService workTypeService;
 	
 	private IMaterialService materialService;
+	
+	private IEquipmentService equipmentService;
 	
 	@Autowired
 	private PlatformTransactionManager  txManager;
@@ -77,6 +82,8 @@ public class DefaultDataCreationService {
 							 }
 						 }
 					 }
+					 
+					 createDefaultEquipmentTypes();
 				}
 				catch(Exception e) {
 					e.printStackTrace();
@@ -110,6 +117,31 @@ public class DefaultDataCreationService {
 		return material;
 	}
 	
+	private void createDefaultEquipmentTypes() throws Exception {
+		
+		WorkType printing = 
+				workTypeService.findByName(WorkType.DefaultNames.PRINTING);
+		 
+		if(printing != null) {
+			
+			String[] printerNames = new String[] {"DC-242", "WC-24", "DC-12", "WC-55"};
+			
+			for(String printerName : printerNames) {
+				
+				Equipment equipment = equipmentService.findByName(printerName);
+				
+				if(equipment == null) {
+					equipment = new Equipment();
+					equipment.setCreatedAt(new Date());
+					equipment.setCreatedBy(User.TECH_USER);
+					equipment.setWorkType(printing);
+					equipment.setName(printerName);
+					equipmentService.save(equipment);
+				}
+			}
+		}
+	}
+	
 	public void setTxManager(PlatformTransactionManager txManager) {
 		this.txManager = txManager;
 	}
@@ -132,5 +164,15 @@ public class DefaultDataCreationService {
 	@Autowired
 	public void setMaterialService(IMaterialService materialService) {
 		this.materialService = materialService;
+	}
+
+	@Autowired
+	public void setEquipmentTypeService(IEquipmentService equipmentService) {
+		this.equipmentService = equipmentService;
+	}
+
+	@Autowired
+	public void setEquipmentService(IEquipmentService equipmentService) {
+		this.equipmentService = equipmentService;
 	}
 }

@@ -6,10 +6,12 @@ import java.util.LinkedList;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.util.FormatUtil;
 
-public class WorkTypeFX {
-
-	private WorkType workType;
+public class WorkTypeFX extends EntityFX<WorkType> {
 	
+	public WorkTypeFX(WorkType entity) {
+		super(entity);
+	}
+
 	public static Collection<WorkTypeFX> convertListEntityToFX(
 			Collection<WorkType> workTypes) {
 		Collection<WorkTypeFX> workTypesFX = new LinkedList<>();
@@ -19,33 +21,15 @@ public class WorkTypeFX {
 		return workTypesFX;
 	}
 	
-	public WorkTypeFX(WorkType workType) {
-		this.workType = workType;
-	}
-	
-	public String getCreatedAtString() {
-		if(workType.getCreatedAt() != null) {
-			return FormatUtil.dateFormatter.format(workType.getCreatedAt());
-		}
-		return null;
-	}
-	
-	public String getCreatedByLogin() {
-		if(workType.getCreatedBy() != null) {
-			return workType.getCreatedBy().getLogin();
-		}
-		return null;
-	}
-	
 	public String getName() {
-		return workType.getName();
+		return entity.getName();
 	}
 	
 	public String toString() {
-		return workType.getName();
+		return entity.getName();
 	}
 
 	public WorkType getWorkType() {
-		return workType;
+		return entity;
 	}
 }

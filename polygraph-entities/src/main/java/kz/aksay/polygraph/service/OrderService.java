@@ -5,11 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IOrderFullTextIndexService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.dao.GenericDao;
+import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
@@ -36,6 +38,8 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	
 	private IOrderFullTextIndexService orderFullTextIndexService;
 	
+	private IEquipmentService equipmentService;
+	
 	@Override
 	@Transactional
 	public Order find(Long id) {
@@ -55,12 +59,35 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Order save(Order order) throws Exception {
+		Order.State oldState = null;
+		
+		if(order.getId() != null) {
+			 Order oldOrder = find(order.getId());
+			 oldState = oldOrder.getState();
+			 getDao().getSession().clear();
+		}
+		
 		order = super.save(order);
 		if(order.getProducedWorks() != null) {
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				if(producedWork.isDirty()) {
 					producedWork.setOrder(order);
 					producedWork = producedWorkService.save(producedWork);
+				}
+				
+				Equipment equipment = producedWork.getEquipment();
+				
+				if(equipment != null &&
+						order.getState().equals(Order.State.FINISHED) && 
+						( oldState == null || !oldState.equals(Order.State.FINISHED)) ) {
+					
+					if(producedWork.getColoredQuantity() != null)
+						equipment.setColoredUsageCount(equipment.getColoredUsageCount()+producedWork.getColoredQuantity());
+					
+					if(producedWork.getQuantity() != null)
+						equipment.setMonochromeUsageCount(equipment.getMonochromeUsageCount()+producedWork.getQuantity());
+					
+					equipmentService.save(equipment);
 				}
 			}
 			for(ProducedWork producedWork : order.getProducedWorks()) {
@@ -167,5 +194,10 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	public void setOrderFullTextIndexService(
 			IOrderFullTextIndexService orderFullTextIndexService) {
 		this.orderFullTextIndexService = orderFullTextIndexService;
+	}
+
+	@Autowired
+	public void setEquipmentService(IEquipmentService equipmentService) {
+		this.equipmentService = equipmentService;
 	}
 }

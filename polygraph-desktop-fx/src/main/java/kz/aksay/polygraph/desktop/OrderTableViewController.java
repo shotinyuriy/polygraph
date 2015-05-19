@@ -1,26 +1,37 @@
 package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
+import kz.aksay.polygraph.desktop.reports.PrintFacade;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.User;
@@ -48,6 +59,7 @@ public class OrderTableViewController implements Initializable,
 	@FXML ComboBox<StateFX> stateCombo;
 	@FXML ComboBox<EmployeeFX> executorCombo;
 	@FXML CheckBox onlyMy;
+	@FXML Label errorLabel;
 	
 	@Override
 	public void setSession(Map<String, Object> session) {
@@ -154,6 +166,32 @@ public class OrderTableViewController implements Initializable,
 			MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 			mainMenu.loadFxmlAndOpenInTab(
 					"order_form.fxml", "Заказ №"+orderId, parameters);
+		}
+	}
+	
+	@FXML
+	public void printOrders(ActionEvent actionEvent) {
+		try {
+			List<OrderFX> orders = new ArrayList<>(ordersTableView.getItems().size());
+			
+			for(OrderFX orderFX : ordersTableView.getItems()) {
+				OrderFX newOrderFX = new OrderFX( orderService.find( orderFX.getOrder().getId() ) );
+				orders.add(newOrderFX);
+			}
+			
+			List<JasperPrint> jasperPrintList = PrintFacade.generateOrderDetails(orders);
+			SwingNode jrViewerNode = new SwingNode();
+			PrintFacade.embedJRViewerIntoSwingNode(jrViewerNode, jasperPrintList);
+			StackPane stackPane = new StackPane();
+			stackPane.getChildren().add(jrViewerNode);
+			Stage stage = new Stage(); 
+			stage.setScene(new Scene(stackPane));
+			stage.setTitle("Предварительный просмотр");
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
+			stage.show();
+		} catch (JRException e) {
+			errorLabel.setText(e.getLocalizedMessage());
 		}
 	}
 }

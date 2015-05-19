@@ -2,7 +2,6 @@ package kz.aksay.polygraph.desktop;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.FileSystems;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,18 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import com.sun.xml.internal.ws.api.server.Container;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
-import net.sf.jasperreports.swing.JRViewer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
@@ -35,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -42,37 +30,34 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Callback;
 import kz.aksay.polygraph.api.ICustomerService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.desktop.reports.PrintFacade;
-import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
-import kz.aksay.polygraph.entity.Order.State;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
-import kz.aksay.polygraph.service.CustomerService;
-import kz.aksay.polygraph.service.EmployeeService;
-import kz.aksay.polygraph.service.OrderService;
+import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.InitializingBean;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.ParametersAware;
 import kz.aksay.polygraph.util.ParametersUtil;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
 
 public class OrderFormController implements 
 	Initializable, SessionAware, ParametersAware, OrderForm, InitializingBean {
@@ -100,6 +85,7 @@ public class OrderFormController implements
 	@FXML private ComboBox<EmployeeFX> currentExecutorCombo;
 	@FXML private TextArea descriptionField;
 	@FXML private ComboBox<StateFX> currentStatusCombo;
+	@FXML private DatePicker dateEndPlan;
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
 	@FXML private AnchorPane materialConsumptionPane;
@@ -112,12 +98,21 @@ public class OrderFormController implements
 			if(isNewOrder) {
 				orderFX.getCreatedAtProperty().set(new Date());
 				orderFX.getCreatedByProperty().set(SessionUtil.retrieveUser(session));
+				
 			}
 			else {
 				orderFX.getUpdatedAtProperty().set(new Date());
 				orderFX.getUpdatedByProperty().set(SessionUtil.retrieveUser(session));
 			}
-						
+			
+			if(dateEndPlan.getValue() != null) {
+				orderFX.getOrder().setDateEndPlan(
+						FormatUtil.convertLocalDate(dateEndPlan.getValue())
+					);
+			} else {
+				orderFX.getOrder().setDateEndPlan(null);
+			}
+			
 			orderService.save(orderFX.getOrder());
 			
 			validationLabel.setText("Сохранение успешно");
@@ -230,6 +225,8 @@ public class OrderFormController implements
 				//customerIdLabel.setText(orderFX.getCustomerId()+"");
 				customerField.setText(orderFX.getCustomerFullName());
 				descriptionField.textProperty().bindBidirectional(orderFX.getDescriptionProperty());
+				dateEndPlan.valueProperty().set(
+						FormatUtil.convertFromLocalDate(orderFX.getDateEndPlanProperty().get()));
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
 				orderFX.getCurrentExecutorProperty().bind(currentExecutorCombo.getSelectionModel().selectedItemProperty());
 				

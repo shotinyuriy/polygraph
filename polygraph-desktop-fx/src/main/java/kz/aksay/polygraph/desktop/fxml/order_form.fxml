@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.DatePicker?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
@@ -36,12 +37,16 @@
 					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 					      
+					      <Label text="Плановая дата оконания:" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+					      
 					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
 					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
 					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
 					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
 					      
-					      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+					      
+					      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 						 </GridPane>
 					 </children>
 				 </AnchorPane>

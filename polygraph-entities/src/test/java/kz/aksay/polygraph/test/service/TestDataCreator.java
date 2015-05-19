@@ -2,13 +2,11 @@ package kz.aksay.polygraph.test.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.context.ApplicationContext;
-
-import sun.security.util.Password;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
@@ -21,7 +19,6 @@ import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
-import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
@@ -30,27 +27,16 @@ import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.User;
-import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entity.User.Role;
-import kz.aksay.polygraph.service.EmployeeService;
-import kz.aksay.polygraph.service.FullTextIndexService;
-import kz.aksay.polygraph.service.MaterialConsumptionService;
-import kz.aksay.polygraph.service.MaterialService;
-import kz.aksay.polygraph.service.MaterialTypeService;
-import kz.aksay.polygraph.service.OrderFullTextIndexService;
-import kz.aksay.polygraph.service.OrderService;
-import kz.aksay.polygraph.service.OrganizationService;
-import kz.aksay.polygraph.service.PersonService;
-import kz.aksay.polygraph.service.ProducedWorkService;
-import kz.aksay.polygraph.service.UserService;
-import kz.aksay.polygraph.service.WorkTypeService;
-import kz.aksay.polygraph.test.ContextUtils;
+import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.util.GeneratorUtils;
-import kz.aksay.polygraph.util.OrgNameGenerator;
 import kz.aksay.polygraph.util.OrgNameGenerator.OrgName;
 import kz.aksay.polygraph.util.PersonNameGenerator.FullName;
 import kz.aksay.polygraph.util.StringUtils;
+
+import org.springframework.context.ApplicationContext;
 
 public class TestDataCreator {
 	
@@ -184,7 +170,7 @@ public class TestDataCreator {
 		List<WorkType> workTypes = workTypeService.findAll();
 		Random r  = new Random();
 		for(Subject customer : customers ) {
-			for(int i = 0; i < 3; i++) {
+			for(int i = 0; i < 1; i++) {
 				int userIndex = r.nextInt(creators.size());
 				User creator = creators.get(userIndex);
 				int employeeIndex = r.nextInt(creators.size());
@@ -307,6 +293,9 @@ public class TestDataCreator {
 		firstOrder.setCurrentExecutor(executorEmployee);
 		firstOrder.setDescription("Описание заказа на ксерокопию");
 		firstOrder.setState(Order.State.PROCESSED);
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 3);
+		firstOrder.setDateEndPlan(calendar.getTime());
 		orderService.save(firstOrder);
 		return firstOrder;
 	}

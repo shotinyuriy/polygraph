@@ -76,6 +76,7 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private Label amountLabel;
 	@FXML private Label coloredAmountLabel;
 	@FXML private Label equipmentLabel;
+	@FXML private Label errorLabel;
 	@FXML private Button finishWorkButton;
 	
 
@@ -91,6 +92,7 @@ public class ProducedWorkFormController implements Initializable,
 	private SimpleDoubleProperty price = new SimpleDoubleProperty();
 	private SimpleIntegerProperty quantity = new SimpleIntegerProperty(1);
 	private SimpleDoubleProperty cost = new SimpleDoubleProperty();
+	private boolean isPrinting = false;
 	
 	private void closeByActionEvent(ActionEvent actionEvent) {
 		Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -112,6 +114,8 @@ public class ProducedWorkFormController implements Initializable,
 	
 	@FXML
 	public void saveOrAdd(ActionEvent actionEvent) {
+		try {
+			errorLabel.setText(null);
 			fillProducedWork();
 			if(producedWorkFX == null) {
 				producedWorkFX = new ProducedWorkFX(producedWork);
@@ -121,9 +125,12 @@ public class ProducedWorkFormController implements Initializable,
 				orderForm.saveProducedWork(producedWorkFX);
 				orderForm.refreshTotalCost();
 			}
+		} catch(Exception e) {
+			errorLabel.setText(e.getMessage());
+		}
 	}
 	
-	private void fillProducedWork() {
+	private void fillProducedWork() throws Exception {
 		EmployeeFX executorFX 
 			= executorCombo.getSelectionModel().getSelectedItem();
 		WorkTypeFX workTypeFX 
@@ -142,6 +149,10 @@ public class ProducedWorkFormController implements Initializable,
 		}
 		if(equipmentCombo.isVisible() && equipmentFX != null) {
 			equipment = equipmentFX.getEquipment();
+		}
+		
+		if(isPrinting && equipment == null) {
+			throw new Exception("Для печати необходимо указать оборудование!");
 		}
 		
 		if(producedWork == null) {
@@ -255,17 +266,20 @@ public class ProducedWorkFormController implements Initializable,
 					ObservableValue<? extends WorkTypeFX> observable,
 					WorkTypeFX oldValue, WorkTypeFX newValue) {
 				if(newValue != null && newValue.getName().equalsIgnoreCase(WorkType.DefaultNames.PRINTING)) {
+					isPrinting = true;
 					coloredAmountLabel.setVisible(true);
 					coloredQuantityField.setVisible(true);
 					equipmentLabel.setVisible(true);
 					equipmentCombo.setVisible(true);
+					amountLabel.setText("Количество ч/б прогонов");
 				} else {
+					isPrinting = false;
 					coloredAmountLabel.setVisible(false);
 					coloredQuantityField.setVisible(false);
 					equipmentLabel.setVisible(false);
 					equipmentCombo.setVisible(false);
+					amountLabel.setText("Количество");
 				}
-				
 			}
 			
 		});
@@ -280,7 +294,6 @@ public class ProducedWorkFormController implements Initializable,
 						coloredQuantityField.setText(oldValue);
 					}
 				}
-				
 			}
 			
 		});

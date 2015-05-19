@@ -40,6 +40,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	private ObjectProperty<EmployeeFX> currentExecutorProperty;
 	private ObjectProperty<Date> updatedAtProperty;
 	private ObjectProperty<User> updatedByProperty;
+	private ObjectProperty<Date> dateEndPlanProperty;
 	private ObjectProperty<Order.State> stateProperty;
 	private StringProperty descriptionProperty;
 	private ObservableList<ProducedWorkFX> producedWorkProperty;
@@ -58,6 +59,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 			customerProperty = new SimpleObjectProperty<Subject>(order.getCustomer());
 			updatedAtProperty = new SimpleObjectProperty<Date>(order.getUpdatedAt());
 			updatedByProperty = new SimpleObjectProperty<User>(order.getUpdatedBy());
+			setDateEndPlanProperty(new SimpleObjectProperty<Date>(order.getDateEndPlan()));
 			stateProperty = new SimpleObjectProperty<Order.State>(order.getState());
 			descriptionProperty = new SimpleStringProperty(order.getDescription());
 			
@@ -92,6 +94,18 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	
 	public String getCreatedAtString() {
 		return FormatUtil.dateFormatter.format(order.getCreatedAt());
+	}
+	
+	public String getUpdatedAtString() {
+		if(order.getUpdatedAt() != null)
+			return FormatUtil.dateFormatter.format(order.getUpdatedAt());
+		return null;
+	}
+	
+	public String getDateEndPlanString() {
+		if(order.getDateEndPlan() != null)
+			return FormatUtil.dateFormatter.format(order.getDateEndPlan());
+		return null;
 	}
 	
 	public String getCustomerFullName() {
@@ -276,5 +290,13 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	public void setMaterialConsumptionProperty(
 			ObservableList<MaterialConsumptionFX> materialConsumptionProperty) {
 		this.materialConsumptionProperty = materialConsumptionProperty;
+	}
+
+	public ObjectProperty<Date> getDateEndPlanProperty() {
+		return dateEndPlanProperty;
+	}
+
+	public void setDateEndPlanProperty(ObjectProperty<Date> dateEndPlanProperty) {
+		this.dateEndPlanProperty = dateEndPlanProperty;
 	}
 }

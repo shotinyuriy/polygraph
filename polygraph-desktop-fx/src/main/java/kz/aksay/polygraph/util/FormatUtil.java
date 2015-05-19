@@ -19,6 +19,7 @@ public final class FormatUtil {
 	}
 	
 	public static LocalDate convertFromLocalDate(Date date) {
+		if(date == null) return null;
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		LocalDate localDate = LocalDate.of(

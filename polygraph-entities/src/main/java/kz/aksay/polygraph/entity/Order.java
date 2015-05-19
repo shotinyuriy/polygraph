@@ -1,6 +1,7 @@
 package kz.aksay.polygraph.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -56,6 +57,9 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	@ManyToOne
 	@JoinColumn(name="current_executor_id")
 	private Employee currentExecutor;
+	
+	@Column
+	private Date dateEndPlan;
 	
 	@Transient
 	private Set<ProducedWork> producedWorks;
@@ -135,5 +139,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 		sb.append("]");
 		
 		return sb.toString();
+	}
+
+	public Date getDateEndPlan() {
+		return dateEndPlan;
+	}
+
+	public void setDateEndPlan(Date dateEndPlan) {
+		this.dateEndPlan = dateEndPlan;
 	}
 }

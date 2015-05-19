@@ -41,6 +41,8 @@
 		</children>
 	</AnchorPane>
 	
+	<Label fx:id="errorLabel" alignment="CENTER_RIGHT" text=""/>
+	
 	<HBox spacing="10.0">
 		<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
 	      	text="ОК" GridPane.columnIndex="1" GridPane.rowIndex="3" />

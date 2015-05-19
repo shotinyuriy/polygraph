@@ -64,6 +64,9 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	@Column
 	private Integer quantity = 0;
 	
+	@Column
+	private Integer coloredQuantity = 0;
+	
 	@Transient
 	private BigDecimal cost;
 	
@@ -164,5 +167,21 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 
 	public void setState(State state) {
 		this.state = state;
+	}
+
+	public Equipment getEquipment() {
+		return equipment;
+	}
+
+	public void setEquipment(Equipment equipment) {
+		this.equipment = equipment;
+	}
+
+	public Integer getColoredQuantity() {
+		return coloredQuantity;
+	}
+
+	public void setColoredQuantity(Integer coloredQuantity) {
+		this.coloredQuantity = coloredQuantity;
 	}
 }

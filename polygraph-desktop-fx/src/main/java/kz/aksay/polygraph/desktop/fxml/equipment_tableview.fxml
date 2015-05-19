@@ -15,7 +15,7 @@
 <?import javafx.scene.control.Button?>
 
 <GridPane xmlns:fx="http://javafx.com/fxml"
-	fx:controller="kz.aksay.polygraph.desktop.EquipmentTypeTableViewController" 
+	fx:controller="kz.aksay.polygraph.desktop.EquipmentTableViewController" 
 	alignment="CENTER" hgap="10.0" vgap="10.0">
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -32,6 +32,14 @@
 			<TableColumn fx:id="nameColumn" text="Название" prefWidth="100" 
 				editable="true" onEditCommit="#update">
 				<cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+			</TableColumn>
+			<TableColumn fx:id="monochromeUsageCountColumn" text="Ч/Б прогоны" prefWidth="100" 
+				editable="true" onEditCommit="#update">
+				<cellValueFactory><PropertyValueFactory property="monochromeUsageCount"/></cellValueFactory>
+			</TableColumn>
+			<TableColumn fx:id="coloredUsageCountColumn" text="Цветные прогоны" prefWidth="100" 
+				editable="true" onEditCommit="#update">
+				<cellValueFactory><PropertyValueFactory property="coloredUsageCount"/></cellValueFactory>
 			</TableColumn>
 			<TableColumn text="Дата добавления" prefWidth="100">
 				<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>

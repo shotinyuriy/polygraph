@@ -17,6 +17,7 @@ public class ProducedWorkFX {
 	private ProducedWork producedWork;
 	private EmployeeFX executorFX;
 	private WorkTypeFX workTypeFX;
+	private EquipmentFX equipmentFX;
 	private boolean dirty = false;
 	
 	public static Collection<ProducedWorkFX> convertListEntityToFX(
@@ -37,6 +38,9 @@ public class ProducedWorkFX {
 		}
 		if(producedWork.getWorkType() != null) {
 			workTypeFX = new WorkTypeFX(producedWork.getWorkType());
+		}
+		if(producedWork.getEquipment() != null) {
+			equipmentFX = new EquipmentFX(producedWork.getEquipment());
 		}
 	}
 	
@@ -80,6 +84,21 @@ public class ProducedWorkFX {
 		return null;
 	}
 	
+	public String getDescription() {
+		
+		StringBuffer sb = new StringBuffer();
+		
+		if( producedWork.getWorkType() != null) {
+			sb.append(producedWork.getWorkType().getName());
+		}
+		
+		if(producedWork.getEquipment() != null) {
+			sb.append(" ").append(producedWork.getEquipment().getName());
+		}
+		
+		return sb.toString();
+	}
+	
 	public String getExecutorName() {
 		{
 			return executorFX.toString();
@@ -105,5 +124,10 @@ public class ProducedWorkFX {
 
 	public Long getId() {
 		return producedWork.getId();
+	}
+
+	public EquipmentFX getEquipmentFX() {
+		
+		return equipmentFX;
 	}
 }

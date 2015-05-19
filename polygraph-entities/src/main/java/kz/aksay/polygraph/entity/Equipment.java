@@ -20,9 +20,10 @@ public class Equipment extends EntitySupport {
 	private WorkType workType;
 	
 	@Column
-	private int usageCount;
+	private int monochromeUsageCount = 0;
 	
-	
+	@Column
+	private int coloredUsageCount = 0;
 
 	public String getName() {
 		return name;
@@ -39,4 +40,22 @@ public class Equipment extends EntitySupport {
 	public void setWorkType(WorkType workType) {
 		this.workType = workType;
 	}
+
+	public int getMonochromeUsageCount() {
+		return monochromeUsageCount;
+	}
+
+	public void setMonochromeUsageCount(int monochromeUsageCount) {
+		this.monochromeUsageCount = monochromeUsageCount;
+	}
+
+	public int getColoredUsageCount() {
+		return coloredUsageCount;
+	}
+
+	public void setColoredUsageCount(int coloredUsageCount) {
+		this.coloredUsageCount = coloredUsageCount;
+	}
+	
+	
 }

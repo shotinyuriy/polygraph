@@ -29,8 +29,11 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	private static final long serialVersionUID = -6315648934763901488L;
 	
 	public static enum State {
+		NEW("Новый"),
 		PROCESSED("В работе"),
-		FINISHED("Завершен");
+		PAUSED("Приостановлен"),
+		FINISHED("Завершен"),
+		CANCELLED("Отклонен");
 		
 		private String name;
 		

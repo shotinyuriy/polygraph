@@ -63,7 +63,7 @@
                                           <AnchorButton fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Типы сотрудников" />
                                           <AnchorButton fx:id="materialListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Материалы" />
                                           <AnchorButton fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" />
-                                          <AnchorButton fx:id="equipmentTypeListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Виды оборудования" />
+                                          <AnchorButton fx:id="equipmentListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Виды оборудования" />
                                        </children>
                                     </VBox>
                                  </children></AnchorPane>

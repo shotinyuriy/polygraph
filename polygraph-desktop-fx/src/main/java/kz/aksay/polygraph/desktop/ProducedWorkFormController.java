@@ -13,6 +13,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,13 +31,16 @@ import javafx.util.converter.NumberStringConverter;
 import javax.validation.ValidationException;
 
 import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
+import kz.aksay.polygraph.entityfx.EquipmentFX;
 import kz.aksay.polygraph.entityfx.MaterialFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
@@ -60,18 +65,25 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private ComboBox<EmployeeFX> executorCombo;
 	@FXML private ComboBox<WorkTypeFX> workTypeCombo;
 	@FXML private ComboBox<MaterialFX> materialCombo;
+	@FXML private ComboBox<EquipmentFX> equipmentCombo;
 	@FXML private TextField quantityField;
 	@FXML private TextField priceField;
+	@FXML private TextField coloredQuantityField;
 	@FXML private Label costField;
 	@FXML private AnchorPane materialConsumptionPane;
 	@FXML private Label producedWorkIdLabel;
 	@FXML private Label validationLabel;
+	@FXML private Label amountLabel;
+	@FXML private Label coloredAmountLabel;
+	@FXML private Label equipmentLabel;
 	@FXML private Button finishWorkButton;
+	
 
 	private IEmployeeService employeeService;
 	private IWorkTypeService workTypeService;
 	private IMaterialService materialService;
 	private IMaterialConsumptionService materialConsumptionService;
+	private IEquipmentService equipmentService;
 	private ProducedWorkFX producedWorkFX;
 	private ProducedWork producedWork;
 	private OrderForm orderForm;
@@ -116,14 +128,20 @@ public class ProducedWorkFormController implements Initializable,
 			= executorCombo.getSelectionModel().getSelectedItem();
 		WorkTypeFX workTypeFX 
 			= workTypeCombo.getSelectionModel().getSelectedItem();
+		EquipmentFX equipmentFX 
+			= equipmentCombo.getSelectionModel().getSelectedItem();
 		Employee executor = null;
 		WorkType workType = null;
+		Equipment equipment = null;
 		
 		if(executorFX != null) {
 			executor = executorFX.getEmployee();
 		}
 		if(workTypeFX != null) {
 			workType = workTypeFX.getWorkType();
+		}
+		if(equipmentCombo.isVisible() && equipmentFX != null) {
+			equipment = equipmentFX.getEquipment();
 		}
 		
 		if(producedWork == null) {
@@ -138,8 +156,14 @@ public class ProducedWorkFormController implements Initializable,
 		
 		producedWork.setExecutor(executor);
 		producedWork.setWorkType(workType);
+		producedWork.setEquipment(equipment);
 		producedWork.setPrice(BigDecimal.valueOf(price.get()));
 		producedWork.setQuantity(quantity.get());
+		if(coloredQuantityField.isVisible() && 
+				coloredQuantityField.getText() != null && 
+				!coloredQuantityField.getText().isEmpty()) {
+			producedWork.setColoredQuantity(Integer.parseInt(coloredQuantityField.getText()));
+		}
 		
 	}
 
@@ -174,14 +198,18 @@ public class ProducedWorkFormController implements Initializable,
 			
 			executorCombo.setValue( producedWorkFX.getExecutorFX() );
 			workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
+			equipmentCombo.setValue( producedWorkFX.getEquipmentFX() );
 			
 			quantity.set(producedWork.getQuantity());
 			price.set(producedWork.getPrice().doubleValue());
-			//materialConsumptionHolder.setMaterialConsumption(producedWork.getMaterialConsumption());
+			if(producedWork.getColoredQuantity() != null) {
+				coloredQuantityField.setText(producedWork.getColoredQuantity()+"");
+			}
 
 			finishWorkButton.setVisible(true);
 			
 		} else {
+			
 			finishWorkButton.setVisible(false);
 			
 			if(orderForm != null ) {
@@ -197,6 +225,8 @@ public class ProducedWorkFormController implements Initializable,
 		materialService = StartingPane.getBean(IMaterialService.class);
 		materialConsumptionService = StartingPane.getBean(
 				IMaterialConsumptionService.class);
+		equipmentService = StartingPane.getBean(IEquipmentService.class);
+		
 		
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employeeService.findAll());
@@ -204,7 +234,7 @@ public class ProducedWorkFormController implements Initializable,
 		Collection<WorkTypeFX> workTypesFX 
 			= WorkTypeFX.convertListEntityToFX(workTypeService.findAll());
 		workTypeCombo.getItems().addAll(workTypesFX);
-		
+		equipmentCombo.getItems().addAll(EquipmentFX.convertListEntityToFX(equipmentService.findAll()));
 		
 		Bindings.bindBidirectional(quantityField.textProperty(), 
                 quantity, 
@@ -217,6 +247,43 @@ public class ProducedWorkFormController implements Initializable,
 		costField.textProperty().bind(cost.asString());
 		
 		cost.bind(price.multiply(quantity));
+		
+		workTypeCombo.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<WorkTypeFX>() {
+
+			@Override
+			public void changed(
+					ObservableValue<? extends WorkTypeFX> observable,
+					WorkTypeFX oldValue, WorkTypeFX newValue) {
+				if(newValue != null && newValue.getName().equalsIgnoreCase(WorkType.DefaultNames.PRINTING)) {
+					coloredAmountLabel.setVisible(true);
+					coloredQuantityField.setVisible(true);
+					equipmentLabel.setVisible(true);
+					equipmentCombo.setVisible(true);
+				} else {
+					coloredAmountLabel.setVisible(false);
+					coloredQuantityField.setVisible(false);
+					equipmentLabel.setVisible(false);
+					equipmentCombo.setVisible(false);
+				}
+				
+			}
+			
+		});
+		
+		coloredQuantityField.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+				if(newValue != null && !newValue.isEmpty()) {
+					if(!newValue.matches("^[0-9]*$")) {
+						coloredQuantityField.setText(oldValue);
+					}
+				}
+				
+			}
+			
+		});
 		
 	}
 	

@@ -23,18 +23,21 @@ import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.User;
-import kz.aksay.polygraph.entityfx.EquipmentTypeFX;
+import kz.aksay.polygraph.entityfx.EquipmentFX;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
 import kz.aksay.polygraph.util.ContextUtils;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
-public class EquipmentTypeTableViewController implements Initializable, SessionAware {
-	@FXML	private TableView<EquipmentTypeFX> tableView;
+public class EquipmentTableViewController implements Initializable, SessionAware {
+	
+	@FXML	private TableView<EquipmentFX> tableView;
 	@FXML   private ComboBox<WorkTypeFX> workTypeBox;
 	@FXML	private TextField nameField;
 	@FXML	private Label validationLabel;
-	@FXML	private TableColumn<EquipmentTypeFX, String> nameColumn;
+	@FXML	private TableColumn<EquipmentFX, String> nameColumn;
+	@FXML	private TableColumn<EquipmentFX, Integer> monochromeUsageCountColumn;
+	@FXML	private TableColumn<EquipmentFX, Integer> coloredUsageCountColumn;
 	
 	private Map<String, Object> session;
 	
@@ -45,19 +48,19 @@ public class EquipmentTypeTableViewController implements Initializable, SessionA
 	
 	@FXML
 	protected void add(ActionEvent event) {
-		ObservableList<EquipmentTypeFX> data = tableView.getItems();
+		ObservableList<EquipmentFX> data = tableView.getItems();
 		Equipment newEquipmentType = createEquipmentType(nameField.getText());
-		EquipmentTypeFX EquipmentTypeFX = new EquipmentTypeFX(newEquipmentType);
-		data.add(EquipmentTypeFX);
+		EquipmentFX EquipmentFX = new EquipmentFX(newEquipmentType);
+		data.add(EquipmentFX);
 		save(newEquipmentType);
 		nameField.setText("");
 	}
 	
 	@FXML
 	protected void update(
-			TableColumn.CellEditEvent<EquipmentTypeFX, String> cellEditEvent) {
-		EquipmentTypeFX EquipmentTypeFX = cellEditEvent.getRowValue();
-		Equipment Equipment = EquipmentTypeFX.getEquipmentType();
+			TableColumn.CellEditEvent<EquipmentFX, String> cellEditEvent) {
+		EquipmentFX EquipmentFX = cellEditEvent.getRowValue();
+		Equipment Equipment = EquipmentFX.getEquipmentType();
 		Equipment.setName(cellEditEvent.getNewValue());
 		Equipment.setUpdatedAt(new Date());
 		Equipment.setUpdatedBy(SessionUtil.retrieveUser(session));
@@ -92,21 +95,21 @@ public class EquipmentTypeTableViewController implements Initializable, SessionA
 		return mt;
 	}
 
-	public TableView<EquipmentTypeFX> getTableView() {
+	public TableView<EquipmentFX> getTableView() {
 		return tableView;
 	}
 
-	public void setTableView(TableView<EquipmentTypeFX> tableView) {
+	public void setTableView(TableView<EquipmentFX> tableView) {
 		this.tableView = tableView;
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
-		Collection<EquipmentTypeFX> equipmentTypesFX 
-			= EquipmentTypeFX.convertListEntityToFX(equipmentService.findAll());
+		Collection<EquipmentFX> equipmentTypesFX 
+			= EquipmentFX.convertListEntityToFX(equipmentService.findAll());
 		tableView.getItems().setAll(equipmentTypesFX);
 		nameColumn.setCellFactory(
-				TextFieldTableCell.<EquipmentTypeFX>forTableColumn());
+				TextFieldTableCell.<EquipmentFX>forTableColumn());
 		Collection<WorkTypeFX> workTypesFX
 			= WorkTypeFX.convertListEntityToFX(workTypeService.findAll());
 		workTypeBox.getItems().addAll(workTypesFX);

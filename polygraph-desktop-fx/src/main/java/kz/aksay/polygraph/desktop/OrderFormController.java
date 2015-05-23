@@ -228,17 +228,13 @@ public class OrderFormController implements
 				dateEndPlan.valueProperty().set(
 						FormatUtil.convertFromLocalDate(orderFX.getDateEndPlanProperty().get()));
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
-				orderFX.getCurrentExecutorProperty().bind(currentExecutorCombo.getSelectionModel().selectedItemProperty());
 				
-				currentStatusCombo.getSelectionModel().select(new StateFX(orderFX.getStateProperty().get(), orderFX.getStateProperty().get().getName()));
-				currentStatusCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StateFX>() {
-					@Override
-					public void changed(
-							ObservableValue<? extends StateFX> observable,
-							StateFX oldValue, StateFX newValue) {
-						orderFX.getStateProperty().set(newValue.getState());
-					}
-				});
+				
+				if(orderFX.getStateProperty().get() != null) {
+				
+					currentStatusCombo.getSelectionModel().select(new StateFX(orderFX.getStateProperty().get(), orderFX.getStateProperty().get().getName()));
+				}
+				
 				
 				
 				producedWorksTableView.getItems().addAll(orderFX.getProducedWorkProperty());
@@ -258,6 +254,15 @@ public class OrderFormController implements
 				}
 			}
 			
+			currentStatusCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StateFX>() {
+				@Override
+				public void changed(
+						ObservableValue<? extends StateFX> observable,
+						StateFX oldValue, StateFX newValue) {
+					orderFX.getStateProperty().set(newValue.getState());
+				}
+			});
+			orderFX.getCurrentExecutorProperty().bind(currentExecutorCombo.getSelectionModel().selectedItemProperty());
 			
 		}
 	}

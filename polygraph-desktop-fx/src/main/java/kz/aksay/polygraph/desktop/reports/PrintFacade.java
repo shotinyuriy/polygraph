@@ -45,11 +45,10 @@ public class PrintFacade {
 	
 	public static JasperPrint generateOrderDetails(OrderFX order) throws JRException {
 		
-			Path jrxmlPath = FileSystems.getDefault().getPath(
-					"src", "main", "java", "kz", "aksay", "polygraph", "desktop", "reports", "templates", 
-					"OrderDetails.jrxml");
 			
-			JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlPath.toString());
+						
+			JasperReport jasperReport = JasperCompileManager.compileReport(
+					PrintFacade.class.getResourceAsStream("templates/OrderDetails.jrxml"));
 			
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("DataFile", "CustomBeanFactory.java - Bean Collection");

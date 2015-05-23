@@ -62,6 +62,12 @@ public class OrganizationTableViewController implements Initializable,
 	}
 	
 	@FXML
+	public void search() {
+		organizationTable.getItems().clear();
+		organizationTable.getItems().setAll(organizationService.findAll());
+	}
+	
+	@FXML
 	public void openOrganizationForm(ActionEvent actionEvent) {
 		Organization organization = organizationTable.getSelectionModel().getSelectedItem();
 		Map<String, Object> parameters = new HashMap<>();

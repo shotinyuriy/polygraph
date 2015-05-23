@@ -88,6 +88,7 @@
                                        <children>
                                           <AnchorButton mnemonicParsing="false" text="Новый сотрудник" onAction="#openNewEmployeeForm"/>
                                           <AnchorButton mnemonicParsing="false" text="Список сотрудников" onAction="#openEmployeeList"/>
+                                          <AnchorButton mnemonicParsing="false" text="Загрузка сотрудников" onAction="#openEmployeeWorkload"/>
                                        </children>
                                     </VBox>
                                  </children>
@@ -125,6 +126,6 @@
     </HBox>
   </children>
   <stylesheets>
-    <URL value="@./main_theme.css" />
+    <URL value="@./dark-theme.css" />
   </stylesheets>
 </VBox>

@@ -82,6 +82,11 @@ public class MainMenuController implements MainMenu, SessionAware {
 	}
 	
 	@FXML
+	public void openEmployeeWorkload(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab("employee_workload_view.fxml", "Загрузка сотрудников");
+	}
+	
+	@FXML
 	public void openOrderList(ActionEvent actionEvent) {
 		loadFxmlAndOpenInTab("order_list.fxml", "Список заказов");
 	}

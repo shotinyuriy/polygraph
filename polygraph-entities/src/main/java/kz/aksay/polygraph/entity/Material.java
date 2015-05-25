@@ -5,30 +5,35 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "material")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Material extends EntitySupport {
+	
+	protected String materialTypeName;
 	
 	private static final long serialVersionUID = -7597841704963862971L;
 
-	@ManyToOne
-	@JoinColumn(name="material_type_id")
-	private MaterialType materialType;
+//	@ManyToOne
+//	@JoinColumn(name="material_type_id")
+//	private MaterialType materialType;
 
 	@Column
 	private String name;
 
-	public MaterialType getMaterialType() {
-		return materialType;
-	}
-
-	public void setMaterialType(MaterialType materialType) {
-		this.materialType = materialType;
-	}
+//	public MaterialType getMaterialType() {
+//		return materialType;
+//	}
+//
+//	public void setMaterialType(MaterialType materialType) {
+//		this.materialType = materialType;
+//	}
 
 	public String getName() {
 		return name;
@@ -42,7 +47,7 @@ public class Material extends EntitySupport {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Material [");
 		sb.append("id: ").append(id).append(", ");
-		sb.append("name: ").append(materialType.getName()).append(" ").append(name).append(", ");
+		sb.append("name: ").append(" ").append(name).append(", ");
 		sb.append("]");
 		
 		return sb.toString();
@@ -55,7 +60,6 @@ public class Material extends EntitySupport {
 			materialNames = new HashMap<String, String[]>();
 			materialNames.put(MaterialType.DefaultNames.PAPER, 
 					new String[] {
-					"A3(1)","A3(2)","A4(1)","A4(2)",
 					"A4 Gloss 250", "A4 Col+", "A3 Gloss 250"} );
 		}
 	}

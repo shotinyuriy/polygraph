@@ -72,16 +72,16 @@ public class DefaultDataCreationService {
 						 }
 					 }
 					 
-					 for(MaterialType materialType : materialTypeService.findAll()) {
-						 String names[] = Material.DefaultNames.materialNames.get(materialType.getName());
-						 if(names != null) {
-							 for(String name: names) {
-								 if(materialService.findByMaterialTypeAndName(materialType, name) == null) {
-									 materialService.save(createMaterial(materialType, name));
-								 }
-							 }
-						 }
-					 }
+//					 for(MaterialType materialType : materialTypeService.findAll()) {
+//						 String names[] = Material.DefaultNames.materialNames.get(materialType.getName());
+//						 if(names != null) {
+//							 for(String name: names) {
+//								 if(materialService.findByMaterialTypeAndName(materialType, name) == null) {
+//									 materialService.save(createMaterial(materialType, name));
+//								 }
+//							 }
+//						 }
+//					 }
 					 
 					 createDefaultEquipmentTypes();
 				}
@@ -113,7 +113,7 @@ public class DefaultDataCreationService {
 		material.setCreatedAt(new Date());
 		material.setCreatedBy(User.TECH_USER);
 		material.setName(name);
-		material.setMaterialType(materialType);
+		//material.setMaterialType(materialType);
 		return material;
 	}
 	

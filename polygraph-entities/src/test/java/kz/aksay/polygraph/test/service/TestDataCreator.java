@@ -280,7 +280,7 @@ public class TestDataCreator {
 		paperA4.setCreatedAt(new Date());
 		paperA4.setCreatedBy(creator);
 		paperA4.setName(name);
-		paperA4.setMaterialType(materialType);
+		//paperA4.setMaterialType(materialType);
 		paperA4 = materialService.save(paperA4);
 		return paperA4;
 	}

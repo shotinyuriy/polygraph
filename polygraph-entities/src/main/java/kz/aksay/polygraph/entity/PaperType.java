@@ -10,15 +10,10 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Check;
 
 @Entity
-@Table(name="material_type", uniqueConstraints = {
-		@UniqueConstraint(name="UNQ_MT_NAME", columnNames="name")})
-@Check(constraints="name=UPPER(name)")
-public class MaterialType extends EntitySupport {
+@Table(name="paper_type", uniqueConstraints = {
+		@UniqueConstraint(name="UNQ_PAPER_TYPE_NAME", columnNames="name")})
+public class PaperType extends EntitySupport {
 	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2151450425605008962L;
 	
 	@Column
@@ -35,14 +30,14 @@ public class MaterialType extends EntitySupport {
 
 	public static class DefaultNames {
 		
-		public static final String PAPER = "БУМАГА"; 
-		public static final String BINDING_SPRING = "ПРУЖИНА";
-		public static final String PAPER_CLIP = "СКРЕПКА";
+		public static final String GLOSS = "Gloss"; 
+		public static final String COL_PLUS = "Col+";
+		public static final String SVET = "Svet";
 		
 		private static String[] defaultNames = new String[] {
-			PAPER,
-			BINDING_SPRING,
-			PAPER_CLIP
+			GLOSS,
+			COL_PLUS,
+			SVET
 		};
 		
 		public static String[] all() {
@@ -50,6 +45,4 @@ public class MaterialType extends EntitySupport {
 		}
 	}
 
-	
-	
 }

@@ -7,12 +7,16 @@ import javax.annotation.PostConstruct;
 
 import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialService;
-import kz.aksay.polygraph.api.IMaterialTypeService;
+import kz.aksay.polygraph.api.IOrganizationService;
+import kz.aksay.polygraph.api.IPaperService;
+import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Material;
-import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.entity.Organization;
+import kz.aksay.polygraph.entity.Paper;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.WorkType;
 
@@ -28,13 +32,15 @@ public class DefaultDataCreationService {
 	
 	private IUserService userService;
 	
-	private IMaterialTypeService materialTypeService;
+	private IPaperTypeService paperTypeService;
 	
 	private IWorkTypeService workTypeService;
 	
-	private IMaterialService materialService;
+	private IPaperService paperService;
 	
 	private IEquipmentService equipmentService;
+	
+	private IOrganizationService organizationService;
 	
 	@Autowired
 	private PlatformTransactionManager  txManager;
@@ -55,10 +61,10 @@ public class DefaultDataCreationService {
 					User.TECH_USER = techUser;
 					 
 					 for(String materialTypeName : 
-						 MaterialType.DefaultNames.all()) {
-						 if(materialTypeService.
+						 PaperType.DefaultNames.all()) {
+						 if(paperTypeService.
 								 findByName(materialTypeName) == null) {
-							 materialTypeService.save(
+							 paperTypeService.save(
 									 createMaterialType(materialTypeName));
 						 }
 					 }
@@ -72,18 +78,16 @@ public class DefaultDataCreationService {
 						 }
 					 }
 					 
-//					 for(MaterialType materialType : materialTypeService.findAll()) {
-//						 String names[] = Material.DefaultNames.materialNames.get(materialType.getName());
-//						 if(names != null) {
-//							 for(String name: names) {
-//								 if(materialService.findByMaterialTypeAndName(materialType, name) == null) {
-//									 materialService.save(createMaterial(materialType, name));
-//								 }
-//							 }
-//						 }
-//					 }
+					 for(PaperType materialType : paperTypeService.findAll()) {
+						 Paper example = new Paper();
+						 example.setType(materialType);
+						 if(paperService.findByExample(example).size() == 0) {
+							 paperService.save(createMaterial(materialType));
+						 }
+					 }
 					 
 					 createDefaultEquipmentTypes();
+					 createOrganizations();
 				}
 				catch(Exception e) {
 					e.printStackTrace();
@@ -92,12 +96,12 @@ public class DefaultDataCreationService {
 		});
 	}
 	
-	private MaterialType createMaterialType(String name) {
-		MaterialType materialType = new MaterialType();
-		materialType.setCreatedAt(new Date());
-		materialType.setCreatedBy(User.TECH_USER);
-		materialType.setName(name);
-		return materialType;
+	private PaperType createMaterialType(String name) {
+		PaperType paperType = new PaperType();
+		paperType.setCreatedAt(new Date());
+		paperType.setCreatedBy(User.TECH_USER);
+		paperType.setName(name);
+		return paperType;
 	}
 	
 	private WorkType createWorkType(String name) {
@@ -108,12 +112,11 @@ public class DefaultDataCreationService {
 		return workType;
 	}
 	
-	private Material createMaterial(MaterialType materialType, String name) {
-		Material material = new Material();
+	private Paper createMaterial(PaperType paperType) {
+		Paper material = new Paper();
 		material.setCreatedAt(new Date());
 		material.setCreatedBy(User.TECH_USER);
-		material.setName(name);
-		//material.setMaterialType(materialType);
+		material.setType(paperType);
 		return material;
 	}
 	
@@ -142,6 +145,29 @@ public class DefaultDataCreationService {
 		}
 	}
 	
+	private void createOrganizations() throws Exception {
+		Organization organization = new Organization();
+		
+		organization.setFullname("Товарищество с ограниченной ответственностью Фирма \"Сервер+\"");
+		organization.setShortname("ТОО Фирма \"Сервер+\"");
+		organization.setInn("960740001061");
+		organization.setKpp("586856000000");
+		organization.setDirectorName("Наумов А.В.");
+		
+		List<Organization> foundOrganizations = organizationService.findByExample(organization);
+		
+		if(foundOrganizations.isEmpty()) {
+			organization.setCreatedAt(new Date());
+			organization.setCreatedBy(User.TECH_USER);
+			
+			organizationService.save(organization);
+		} else {
+			organization = foundOrganizations.get(0);
+		}
+		
+		Organization.FIRMA_SERVER_PLUS = organization;
+	}
+	
 	public void setTxManager(PlatformTransactionManager txManager) {
 		this.txManager = txManager;
 	}
@@ -152,8 +178,8 @@ public class DefaultDataCreationService {
 	}
 	
 	@Autowired
-	public void setMaterialtypeService(IMaterialTypeService materialTypeService) {
-		this.materialTypeService = materialTypeService;
+	public void setMaterialtypeService(IPaperTypeService paperTypeService) {
+		this.paperTypeService = paperTypeService;
 	}
 
 	@Autowired
@@ -162,8 +188,8 @@ public class DefaultDataCreationService {
 	}
 
 	@Autowired
-	public void setMaterialService(IMaterialService materialService) {
-		this.materialService = materialService;
+	public void setPaperService(IPaperService paperService) {
+		this.paperService = paperService;
 	}
 
 	@Autowired
@@ -174,5 +200,10 @@ public class DefaultDataCreationService {
 	@Autowired
 	public void setEquipmentService(IEquipmentService equipmentService) {
 		this.equipmentService = equipmentService;
+	}
+
+	@Autowired
+	public void setOrganizationService(IOrganizationService organizationService) {
+		this.organizationService = organizationService;
 	}
 }

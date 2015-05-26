@@ -24,14 +24,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import kz.aksay.polygraph.api.IMaterialService;
-import kz.aksay.polygraph.api.IMaterialTypeService;
+import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.entity.Material;
-import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entityfx.MaterialFX;
 import kz.aksay.polygraph.entityfx.MaterialTypeFX;
 import kz.aksay.polygraph.service.MaterialService;
-import kz.aksay.polygraph.service.MaterialTypeService;
+import kz.aksay.polygraph.service.PaperTypeService;
 import kz.aksay.polygraph.util.ContextUtils;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
@@ -41,13 +41,13 @@ public class MaterialTableViewController implements Initializable, SessionAware 
 	@FXML	private TextField nameField;
 	@FXML	private Label validationLabel;
 	@FXML	private TableColumn<MaterialFX, String> nameColumn;
-	@FXML	private TableColumn<MaterialFX, MaterialType> materialTypeColumn;
+	@FXML	private TableColumn<MaterialFX, PaperType> materialTypeColumn;
 	@FXML	private ComboBox<MaterialTypeFX> materialTypeBox;
 	
 	private Map<String, Object> session;
 	
-	private IMaterialTypeService materialTypeService 
-		= ContextUtils.getBean(IMaterialTypeService.class);
+	private IPaperTypeService paperTypeService 
+		= ContextUtils.getBean(IPaperTypeService.class);
 	
 	private IMaterialService materialService 
 	= ContextUtils.getBean(IMaterialService.class);
@@ -56,8 +56,8 @@ public class MaterialTableViewController implements Initializable, SessionAware 
 	protected void add(ActionEvent event) {
 		ObservableList<MaterialFX> data = tableView.getItems();
 		MaterialTypeFX materialTypeFx = materialTypeBox.getValue();
-		MaterialType materialType = materialTypeFx.getMaterialType();
-		Material material = createMaterial(nameField.getText(), materialType);
+		PaperType paperType = materialTypeFx.getMaterialType();
+		Material material = createMaterial(nameField.getText(), paperType);
 		save(material);
 		MaterialFX materialFx = new MaterialFX(material);
 		data.add(materialFx);
@@ -116,12 +116,12 @@ public class MaterialTableViewController implements Initializable, SessionAware 
 		}
 	}
 	
-	protected Material createMaterial(String name, MaterialType materialType) {
+	protected Material createMaterial(String name, PaperType paperType) {
 		Material mt = new Material();
 		mt.setCreatedAt(new Date());
 		mt.setCreatedBy(User.TECH_USER);
 		mt.setName(name.toString());
-		mt.setMaterialType(materialType);
+		mt.setMaterialType(paperType);
 		return mt;
 	}
 
@@ -142,7 +142,7 @@ public class MaterialTableViewController implements Initializable, SessionAware 
 				TextFieldTableCell.<MaterialFX>forTableColumn());
 		
 		List<MaterialTypeFX> materialTypesFX 
-			= MaterialTypeFX.convertListEntityToFX(materialTypeService.findAll());
+			= MaterialTypeFX.convertListEntityToFX(paperTypeService.findAll());
 		materialTypeBox.getItems().setAll(materialTypesFX);
 	}
 

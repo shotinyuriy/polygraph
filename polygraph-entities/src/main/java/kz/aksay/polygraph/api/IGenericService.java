@@ -21,4 +21,6 @@ public interface IGenericService<T, PK extends Serializable> {
 	public void delete(T entity);
 	
 	public int deleteAll();
+
+	public List<T> findByExample(T example);
 }

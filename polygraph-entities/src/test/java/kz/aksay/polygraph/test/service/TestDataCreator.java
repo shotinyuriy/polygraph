@@ -11,7 +11,8 @@ import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
-import kz.aksay.polygraph.api.IMaterialTypeService;
+import kz.aksay.polygraph.api.IPaperService;
+import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.api.IOrderFullTextIndexService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.api.IOrganizationService;
@@ -20,9 +21,11 @@ import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
-import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.entity.Paper;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.Person;
@@ -50,8 +53,8 @@ public class TestDataCreator {
 	private IOrderService orderService;
 	private IProducedWorkService producedWorkService;
 	private IWorkTypeService workTypeService;
-	private IMaterialTypeService materialTypeService;
-	private IMaterialService materialService;
+	private IPaperTypeService paperTypeService;
+	private IPaperService paperService;
 	private IMaterialConsumptionService materialConsumptionService;
 	private IOrderFullTextIndexService orderFullTextIndexService;
 	private IFullTextIndexService fullTextIndexService;
@@ -69,8 +72,8 @@ public class TestDataCreator {
 		orderService = context.getBean(IOrderService.class);
 		producedWorkService = context.getBean(IProducedWorkService.class);
 		workTypeService = context.getBean(IWorkTypeService.class);
-		materialTypeService = context.getBean(IMaterialTypeService.class);
-		materialService = context.getBean(IMaterialService.class);
+		paperTypeService = context.getBean(IPaperTypeService.class);
+		paperService = context.getBean(IPaperService.class);
 		materialConsumptionService = context.getBean(IMaterialConsumptionService.class);
 		orderFullTextIndexService = context.getBean(IOrderFullTextIndexService.class);
 		fullTextIndexService = context.getBean(IFullTextIndexService.class);
@@ -263,25 +266,25 @@ public class TestDataCreator {
 		return xerocopy;
 	}
 	
-	public MaterialType createMaterialType(User creator, String name) throws Exception {
-		MaterialType materialType = materialTypeService.findByName(name);
-		if(materialType == null) {
-			materialType = new MaterialType();
-			materialType.setCreatedAt(new Date());
-			materialType.setCreatedBy(creator);
-			materialType.setName(name);
-			materialType = materialTypeService.save(materialType);
+	public PaperType createMaterialType(User creator, String name) throws Exception {
+		PaperType paperType = paperTypeService.findByName(name);
+		if(paperType == null) {
+			paperType = new PaperType();
+			paperType.setCreatedAt(new Date());
+			paperType.setCreatedBy(creator);
+			paperType.setName(name);
+			paperType = paperTypeService.save(paperType);
 		}
-		return materialType;
+		return paperType;
 	}
 	
-	public Material createMaterial(User creator, MaterialType materialType, String name) throws Exception {
-		Material paperA4 = new Material();
+	public Paper createPaper(User creator, PaperType paperType, Format format) throws Exception {
+		Paper paperA4 = new Paper();
 		paperA4.setCreatedAt(new Date());
 		paperA4.setCreatedBy(creator);
-		paperA4.setName(name);
-		//paperA4.setMaterialType(materialType);
-		paperA4 = materialService.save(paperA4);
+		paperA4.setFormat(format);
+		paperA4.setType(paperType);
+		paperA4 = paperService.save(paperA4);
 		return paperA4;
 	}
 	

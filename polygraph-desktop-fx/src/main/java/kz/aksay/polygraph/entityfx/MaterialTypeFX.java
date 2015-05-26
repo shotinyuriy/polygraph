@@ -3,48 +3,48 @@ package kz.aksay.polygraph.entityfx;
 import java.util.LinkedList;
 import java.util.List;
 
-import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.util.FormatUtil;
 
 public class MaterialTypeFX {
 	
-	private final MaterialType materialType;
+	private final PaperType paperType;
 	
-	public static List<MaterialTypeFX> convertListEntityToFX(List<MaterialType> materialTypes) {
+	public static List<MaterialTypeFX> convertListEntityToFX(List<PaperType> paperTypes) {
 		List<MaterialTypeFX> materialTypesFx = new LinkedList<>();
-		for(MaterialType materialType : materialTypes) {
-			MaterialTypeFX materialTypeFx = new MaterialTypeFX(materialType);
+		for(PaperType paperType : paperTypes) {
+			MaterialTypeFX materialTypeFx = new MaterialTypeFX(paperType);
 			materialTypesFx.add(materialTypeFx);
 		}
 		return materialTypesFx;
 	}
 
-	public MaterialTypeFX(MaterialType materialType) {
-		this.materialType = materialType;
+	public MaterialTypeFX(PaperType paperType) {
+		this.paperType = paperType;
 	}
 
-	public MaterialType getMaterialType() {
-		return this.materialType;
+	public PaperType getMaterialType() {
+		return this.paperType;
 	}
 	
 	public String getName() {
-		return materialType.getName();
+		return paperType.getName();
 	}
 	
 	public String getCreatedAtString() {
-		return FormatUtil.dateFormatter.format(materialType.getCreatedAt());
+		return FormatUtil.dateFormatter.format(paperType.getCreatedAt());
 	}
 	
 	public String getCreatedByLogin() {
-		return materialType.getCreatedBy().getLogin();
+		return paperType.getCreatedBy().getLogin();
 	}
 	
 	public String getUpdatedByLogin() {
-		return materialType.getUpdatedBy().getLogin();
+		return paperType.getUpdatedBy().getLogin();
 	}
 	
 	@Override
 	public String toString() {
-		return materialType.getName();
+		return paperType.getName();
 	}
 }

@@ -1,47 +1,32 @@
 package kz.aksay.polygraph.test.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
-import kz.aksay.polygraph.api.IMaterialService;
-import kz.aksay.polygraph.api.IMaterialTypeService;
 import kz.aksay.polygraph.api.IOrderFullTextIndexService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.api.IOrganizationService;
+import kz.aksay.polygraph.api.IPaperService;
+import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
-import kz.aksay.polygraph.entity.Material;
+import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.MaterialConsumption;
-import kz.aksay.polygraph.entity.MaterialType;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Organization;
+import kz.aksay.polygraph.entity.Paper;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.WorkType;
-import kz.aksay.polygraph.service.EmployeeService;
-import kz.aksay.polygraph.service.FullTextIndexService;
-import kz.aksay.polygraph.service.MaterialConsumptionService;
-import kz.aksay.polygraph.service.MaterialService;
-import kz.aksay.polygraph.service.MaterialTypeService;
-import kz.aksay.polygraph.service.OrderFullTextIndexService;
-import kz.aksay.polygraph.service.OrderService;
-import kz.aksay.polygraph.service.OrganizationService;
-import kz.aksay.polygraph.service.PersonService;
-import kz.aksay.polygraph.service.ProducedWorkService;
-import kz.aksay.polygraph.service.UserService;
-import kz.aksay.polygraph.service.WorkTypeService;
 import kz.aksay.polygraph.test.ContextUtils;
 
 import org.springframework.context.ApplicationContext;
@@ -60,8 +45,8 @@ public class TestDesignerBaseScenario extends Assert {
 	private IOrderService orderService;
 	private IProducedWorkService producedWorkService;
 	private IWorkTypeService workTypeService;
-	private IMaterialTypeService materialTypeService;
-	private IMaterialService materialService;
+	private IPaperTypeService paperTypeService;
+	private IPaperService paperService;
 	private IMaterialConsumptionService materialConsumptionService;
 	private IOrderFullTextIndexService orderFullTextIndexService; 
 	private IFullTextIndexService fullTextIndexService;
@@ -75,8 +60,8 @@ public class TestDesignerBaseScenario extends Assert {
 	private Order firstOrder;
 	private Organization organizationCustomer;
 	private WorkType xerocopy;
-	private MaterialType paper;
-	private Material paperA4;
+	private PaperType gloss2;
+	private Paper paperA4;
 	private ProducedWork producedWork;
 	private MaterialConsumption copyMaterialConsumption;
 	private Person customerPerson;
@@ -96,8 +81,8 @@ public class TestDesignerBaseScenario extends Assert {
 		orderService = context.getBean(IOrderService.class);
 		producedWorkService = context.getBean(IProducedWorkService.class);
 		workTypeService = context.getBean(IWorkTypeService.class);
-		materialTypeService = context.getBean(IMaterialTypeService.class);
-		materialService = context.getBean(IMaterialService.class);
+		paperTypeService = context.getBean(IPaperTypeService.class);
+		paperService = context.getBean(IPaperService.class);
 		materialConsumptionService = context.getBean(IMaterialConsumptionService.class);
 		orderFullTextIndexService = context.getBean(IOrderFullTextIndexService.class);
 		fullTextIndexService = context.getBean(IFullTextIndexService.class);
@@ -152,11 +137,11 @@ public class TestDesignerBaseScenario extends Assert {
 	}
 
 	private void createMaterialPaperA4() throws Exception {
-		paperA4 = testDataCreator.createMaterial(User.TECH_USER, paper, "A4");
+		paperA4 = testDataCreator.createPaper(User.TECH_USER, gloss2, Format.A4);
 	}
 
 	private void createMaterialTypePaper() throws Exception {
-		paper = testDataCreator.createMaterialType(User.TECH_USER, "БУМАГА");
+		gloss2 = testDataCreator.createMaterialType(User.TECH_USER, "БУМАГА");
 	}
 
 	private void createWorkTypeXerocopy() throws Exception {
@@ -286,10 +271,10 @@ public class TestDesignerBaseScenario extends Assert {
 			materialConsumptionService.deleteAllByProducedWork(producedWork);
 			producedWorkService.delete(producedWork);
 		}
-		if(paperA4 != null && paperA4.getId() != null) materialService.delete(paperA4);
-		if(paper != null && paper.getId() != null) {
-			materialService.deleteAllByMaterialType(paper);
-			materialTypeService.delete(paper);
+		if(paperA4 != null && paperA4.getId() != null) paperService.delete(paperA4);
+		if(gloss2 != null && gloss2.getId() != null) {
+			paperService.deleteAllByPaperType(gloss2);
+			paperTypeService.delete(gloss2);
 		}
 		if(xerocopy != null && xerocopy.getId() != null) workTypeService.delete(xerocopy);
 		if(secondOrder != null && secondOrder.getId() != null) {

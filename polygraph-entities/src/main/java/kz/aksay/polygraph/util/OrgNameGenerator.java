@@ -41,11 +41,15 @@ public class OrgNameGenerator {
 		int orgTypeIndex = r.nextInt(orgTypes.length);
 		int orgSphereIndex = r.nextInt(orgSphere.length);
 		int nounIndex = r.nextInt(nouns.length);
-		int number = r.nextInt();
+		
+		StringBuffer inn = new StringBuffer(); 
 		
 		orgName.setFullName(orgTypes[orgTypeIndex][1]+" "+orgSphere[orgSphereIndex]+" "+nouns[nounIndex]);
 		orgName.setShortName(orgTypes[orgTypeIndex][0]+" "+orgSphere[orgSphereIndex]+" "+nouns[nounIndex]);
-		orgName.setNumber(number+"");
+		for(int i = 0; i < 9; i ++) {
+			inn.append(r.nextInt(10));
+		}
+		orgName.setNumber(inn.toString());
 		
 		//System.out.println("ORG FULL NAME "+orgName.getFullName());
 		//System.out.println("ORG SHORT NAME "+orgName.getShortName());

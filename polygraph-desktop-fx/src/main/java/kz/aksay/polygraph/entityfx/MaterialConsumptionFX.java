@@ -39,9 +39,9 @@ public class MaterialConsumptionFX {
 		return materialConsumption;
 	}
 	
-	public String getMaterialFullName() {
+	public String getMaterialName() {
 		if(materialFX != null) {
-			return materialFX.getFullName();
+			return materialFX.getName();
 		}
 		return null;
 	}

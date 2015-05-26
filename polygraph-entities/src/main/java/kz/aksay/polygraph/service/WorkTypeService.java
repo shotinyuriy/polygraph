@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.dao.GenericDao;
-import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.WorkType;
 
 @Service

@@ -6,6 +6,7 @@ import java.util.List;
 import kz.aksay.polygraph.api.IGenericService;
 import kz.aksay.polygraph.dao.GenericDao;
 
+import org.hibernate.criterion.Example;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,5 +49,13 @@ public abstract class AbstractGenericService<T, PK extends Serializable>
 	@Transactional(propagation=Propagation.REQUIRED)
 	public int deleteAll() {
 		return getDao().deleteAll();
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	@Transactional(propagation=Propagation.REQUIRED)
+	public List<T> findByExample(T example) {
+		return (List<T>) getDao().getSession().createCriteria(getDao().clazz())
+				.add(Example.create(example)).list();
 	}
 }

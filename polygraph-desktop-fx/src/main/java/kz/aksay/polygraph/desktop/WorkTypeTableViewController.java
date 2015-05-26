@@ -15,7 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import kz.aksay.polygraph.api.IWorkTypeService;
-import kz.aksay.polygraph.entity.MaterialType;
+import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
 import kz.aksay.polygraph.service.WorkTypeService;

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrderDetails" language="groovy" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b864bfb-97e3-4346-8b0a-607705d6f4ac">
-	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.zoom" value="1.4641000000000028"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="244"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="orderNumber" class="java.lang.String"/>
 	<parameter name="customerName" class="java.lang.String"/>
 	<parameter name="orderName" class="java.lang.String"/>
 	<parameter name="circulation" class="java.lang.String"/>
 	<parameter name="orderDate" class="java.util.Date"/>
+	<parameter name="a3_1_count" class="java.lang.String"/>
+	<parameter name="a3_2_count" class="java.lang.String"/>
+	<parameter name="a4_1_count" class="java.lang.String"/>
+	<parameter name="a4_2_count" class="java.lang.String"/>
+	<parameter name="a3_1_wasted" class="java.lang.String"/>
+	<parameter name="a3_2_wasted" class="java.lang.String"/>
+	<parameter name="a4_1_wasted" class="java.lang.String"/>
+	<parameter name="a4_2_wasted" class="java.lang.String"/>
 	<field name="number" class="java.lang.Integer"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="price" class="java.lang.Double"/>
@@ -206,7 +214,7 @@
 	</detail>
 	<columnFooter>
 		<band height="21" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="314" y="0" width="67" height="20" uuid="3564b77b-d6ee-45a6-b552-1154b3080471"/>
 				<box>
 					<pen lineWidth="0.5"/>
@@ -218,7 +226,7 @@
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{totalAmount}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="245" y="0" width="69" height="20" uuid="994e03c3-b162-4477-b0d6-b43ffcb86774"/>
 				<box>
 					<pen lineWidth="0.5"/>
@@ -247,19 +255,225 @@
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="90" splitType="Stretch">
+		<band height="183" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="27" width="73" height="20" uuid="20472a4c-89ea-4dfb-a36b-d8c766edde17"/>
-				<text><![CDATA[Static text]]></text>
+				<reportElement x="182" y="19" width="199" height="13" uuid="e32d28c4-41f9-46d8-bc80-0686add9213a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[Исполнитель_________________________]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="73" y="27" width="75" height="20" uuid="f875c7ba-b78d-48ff-8b8b-1f4156668d8f"/>
-				<text><![CDATA[Static text]]></text>
+				<reportElement x="0" y="19" width="182" height="13" uuid="20472a4c-89ea-4dfb-a36b-d8c766edde17"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[Заказчик:________________________]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="27" width="77" height="20" uuid="e32d28c4-41f9-46d8-bc80-0686add9213a"/>
-				<text><![CDATA[Static text]]></text>
+				<reportElement x="245" y="33" width="136" height="15" uuid="b62c29bb-1795-4a50-ac1c-1e6496986547"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[(Ф.И.О подпись)]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="44" y="33" width="138" height="15" uuid="a52f1653-708b-4063-9c51-b4ca36aa4a47"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[(Ф.И.О подпись)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="63" width="240" height="14" uuid="bf5ac0eb-5bdf-48ee-b922-abdefcff8c9f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Изготовлено копий]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="63" width="141" height="14" uuid="759eb613-9733-4f73-8330-70d3b2c16d24"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[В т.ч. брак]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="77" width="60" height="14" uuid="e9fbcfd9-4b7b-4cf9-a466-4bff15dcd631"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А3(1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="77" width="60" height="14" uuid="da8b4bd3-60a3-4722-8672-992894b69f00"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А3(2)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="77" width="60" height="14" uuid="253337bd-a161-4a7d-ab0b-0b8c713bc238"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А4(1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="77" width="60" height="14" uuid="7e070fd9-f2e8-4f5d-8a90-876a690d4856"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А4(2)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="77" width="35" height="14" uuid="7a1ca964-fcef-438b-a225-913163aca4c4"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А3(1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="77" width="35" height="14" uuid="22333773-4ee2-4478-8693-5495ff94ae5e"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А3(2)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="77" width="35" height="14" uuid="e8cf8caa-947e-48d2-9d43-6a3757627294"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А4(1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="77" width="36" height="14" uuid="dec267af-32dd-4fb3-b739-4274a91c7384"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[А4(2)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="91" width="60" height="13" uuid="4968bbc7-bb56-4c59-8022-841f11fbe3c4"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a3_1_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="91" width="60" height="13" uuid="1db30cb4-e17a-4b31-9e7f-fc5961830dc4"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a3_2_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="91" width="60" height="13" uuid="0c9ce7ee-522c-47a6-92bf-6feab1e60963"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a4_1_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="91" width="60" height="13" uuid="829d237e-e0c2-4c08-b795-c8bb1d8aca20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a4_2_count}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="91" width="35" height="13" uuid="d32c9100-feac-47d3-8011-0422b6ef2f8d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a3_1_wasted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="275" y="91" width="35" height="13" uuid="898673e5-92fb-49cd-bb0f-0c6e675c65b9"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a3_2_wasted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="91" width="35" height="13" uuid="7e01090c-0f13-4632-bdb5-542d0d985d20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a4_1_wasted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="345" y="91" width="36" height="13" uuid="a24400d1-629b-43b5-8199-f4c7d568f0a5"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{a4_2_wasted}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<summary>

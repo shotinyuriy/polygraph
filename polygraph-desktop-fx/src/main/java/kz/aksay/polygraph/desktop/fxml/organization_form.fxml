@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController"  alignment="TOP_CENTER">
 <children>
@@ -35,34 +36,67 @@
 		
 	</GridPane>
 	
-	<Label text="Договоры" alignment="BASELINE_CENTER"/>
+	<VBox prefWidth="640.0">
+		<Label text="Договоры" alignment="BASELINE_CENTER"/>
+		
+		<TableView fx:id="contractsTableView">
+		  	<columns>
+		  		<TableColumn text="Номер" prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
+		 		</TableColumn>
+		 		<TableColumn text="Дата начала" prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="beginDateString"/></cellValueFactory>
+		 		</TableColumn>
+		 		<TableColumn text="Дата завершения"  prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="endDateString"/></cellValueFactory>
+		 		</TableColumn>
+		 	</columns>
+		</TableView>
+		
+		<HBox alignment="BASELINE_CENTER">
+			<children>
+				<Button fx:id="addContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addContract" 
+					text="Добавить"  />
+			    	
+				<Button fx:id="editContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editContract" 
+					text="Изменить" />
+			    	
+				<Button fx:id="deleteContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteContract" 
+					text="Удалить" />
+			</children>
+		</HBox>
+	</VBox>
 	
-	<TableView fx:id="contractsTableView">
-	  	<columns>
-	  		<TableColumn text="Номер" prefWidth="150.0">
-	 			<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
-	 		</TableColumn>
-	 		<TableColumn text="Дата начала" prefWidth="150.0">
-	 			<cellValueFactory><PropertyValueFactory property="beginDateString"/></cellValueFactory>
-	 		</TableColumn>
-	 		<TableColumn text="Дата завершения"  prefWidth="150.0">
-	 			<cellValueFactory><PropertyValueFactory property="endhDateString"/></cellValueFactory>
-	 		</TableColumn>
-	 	</columns>
-	</TableView>
-	
-	<HBox alignment="BASELINE_CENTER">
-		<children>
-			<Button fx:id="addContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addContract" 
-				text="Добавить"  />
-		    	
-			<Button fx:id="editContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editContract" 
-				text="Изменить" />
-		    	
-			<Button fx:id="deleteContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteContract" 
-				text="Удалить" />
-		</children>
-	</HBox>
+	<VBox prefWidth="640.0">
+		<Label text="Доверенности" alignment="BASELINE_CENTER"/>
+		
+		<TableView fx:id="vicariousPowerTableView">
+		  	<columns>
+		  		<TableColumn text="Номер" prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
+		 		</TableColumn>
+		 		<TableColumn text="ФИО доверенного" prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="personName"/></cellValueFactory>
+		 		</TableColumn>
+		 		<TableColumn text="Дата завершения"  prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="endDateString"/></cellValueFactory>
+		 		</TableColumn>
+		 	</columns>
+		</TableView>
+		
+		<HBox alignment="BASELINE_CENTER">
+			<children>
+				<Button fx:id="addVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addVicariousPower" 
+					text="Добавить"  />
+			    	
+				<Button fx:id="editVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editVicariousPower" 
+					text="Изменить" />
+			    	
+				<Button fx:id="deleteVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteVicariousPower" 
+					text="Удалить" />
+			</children>
+		</HBox>
+	</VBox>
 	
 	<HBox alignment="BASELINE_CENTER">
 		<children>

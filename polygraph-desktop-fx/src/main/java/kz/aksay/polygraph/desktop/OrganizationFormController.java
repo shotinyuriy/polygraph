@@ -24,11 +24,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IOrganizationService;
+import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Organization;
+import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entityfx.ContractFX;
 import kz.aksay.polygraph.entityfx.EntityFX;
+import kz.aksay.polygraph.entityfx.VicariousPowerFX;
 import kz.aksay.polygraph.service.OrganizationService;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -43,6 +46,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	private IOrganizationService organizationService 
 		= StartingPane.getBean(IOrganizationService.class);
 	private IContractService contractService = StartingPane.getBean(IContractService.class);
+	private IVicariousPowerService vicariousPowerService = StartingPane.getBean(IVicariousPowerService.class);
 	
 	@FXML private Label idLabel;
 	@FXML private TextField innField;
@@ -56,6 +60,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	@FXML private TextField directorNameField;
 	@FXML private Button newOrderButton;
 	@FXML private TableView<ContractFX> contractsTableView;
+	@FXML private TableView<VicariousPowerFX> vicariousPowerTableView;
 
 	private Map<String, Object> session;
 	private Map<String, Object> parameters;
@@ -122,9 +127,10 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	
 	@FXML
 	public void addContract(ActionEvent actionEvent) {
+		Organization organization = organizationService.find(organizationId);
 		Contract contract = new Contract();
 		contract.setParty1(Organization.FIRMA_SERVER_PLUS);
-		contract.setParty2(organizationService.find(organizationId));
+		contract.setParty2(organization);
 		
 		ContractFX contractFX = new ContractFX(contract);
 		
@@ -140,17 +146,90 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		stage.setTitle("Новый договор");
 		stage.initModality(Modality.WINDOW_MODAL);
 		stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
-		stage.show();
+		stage.showAndWait();
+		
+		loadContracts(organization);
 	}
 	
 	@FXML
 	public void editContract(ActionEvent actionEvent) {
-		StartingPane.popScene();
+		ContractFX contractFX = contractsTableView.getSelectionModel().getSelectedItem();
+		
+		if(contractFX != null) {
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put(ParameterKeys.ORGANIZATION_FORM, this);
+			parameters.put(ParameterKeys.CONTRACT, contractFX);
+			
+			Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
+					packageInfo.class, "short_contract_form.fxml", session, parameters);
+			
+			Stage stage = new Stage(); 
+			stage.setScene(new Scene(root));
+			stage.setTitle("Новый договор");
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
+			stage.showAndWait();
+			
+			loadContracts(contractFX.getEntity().getParty2());									
+		}
 	}
 	
 	@FXML
 	public void deleteContract(ActionEvent actionEvent) {
-		StartingPane.popScene();
+		
+	}
+	
+	@FXML
+	public void addVicariousPower(ActionEvent actionEvent) {
+		Organization organization = organizationService.find(organizationId);
+		VicariousPower vicariousPower = new VicariousPower();
+		vicariousPower.setOrganization(organization);
+		
+		VicariousPowerFX vicariousPowerFX = new VicariousPowerFX(vicariousPower);
+		
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put(ParameterKeys.ORGANIZATION_FORM, this);
+		parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
+		
+		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
+				packageInfo.class, "vicarious_power_form.fxml", session, parameters);
+		
+		Stage stage = new Stage(); 
+		stage.setScene(new Scene(root));
+		stage.setTitle("Новая доверенность");
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
+		stage.showAndWait();
+		
+		loadVicariousPower(organization);
+	}
+	
+	@FXML
+	public void editVicariousPower(ActionEvent actionEvent) {
+		VicariousPowerFX vicariousPowerFX = vicariousPowerTableView.getSelectionModel().getSelectedItem();
+		
+		if(vicariousPowerFX != null) {
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put(ParameterKeys.ORGANIZATION_FORM, this);
+			parameters.put(ParameterKeys.CONTRACT, vicariousPowerFX);
+			
+			Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
+					packageInfo.class, "vicarious_power_form.fxml", session, parameters);
+			
+			Stage stage = new Stage(); 
+			stage.setScene(new Scene(root));
+			stage.setTitle("Новый договор");
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
+			stage.showAndWait();
+			
+			loadVicariousPower(vicariousPowerFX.getEntity().getOrganization());									
+		}
+	}
+	
+	@FXML
+	public void deleteVicariousPower(ActionEvent actionEvent) {
+		
 	}
 	
 	@FXML
@@ -169,7 +248,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	public void fillForm(Long id) {
 		Organization organization = organizationService.find(id);
 		if(organization != null) {
-			organizationId = organization.getId();
+			organizationId = id;
 			directorNameField.setText(organization.getDirectorName());
 			idLabel.setText(organization.getId().toString());
 			innField.setText(organization.getInn());
@@ -181,10 +260,22 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			phoneField.setText(organization.getPhone());
 			newOrderButton.setVisible(true);
 			
-			List<Contract> contracts = contractService.findByParty2(organization);
-			List<ContractFX> contractsFX = EntityFX.convertListEntityToFX(contracts, ContractFX.class);
-			contractsTableView.getItems().addAll(contractsFX);
+			loadContracts(organization);
 		}
+	}
+	
+	public void loadContracts(Organization organization) {
+		List<Contract> contracts = contractService.findByParty2(organization);
+		List<ContractFX> contractsFX = EntityFX.convertListEntityToFX(contracts, ContractFX.class);
+		contractsTableView.getItems().clear();
+		contractsTableView.getItems().addAll(contractsFX);
+	}
+	
+	public void loadVicariousPower(Organization organization) {
+		List<VicariousPower> vicariousPowers = vicariousPowerService.findByOrganization(organization);
+		List<VicariousPowerFX> vicariousPowersFX = EntityFX.convertListEntityToFX(vicariousPowers, VicariousPowerFX.class);
+		vicariousPowerTableView.getItems().clear();
+		vicariousPowerTableView.getItems().addAll(vicariousPowersFX);
 	}
 
 	@Override

@@ -25,7 +25,7 @@
 				<AnchorPane>
 					<children>
 						<GridPane fx:id="orderContainer" hgap="10.0" vgap="10.0" 
-							alignment="CENTER_LEFT" 
+							alignment="TOP_CENTER" 
 							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
 							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 					
@@ -52,7 +52,7 @@
 				 </AnchorPane>
 			 </VBox>
 		  
-			  <VBox VBox.vgrow="SOMETIMES" alignment="BASELINE_CENTER">
+			  <VBox VBox.vgrow="SOMETIMES" alignment="TOP_CENTER">
 			  <children>
 			      <TableView fx:id="producedWorksTableView" 
 			      	maxWidth="1080.0" prefWidth="750.0" minHeight="240.0" prefHeight="240" maxHeight="240.0" VBox.vgrow="ALWAYS" HBox.hgrow="SOMETIMES">
@@ -75,8 +75,14 @@
 			      	</columns>
 			      </TableView>
 		     
+		     	  <HBox alignment="TOP_RIGHT">
+			      	<children>
+			      	<Label text="Итого"/>
+			      	<Label fx:id="totalCostLabel" prefWidth="100.0"/>
+			      	</children>
+			      </HBox>
 		      
-			      <HBox alignment="BASELINE_CENTER">
+			      <HBox alignment="TOP_CENTER">
 			      	<children>
 				      	<Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" 
 				      		text="Добавить"  />
@@ -88,18 +94,11 @@
 				      		text="Удалить" />
 				     </children>
 			      </HBox>
-			      
-			      <HBox>
-			      	<children>
-			      	<Label text="Итого"/>
-			      	<Label fx:id="totalCostLabel"/>
-			      	</children>
-			      </HBox>
 			     
 			     <AnchorPane fx:id="materialConsumptionPane">
 			     </AnchorPane>
 			     
-			     <HBox>
+			     <HBox alignment="TOP_CENTER">
 			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
 			      		text="Сохранить" />
 			      	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" 

@@ -11,9 +11,9 @@
 <?import javafx.scene.control.Button?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" 
-	fx:controller="kz.aksay.polygraph.desktop.MaterialConsumptionTableViewController" maxHeight="200.0">
+	fx:controller="kz.aksay.polygraph.desktop.MaterialConsumptionTableViewController" maxHeight="320.0" alignment="TOP_CENTER">
 		<Label  text="Расход материалов" />
-		<TableView  fx:id="materialConsumptionsTableView">
+		<TableView  fx:id="materialConsumptionsTableView" maxHeight="200.0">
 			<columns>
 				<TableColumn text="Материал" prefWidth="250.0">
 					<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
@@ -24,7 +24,7 @@
 			</columns>
 		</TableView>
 		
-		<HBox  spacing="10.0">
+		<HBox  spacing="10.0" prefHeight="120.0" alignment="TOP_CENTER">
 			<Label text="Материал"/>
 			<ComboBox fx:id="materialCombo"/>
 			<Label text="Количество"/>

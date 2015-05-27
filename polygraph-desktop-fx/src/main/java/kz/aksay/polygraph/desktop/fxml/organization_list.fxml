@@ -48,6 +48,7 @@
 	<AnchorPane>
 		<HBox>
 			<Button onAction="#openOrganizationForm">Изменить</Button>
+			<Button onAction="#newOrganizationForm">Новая организация</Button>
 			<Button onAction="#openNewOrder">Новый заказ</Button>
 		</HBox>
 	</AnchorPane>

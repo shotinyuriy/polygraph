@@ -6,14 +6,13 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import kz.aksay.polygraph.api.IEquipmentService;
-import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.api.IPaperService;
 import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Equipment;
-import kz.aksay.polygraph.entity.Material;
+import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.PaperType;
@@ -78,11 +77,11 @@ public class DefaultDataCreationService {
 						 }
 					 }
 					 
-					 for(PaperType materialType : paperTypeService.findAll()) {
+					 for(PaperType paperType : paperTypeService.findAll()) {
 						 Paper example = new Paper();
-						 example.setType(materialType);
-						 if(paperService.findByExample(example).size() == 0) {
-							 paperService.save(createMaterial(materialType));
+						 example.setType(paperType);
+						 if(paperService.findByExampleAndPaperType(example, paperType).size() == 0) {
+							 paperService.save(createPaper(paperType));
 						 }
 					 }
 					 
@@ -112,10 +111,12 @@ public class DefaultDataCreationService {
 		return workType;
 	}
 	
-	private Paper createMaterial(PaperType paperType) {
+	private Paper createPaper(PaperType paperType) {
 		Paper material = new Paper();
 		material.setCreatedAt(new Date());
 		material.setCreatedBy(User.TECH_USER);
+		material.setFormat(Format.A4);
+		material.setDensity(250);
 		material.setType(paperType);
 		return material;
 	}

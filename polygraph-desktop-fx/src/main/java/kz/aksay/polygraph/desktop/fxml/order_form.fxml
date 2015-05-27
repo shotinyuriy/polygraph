@@ -21,7 +21,7 @@
 		<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
 			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 		<VBox maxWidth="800">
-			<VBox VBox.vgrow="SOMETIMES" alignment="TOP_LEFT">
+			<VBox VBox.vgrow="SOMETIMES" alignment="TOP_CENTER">
 				<AnchorPane>
 					<children>
 						<GridPane fx:id="orderContainer" hgap="10.0" vgap="10.0" 
@@ -52,7 +52,7 @@
 				 </AnchorPane>
 			 </VBox>
 		  
-			  <VBox VBox.vgrow="SOMETIMES" alignment="TOP_LEFT">
+			  <VBox VBox.vgrow="SOMETIMES" alignment="BASELINE_CENTER">
 			  <children>
 			      <TableView fx:id="producedWorksTableView" 
 			      	maxWidth="1080.0" prefWidth="750.0" minHeight="240.0" prefHeight="240" maxHeight="240.0" VBox.vgrow="ALWAYS" HBox.hgrow="SOMETIMES">
@@ -76,7 +76,7 @@
 			      </TableView>
 		     
 		      
-			      <HBox>
+			      <HBox alignment="BASELINE_CENTER">
 			      	<children>
 				      	<Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" 
 				      		text="Добавить"  />

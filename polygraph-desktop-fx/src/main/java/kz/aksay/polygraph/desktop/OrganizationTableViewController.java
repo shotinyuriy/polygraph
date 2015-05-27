@@ -80,6 +80,14 @@ public class OrganizationTableViewController implements Initializable,
 	}
 	
 	@FXML
+	public void newOrganizationForm(ActionEvent actionEvent) {
+		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+		if(mainMenu != null) {
+			mainMenu.loadFxmlAndOpenInTab("organization_form.fxml", "Новый клиент юр.лицо");
+		}
+	}
+	
+	@FXML
 	public void openNewOrder(ActionEvent actionEvent) {
 		Organization organization = organizationTable.getSelectionModel().getSelectedItem();
 		Map<String, Object> parameters = new HashMap<>();

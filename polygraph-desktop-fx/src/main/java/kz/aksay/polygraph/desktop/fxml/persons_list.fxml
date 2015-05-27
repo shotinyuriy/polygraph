@@ -45,6 +45,7 @@
 	<AnchorPane>
 		<HBox>
 		<Button onAction="#openPersonForm">Изменить</Button>
+		<Button onAction="#newPersonForm">Новое физ. лицо</Button>
 		<Button onAction="#openNewOrderForm">Новый заказ</Button>
 		</HBox>
 	</AnchorPane>

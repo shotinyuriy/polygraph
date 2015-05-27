@@ -20,17 +20,18 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.User;
-import kz.aksay.polygraph.entityfx.MaterialTypeFX;
+import kz.aksay.polygraph.entityfx.EntityFX;
+import kz.aksay.polygraph.entityfx.PaperTypeFX;
 import kz.aksay.polygraph.service.PaperTypeService;
 import kz.aksay.polygraph.util.ContextUtils;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
 public class MaterialTypeTableViewController implements Initializable, SessionAware {
-	@FXML	private TableView<MaterialTypeFX> tableView;
+	@FXML	private TableView<PaperTypeFX> tableView;
 	@FXML	private TextField nameField;
 	@FXML	private Label validationLabel;
-	@FXML	private TableColumn<MaterialTypeFX, String> nameColumn;
+	@FXML	private TableColumn<PaperTypeFX, String> nameColumn;
 	
 	private Map<String, Object> session;
 	
@@ -39,19 +40,19 @@ public class MaterialTypeTableViewController implements Initializable, SessionAw
 	
 	@FXML
 	protected void add(ActionEvent event) {
-		ObservableList<MaterialTypeFX> data = tableView.getItems();
+		ObservableList<PaperTypeFX> data = tableView.getItems();
 		PaperType newMaterialType = createMaterialType(nameField.getText());
-		MaterialTypeFX materialTypeFX = new MaterialTypeFX(newMaterialType);
-		data.add(materialTypeFX);
+		PaperTypeFX paperTypeFX = new PaperTypeFX(newMaterialType);
+		data.add(paperTypeFX);
 		save(newMaterialType);
 		nameField.setText("");
 	}
 	
 	@FXML
 	protected void update(
-			TableColumn.CellEditEvent<MaterialTypeFX, String> cellEditEvent) {
-		MaterialTypeFX materialTypeFX = cellEditEvent.getRowValue();
-		PaperType paperType = materialTypeFX.getMaterialType();
+			TableColumn.CellEditEvent<PaperTypeFX, String> cellEditEvent) {
+		PaperTypeFX paperTypeFX = cellEditEvent.getRowValue();
+		PaperType paperType = paperTypeFX.getPaperType();
 		paperType.setName(cellEditEvent.getNewValue());
 		paperType.setUpdatedAt(new Date());
 		paperType.setUpdatedBy(SessionUtil.retrieveUser(session));
@@ -79,21 +80,21 @@ public class MaterialTypeTableViewController implements Initializable, SessionAw
 		return mt;
 	}
 
-	public TableView<MaterialTypeFX> getTableView() {
+	public TableView<PaperTypeFX> getTableView() {
 		return tableView;
 	}
 
-	public void setTableView(TableView<MaterialTypeFX> tableView) {
+	public void setTableView(TableView<PaperTypeFX> tableView) {
 		this.tableView = tableView;
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
-		List<MaterialTypeFX> materialTypesFX 
-			= MaterialTypeFX.convertListEntityToFX(paperTypeService.findAll());
+		List<PaperTypeFX> materialTypesFX 
+			= EntityFX.convertListEntityToFX(paperTypeService.findAll(), PaperTypeFX.class);
 		tableView.getItems().setAll(materialTypesFX);
 		nameColumn.setCellFactory(
-				TextFieldTableCell.<MaterialTypeFX>forTableColumn());
+				TextFieldTableCell.<PaperTypeFX>forTableColumn());
 	}
 
 	@Override

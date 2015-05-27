@@ -284,6 +284,7 @@ public class TestDataCreator {
 		paperA4.setCreatedBy(creator);
 		paperA4.setFormat(format);
 		paperA4.setType(paperType);
+		paperA4.setDensity(250);
 		paperA4 = paperService.save(paperA4);
 		return paperA4;
 	}

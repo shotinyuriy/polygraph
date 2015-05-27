@@ -79,6 +79,14 @@ public class PersonTableViewController implements Initializable, SessionAware {
 	}
 	
 	@FXML
+	public void newPersonForm(ActionEvent actionEvent) {
+		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+		if(mainMenu != null) {
+			mainMenu.loadFxmlAndOpenInTab("person_form.fxml", "Новый клиент физ.лицо");
+		}
+	}
+	
+	@FXML
 	public void openNewOrderForm(ActionEvent actionEvent) {
 		PersonFX personFX = personTable.getSelectionModel().getSelectedItem();
 		if(personFX != null) {

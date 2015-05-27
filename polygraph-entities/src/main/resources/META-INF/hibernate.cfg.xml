@@ -19,7 +19,7 @@
 		
 		<mapping package="kz.aksay.polygraph.entity"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.BindingSpring"></mapping>
-		<mapping class="kz.aksay.polygraph.entity.Subject"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Contract"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Equipment"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.FullTextIndex"></mapping>
@@ -34,7 +34,9 @@
 		<mapping class="kz.aksay.polygraph.entity.Person"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.ProducedWork"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Sticker"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Subject"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.User"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.VicariousPower"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.WorkType"></mapping>
 		
 	</session-factory>

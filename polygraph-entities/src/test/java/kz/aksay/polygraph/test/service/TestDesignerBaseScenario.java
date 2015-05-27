@@ -1,8 +1,11 @@
 package kz.aksay.polygraph.test.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
@@ -14,7 +17,9 @@ import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
+import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.api.IWorkTypeService;
+import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.MaterialConsumption;
@@ -26,6 +31,7 @@ import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
+import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.test.ContextUtils;
 
@@ -50,6 +56,8 @@ public class TestDesignerBaseScenario extends Assert {
 	private IMaterialConsumptionService materialConsumptionService;
 	private IOrderFullTextIndexService orderFullTextIndexService; 
 	private IFullTextIndexService fullTextIndexService;
+	private IContractService contractService;
+	private IVicariousPowerService vicariousPowerService;
 	
 	private final String executorLogin = "executorLogin";
 	private final String executorPassword = "exectorPassword";
@@ -66,7 +74,8 @@ public class TestDesignerBaseScenario extends Assert {
 	private MaterialConsumption copyMaterialConsumption;
 	private Person customerPerson;
 	private Order secondOrder; 
-	
+	private Contract contract;
+	private VicariousPower vicariousPower;
 	private TestOrderService testOrderService;
 	private TestMaterialConsumptionService testMaterialConsumptionService;
 	private TestDataCreator testDataCreator; 
@@ -89,6 +98,8 @@ public class TestDesignerBaseScenario extends Assert {
 		testOrderService = new TestOrderService();
 		testMaterialConsumptionService = new TestMaterialConsumptionService();
 		testMaterialConsumptionService.setUp();
+		contractService = context.getBean(IContractService.class);
+		vicariousPowerService = context.getBean(IVicariousPowerService.class);
 		testDataCreator = new TestDataCreator(this.context);
 	}
 	
@@ -102,6 +113,8 @@ public class TestDesignerBaseScenario extends Assert {
 			createEmployee();
 			createUser();
 			createOrganizationCustomer();
+			createContract();
+			createVicariousPower();
 			createOrder();
 			createOrderForPerson();
 			testRecreateOrderFullTextIndexes();
@@ -127,6 +140,34 @@ public class TestDesignerBaseScenario extends Assert {
 
 	
 	
+	private void createVicariousPower() throws Exception {
+		vicariousPower = new VicariousPower();
+		Calendar calendar = Calendar.getInstance();
+		vicariousPower.setCreatedAt(calendar.getTime());
+		vicariousPower.setCreatedBy(User.TECH_USER);
+		calendar.add(Calendar.MONTH, 1);
+		vicariousPower.setEndDate(calendar.getTime());
+		vicariousPower.setNumber("123456789");
+		vicariousPower.setOrganization(organizationCustomer);
+		vicariousPower.setPerson(customerPerson);
+		vicariousPowerService.save(vicariousPower);
+	}
+
+	private void createContract() throws Exception {
+		contract = new Contract();
+		Calendar calendar = Calendar.getInstance();
+		contract.setCreatedAt(calendar.getTime());
+		contract.setCreatedBy(User.TECH_USER);
+		calendar.add(Calendar.MONTH, -1);
+		contract.setBeginDate(calendar.getTime());
+		calendar.add(Calendar.MONTH, 2);
+		contract.setEndDate(calendar.getTime());
+		contract.setParty1(Organization.FIRMA_SERVER_PLUS);
+		contract.setParty2(organizationCustomer);
+		contract.setNumber("123456789");
+		contractService.save(contract);
+	}
+
 	private void createMaterialConsumption() throws Exception {
 		copyMaterialConsumption = testDataCreator.createMaterialConsumption(paperA4, firstOrder);
 	}
@@ -285,6 +326,8 @@ public class TestDesignerBaseScenario extends Assert {
 			producedWorkService.deleteAllByOrder(firstOrder);
 			orderService.delete(firstOrder);
 		}
+		if(contract != null && contract.getId() != null) contractService.delete(contract);
+		if(vicariousPower != null && vicariousPower.getId() != null) vicariousPowerService.delete(vicariousPower);
 		if(organizationCustomer != null && organizationCustomer.getId() != null) organizationService.delete(organizationCustomer);
 		if(executorUser != null && executorUser.getId() != null) userService.delete(executorUser);
 		if(executorEmployee != null && executorEmployee.getId() != null) employeeService.delete(executorEmployee);

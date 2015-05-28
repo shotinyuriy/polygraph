@@ -196,7 +196,7 @@ public class TestDesignerBaseScenario extends Assert {
 
 	private void createOrder() throws Exception {
 		firstOrder = testDataCreator.createOrder(
-				User.TECH_USER, customerPerson, executorEmployee);
+				User.TECH_USER, organizationCustomer, executorEmployee, vicariousPower);
 	}
 
 	private void createOrganizationCustomer() throws Exception {

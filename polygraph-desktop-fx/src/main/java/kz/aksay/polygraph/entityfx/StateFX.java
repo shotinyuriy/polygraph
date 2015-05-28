@@ -7,14 +7,18 @@ public class StateFX {
 	private Order.State state;
 	private String name;
 	
+	public final static StateFX[] VALUES_PLUS_ALL;
 	public final static StateFX[] VALUES;
 	
 	static {
 		Order.State[] orderStates = Order.State.values();
-		VALUES = new StateFX[orderStates.length+1];
-		VALUES[0] = new StateFX(null, "Все");
+		VALUES = new StateFX[orderStates.length];
+		VALUES_PLUS_ALL = new StateFX[orderStates.length+1];
+		
+		VALUES_PLUS_ALL[0] = new StateFX(null, "Все");
 		for(int i = 0; i < orderStates.length; i++) {
-			VALUES[i+1] = new StateFX(orderStates[i], orderStates[i].getName());
+			VALUES[i] = new StateFX(orderStates[i], orderStates[i].getName());
+			VALUES_PLUS_ALL[i+1] = new StateFX(orderStates[i], orderStates[i].getName());
 		}
 	}
 	

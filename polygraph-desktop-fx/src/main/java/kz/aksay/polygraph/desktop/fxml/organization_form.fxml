@@ -78,6 +78,9 @@
 		 		<TableColumn text="ФИО доверенного" prefWidth="150.0">
 		 			<cellValueFactory><PropertyValueFactory property="personName"/></cellValueFactory>
 		 		</TableColumn>
+		 		<TableColumn text="Дата выдачи"  prefWidth="150.0">
+		 			<cellValueFactory><PropertyValueFactory property="beginDateString"/></cellValueFactory>
+		 		</TableColumn>
 		 		<TableColumn text="Дата завершения"  prefWidth="150.0">
 		 			<cellValueFactory><PropertyValueFactory property="endDateString"/></cellValueFactory>
 		 		</TableColumn>

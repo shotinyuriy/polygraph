@@ -85,7 +85,7 @@ public class OrderTableViewController implements Initializable,
 		
 		ordersTableView.getItems().addAll(ordersFX);
 		
-		stateCombo.getItems().addAll(StateFX.VALUES);
+		stateCombo.getItems().addAll(StateFX.VALUES_PLUS_ALL);
 		stateCombo.getSelectionModel().select(0);
 		
 		executorCombo.getItems().add(EmployeeFX.ALL_EMPLOYEES);

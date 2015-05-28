@@ -211,7 +211,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		if(vicariousPowerFX != null) {
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put(ParameterKeys.ORGANIZATION_FORM, this);
-			parameters.put(ParameterKeys.CONTRACT, vicariousPowerFX);
+			parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
 			
 			Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
 					packageInfo.class, "vicarious_power_form.fxml", session, parameters);
@@ -234,13 +234,30 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	
 	@FXML
 	public void openNewOrder(ActionEvent actionEvent) {
+		validationLabel.setText(null);
 		if(organizationId != null) {
-			Map<String, Object> parameters = new HashMap<>();
-			parameters.put(ParameterKeys.CUSTOMER_ID, organizationId);
-			MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
-			if(mainMenu != null) {
-				mainMenu.loadFxmlAndOpenInTab("order_form.fxml", 
-						"Новый заказ", parameters);
+			if(vicariousPowerTableView.getItems().size() == 0) {
+				validationLabel.setText("Необходимо добавить хотя бы одну доверенность!");
+			} else {
+				
+				VicariousPowerFX vicariousPowerFX;
+				if (vicariousPowerTableView.getItems().size() == 1) {
+					vicariousPowerFX = vicariousPowerTableView.getItems().get(0);
+				} else {
+					vicariousPowerFX = vicariousPowerTableView.getSelectionModel().getSelectedItem();
+				}
+				if(vicariousPowerFX == null) {
+					validationLabel.setText("Необходимо выбрать доверенность!");
+				} else {
+					Map<String, Object> parameters = new HashMap<>();
+					parameters.put(ParameterKeys.CUSTOMER_ID, organizationId);
+					parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
+					MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+					if(mainMenu != null) {
+						mainMenu.loadFxmlAndOpenInTab("order_form.fxml", 
+								"Новый заказ", parameters);
+					}
+				}
 			}
 		}
 	}
@@ -261,6 +278,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			newOrderButton.setVisible(true);
 			
 			loadContracts(organization);
+			loadVicariousPower(organization);
 		}
 	}
 	

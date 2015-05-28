@@ -16,7 +16,7 @@
 <?import javafx.scene.control.DatePicker?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
+	fx:controller="kz.aksay.polygraph.desktop.OrderFormController" prefWidth="640.0" prefHeight="480.0">
 	<children>
 		<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
 			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -33,20 +33,19 @@
 					      <Label fx:id="customerIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 					      
 					      <Label alignment="CENTER_RIGHT" text="Заказчик" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-					      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+					      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 					      
-					      <Label text="Плановая дата оконания:" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+					      <Label text="Плановая дата оконания:" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 					      
 					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+					      <Label fx:id="vicariousPowerNumberField" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
 					      
-	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
-					      
-					      <Label fx:id="validationLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
 						 </GridPane>
 					 </children>
 				 </AnchorPane>
@@ -97,6 +96,8 @@
 			     
 			     <AnchorPane fx:id="materialConsumptionPane">
 			     </AnchorPane>
+			     
+			     <Label fx:id="validationLabel"/>
 			     
 			     <HBox alignment="TOP_CENTER">
 			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 

@@ -9,6 +9,7 @@ import java.util.Random;
 
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
+import kz.aksay.polygraph.api.IGenericService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.api.IPaperService;
@@ -19,6 +20,7 @@ import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
+import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Format;
@@ -33,6 +35,7 @@ import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
+import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.util.GeneratorUtils;
 import kz.aksay.polygraph.util.OrgNameGenerator.OrgName;
@@ -58,6 +61,7 @@ public class TestDataCreator {
 	private IMaterialConsumptionService materialConsumptionService;
 	private IOrderFullTextIndexService orderFullTextIndexService;
 	private IFullTextIndexService fullTextIndexService;
+	private IVicariousPowerService vicariousPowerService;
 
 	public TestDataCreator(ApplicationContext context) {
 		this.context = context;
@@ -77,6 +81,7 @@ public class TestDataCreator {
 		materialConsumptionService = context.getBean(IMaterialConsumptionService.class);
 		orderFullTextIndexService = context.getBean(IOrderFullTextIndexService.class);
 		fullTextIndexService = context.getBean(IFullTextIndexService.class);
+		vicariousPowerService = context.getBean(IVicariousPowerService.class);
 	}
 	
 	public void createAllEntities() {
@@ -179,7 +184,11 @@ public class TestDataCreator {
 				int employeeIndex = r.nextInt(creators.size());
 				Employee employee = creators.get(employeeIndex).getEmployee();
 				try {
-					Order order = createOrder(creator, customer, employee);
+					VicariousPower vicariousPower = null;
+					if(customer instanceof Organization) {
+						vicariousPower = createVicariousPower((Organization)customer);
+					}
+					Order order = createOrder(creator, customer, employee, vicariousPower);
 					for(WorkType workType : workTypes) {
 						createProducedWork(order, workType, employee);
 					}
@@ -190,6 +199,22 @@ public class TestDataCreator {
 			}
 		}
 		return orders;
+	}
+
+	private VicariousPower createVicariousPower(Organization customer) throws Exception {
+		VicariousPower vicariousPower = new VicariousPower();
+		vicariousPower.setCreatedAt(new Date());
+		vicariousPower.setCreatedBy(User.TECH_USER);
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -1);
+		vicariousPower.setBeginDate(calendar.getTime());
+		calendar.add(Calendar.MONTH, 2);
+		vicariousPower.setEndDate(calendar.getTime());
+		vicariousPower.setNumber("345345345");
+		vicariousPower.setPersonName("Микишева В.А.");
+		vicariousPower.setOrganization(customer);
+		vicariousPowerService.save(vicariousPower);
+		return vicariousPower;
 	}
 
 	public Person createPerson(User creator) throws Exception {
@@ -289,7 +314,7 @@ public class TestDataCreator {
 		return paperA4;
 	}
 	
-	public Order createOrder(User creator, Subject customer, Employee executorEmployee) throws Exception {
+	public Order createOrder(User creator, Subject customer, Employee executorEmployee, VicariousPower vicariousPower) throws Exception {
 		Order firstOrder = new Order();
 		firstOrder.setCreatedAt(new Date());
 		firstOrder.setCreatedBy(creator);
@@ -297,6 +322,7 @@ public class TestDataCreator {
 		firstOrder.setCurrentExecutor(executorEmployee);
 		firstOrder.setDescription("Описание заказа на ксерокопию");
 		firstOrder.setState(Order.State.PROCESSED);
+		firstOrder.setVicariousPower(vicariousPower);
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, 3);
 		firstOrder.setDateEndPlan(calendar.getTime());

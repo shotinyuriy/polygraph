@@ -14,11 +14,14 @@ import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.entity.Subject;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.metamodel.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -65,6 +68,21 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			 Order oldOrder = find(order.getId());
 			 oldState = oldOrder.getState();
 			 getDao().getSession().clear();
+		}
+		
+		if(order.getCustomer() != null) {
+			Subject customer = order.getCustomer();
+			if(customer instanceof Organization) {
+				Long organizationId = ((Organization) customer).getId();
+				if(order.getVicariousPower() == null) {
+					throw new Exception("Укажите доверенность!");
+				}
+				System.out.println(" order.getVicariousPower() "+order.getVicariousPower());
+				System.out.println(" order.getVicariousPower().getOrganization() "+order.getVicariousPower().getOrganization());
+				if( !organizationId.equals( order.getVicariousPower().getOrganization().getId()) ) {
+					throw new Exception("Организация в доверенности и в заказе не совпадают!");
+				}
+			}
 		}
 		
 		order = super.save(order);

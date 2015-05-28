@@ -32,6 +32,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	
 	private Order order;
 	private EmployeeFX currentExecutorFX;
+	private VicariousPowerFX vicariousPowerFX;
 	
 	private LongProperty idProperty;
 	private ObjectProperty<Date> createdAtProperty;
@@ -42,6 +43,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	private ObjectProperty<User> updatedByProperty;
 	private ObjectProperty<Date> dateEndPlanProperty;
 	private ObjectProperty<Order.State> stateProperty;
+	private ObjectProperty<VicariousPowerFX> vicariousPowerProperty;
 	private StringProperty descriptionProperty;
 	private ObservableList<ProducedWorkFX> producedWorkProperty;
 	private ObservableList<MaterialConsumptionFX> materialConsumptionProperty;
@@ -53,6 +55,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 		this.order = order;
 		if(order != null) {
 			currentExecutorFX = new EmployeeFX(order.getCurrentExecutor());
+			vicariousPowerFX = new VicariousPowerFX(order.getVicariousPower());
 			createdAtProperty = new SimpleObjectProperty<Date>(order.getCreatedAt());
 			createdByProperty = new SimpleObjectProperty<User>(order.getCreatedBy());
 			currentExecutorProperty = new SimpleObjectProperty<EmployeeFX>(currentExecutorFX);
@@ -62,6 +65,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 			setDateEndPlanProperty(new SimpleObjectProperty<Date>(order.getDateEndPlan()));
 			stateProperty = new SimpleObjectProperty<Order.State>(order.getState());
 			descriptionProperty = new SimpleStringProperty(order.getDescription());
+			vicariousPowerProperty = new SimpleObjectProperty<VicariousPowerFX>(vicariousPowerFX);
 			
 			Collection<ProducedWorkFX> producedWorksFX = ProducedWorkFX.
 					convertListEntityToFX(order.getProducedWorks());
@@ -192,6 +196,8 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 		}
 		
 		order.setState(stateProperty.get());
+		
+		order.setVicariousPower(vicariousPowerProperty.get().getEntity());
 	}
 
 	
@@ -298,5 +304,14 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 
 	public void setDateEndPlanProperty(ObjectProperty<Date> dateEndPlanProperty) {
 		this.dateEndPlanProperty = dateEndPlanProperty;
+	}
+
+	public ObjectProperty<VicariousPowerFX> getVicariousPowerProperty() {
+		return vicariousPowerProperty;
+	}
+
+	public void setVicariousPowerProperty(
+			ObjectProperty<VicariousPowerFX> vicariousPowerProperty) {
+		this.vicariousPowerProperty = vicariousPowerProperty;
 	}
 }

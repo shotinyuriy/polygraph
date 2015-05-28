@@ -44,10 +44,12 @@ import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
+import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
+import kz.aksay.polygraph.entityfx.VicariousPowerFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.InitializingBean;
@@ -81,6 +83,7 @@ public class OrderFormController implements
 	@FXML private Label totalCostLabel;
 	@FXML private Label errorLabel;
 	
+	@FXML private Label vicariousPowerNumberField;
 	@FXML private Label customerField;
 	@FXML private ComboBox<EmployeeFX> currentExecutorCombo;
 	@FXML private TextArea descriptionField;
@@ -217,12 +220,14 @@ public class OrderFormController implements
 		if(parameters != null) {
 			Long orderId = ParametersUtil.extractParameter(
 					parameters, ParameterKeys.ORDER_ID, Long.class);
+			VicariousPowerFX vicariousPowerFX = ParametersUtil.extractParameter(
+					parameters, ParameterKeys.VICARIOUS_POWER, VicariousPowerFX.class);
+			
 			if(orderId != null) {
 				isNewOrder = false;
 				Order order = orderService.find(orderId);
 				orderFX = new OrderFX(order);
-				//orderIdLabel.setText(orderId+"");
-				//customerIdLabel.setText(orderFX.getCustomerId()+"");
+				
 				customerField.setText(orderFX.getCustomerFullName());
 				descriptionField.textProperty().bindBidirectional(orderFX.getDescriptionProperty());
 				dateEndPlan.valueProperty().set(
@@ -235,7 +240,11 @@ public class OrderFormController implements
 					currentStatusCombo.getSelectionModel().select(new StateFX(orderFX.getStateProperty().get(), orderFX.getStateProperty().get().getName()));
 				}
 				
-				
+				VicariousPower vicariousPower = order.getVicariousPower();
+				if(vicariousPower != null) {
+					vicariousPowerNumberField.setText(vicariousPower.getNumber());
+					order.setVicariousPower(vicariousPower);
+				}
 				
 				producedWorksTableView.getItems().addAll(orderFX.getProducedWorkProperty());
 				orderFX.setProducedWorkProperty(producedWorksTableView.getItems());
@@ -252,6 +261,12 @@ public class OrderFormController implements
 					customerIdLabel.setText(customer.getId()+"");
 					customerField.setText(customer.getFullName());
 				}
+				if(vicariousPowerFX != null) {
+					vicariousPowerNumberField.setText(vicariousPowerFX.getDescription());
+					orderFX.getVicariousPowerProperty().set(vicariousPowerFX);
+				}
+				
+				currentStatusCombo.getSelectionModel().select(new StateFX(Order.State.NEW, Order.State.NEW.getName()));
 			}
 			
 			currentStatusCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StateFX>() {

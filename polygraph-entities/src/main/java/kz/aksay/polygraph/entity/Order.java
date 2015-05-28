@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="\"order\"")
@@ -50,9 +51,14 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	@Transient
 	private Set<MaterialConsumption> materialConsumption;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="customer_id", nullable=false)
 	private Subject customer;
+	
+	@ManyToOne
+	@JoinColumn(name="vicarious_power_id")
+	private VicariousPower vicariousPower;
 	
 	@ManyToOne
 	@JoinColumn(name="current_executor_id")
@@ -147,5 +153,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	public void setDateEndPlan(Date dateEndPlan) {
 		this.dateEndPlan = dateEndPlan;
+	}
+
+	public VicariousPower getVicariousPower() {
+		return vicariousPower;
+	}
+
+	public void setVicariousPower(VicariousPower vicariousPower) {
+		this.vicariousPower = vicariousPower;
 	}
 }

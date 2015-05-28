@@ -20,7 +20,7 @@ public class AnchorButton extends AnchorPane {
 	
 	public AnchorButton() {
 		super();
-		FXMLLoader loader = new FXMLLoader(packageInfo.class.getResource("AnchorButton.fxml"));
+		FXMLLoader loader = new FXMLLoader(packageInfo.class.getResource("/custom/AnchorButton.fxml"));
 		loader.setRoot(this);
 		loader.setController(this);
 		

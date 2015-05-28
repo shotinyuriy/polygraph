@@ -6,8 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.desktop.controls.AnchorButton;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
@@ -34,16 +36,35 @@ public class StartingPane extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		applicationContext = ContextUtils.getApplicationContext();
-		
-		StartingPane.primaryStage = primaryStage;
-		primaryStage.setTitle("Управление задачами");
-		Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
-				"fxml_login.fxml"));
-		Scene myScene = new Scene(pane);
-		
-		primaryStage.setScene(myScene);
-		primaryStage.show();
+		try {
+			applicationContext = ContextUtils.getApplicationContext();
+			
+			StartingPane.primaryStage = primaryStage;
+			primaryStage.setTitle("Управление задачами");
+			Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
+					"/fxml_login.fxml"));
+			Scene myScene = new Scene(pane);
+			
+			primaryStage.setScene(myScene);
+			primaryStage.show();
+		} catch (Exception e) {
+			Pane pane = new Pane();
+			VBox vbox = new VBox();
+			Label label = new Label();
+			
+			vbox.getChildren().add(label);
+			
+			pane.getChildren().add(vbox);
+			label.setText(e.getMessage());
+			for(StackTraceElement ste : e.getStackTrace()) {
+				Label stackTrace = new Label();
+				stackTrace.setText(ste.toString());
+				vbox.getChildren().add(stackTrace);
+			}
+			Scene myScene = new Scene(pane);
+			primaryStage.setScene(myScene);
+			primaryStage.show();
+		}
 	}
 	
 	public static void main(String[] args) {		

@@ -167,7 +167,7 @@ public class OrderFormController implements
 		parameters.put(ParameterKeys.ORDER_FORM, this);
 		
 		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-				packageInfo.class, "produced_work_form.fxml", session, parameters);
+				packageInfo.class, "/produced_work_form.fxml", session, parameters);
 		
 		Stage stage = new Stage(); 
 		stage.setScene(new Scene(root));
@@ -187,7 +187,7 @@ public class OrderFormController implements
 		parameters.put(ParameterKeys.PRODUCED_WORK, producedWorkFX);
 		
 		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-				packageInfo.class, "produced_work_form.fxml", session, parameters);
+				packageInfo.class, "/produced_work_form.fxml", session, parameters);
 		
 		Stage stage = new Stage(); 
 		stage.setScene(new Scene(root));
@@ -297,7 +297,7 @@ public class OrderFormController implements
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put(ParameterKeys.MATERIAL_CONSUMER, orderFX);
 		Node node = SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
-				"material_consumption_tableview.fxml", session, parameters);
+				"/material_consumption_tableview.fxml", session, parameters);
 		materialConsumptionPane.getChildren().add(node);
 		currentStatusCombo.getItems().clear();
 		currentStatusCombo.getItems().addAll(StateFX.VALUES);

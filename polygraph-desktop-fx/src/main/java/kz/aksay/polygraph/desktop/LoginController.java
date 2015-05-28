@@ -71,7 +71,7 @@ public class LoginController {
 			session.put(SessionUtil.USER_KEY, user);
 			
 			Node node = SessionUtil.loadFxmlNodeWithSession(
-					packageInfo.class, "main_menu.fxml", session, null);
+					packageInfo.class, "/main_menu.fxml", session, null);
 			
 			if(node instanceof Parent) {
 				Scene scene = new Scene((Parent)node);

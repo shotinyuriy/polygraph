@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<VBox fx:id="producedWorkContainer" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+		fx:controller="kz.aksay.polygraph.desktop.ProducedWorkFormController" alignment="CENTER" spacing="10.0">
+	
+	<AnchorPane>
+		<children>
+			<GridPane prefHeight="300.0"  maxHeight="300.0" vgap="10.0" hgap="10.0">
+			      <Label fx:id="producedWorkIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+			
+			      <Label fx:id="executorLabel" alignment="CENTER_RIGHT" text="Исполнитель" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+			      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+			      <Label fx:id="priceLabel" alignment="CENTER_RIGHT" text="Цена" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+			      <Label fx:id="amountLabel" alignment="CENTER_RIGHT" text="Количество" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+			      <Label fx:id="coloredAmountLabel" alignment="CENTER_RIGHT" text="Количество цветных проходов" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+			      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+			      <Label fx:id="equipmentLabel" alignment="CENTER_RIGHT" text="Машина" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+			      
+			      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+				  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+				  <TextField fx:id="priceField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+				  <TextField fx:id="quantityField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+				  <TextField fx:id="coloredQuantityField" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+				  <Label fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+				  <ComboBox fx:id="equipmentCombo" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
+			</GridPane>
+		</children>
+	</AnchorPane>
+	
+	<Label fx:id="errorLabel" alignment="CENTER_RIGHT" text=""/>
+	
+	<HBox spacing="10.0">
+		<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
+	      	text="ОК" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+		<Button fx:id="saveAndOpenNewButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#saveAndOpenNew" 
+	      	text="OK+1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+		<Button fx:id="finishWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#finishWork" 
+	      	text="Завершить работу"/>
+	</HBox>
+	
+	<Label fx:id="validationLabel"/>
+</VBox>

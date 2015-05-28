@@ -134,7 +134,7 @@ public class OrderConsumptionTableViewController implements Initializable,
 				
 				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 				mainMenu.loadFxmlAndOpenInTab(
-						"order_form.fxml", "Заказ №"+orderId, parameters);
+						"/order_form.fxml", "Заказ №"+orderId, parameters);
 			}
 		}
 	}

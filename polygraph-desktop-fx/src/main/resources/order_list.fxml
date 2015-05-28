@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController">
+	<children>
+	
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   		<top>
+	      <HBox spacing="20.0" alignment="BOTTOM_LEFT">
+	      	<children>
+	         	<TextField fx:id="searchField" prefWidth="300.0"/>
+	            <Label text="Статус:"/>
+	            <ComboBox fx:id="stateCombo"/>
+	            <CheckBox fx:id="onlyMy" text="Я исполнитель" />
+	            <ComboBox fx:id="executorCombo"/>
+	            <Button mnemonicParsing="false" text="Поиск" onAction="#findOrders"/>
+	        </children>
+	      </HBox>
+	    </top>
+   		<center>
+
+	   	  <ScrollPane prefHeight="480" prefWidth="740.0" fitToHeight="true" fitToWidth="true">
+	   	  
+		      <TableView fx:id="ordersTableView" prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER" VBox.vgrow="SOMETIMES">
+		        <columns>
+		          <TableColumn prefWidth="150" text="Номер заказа">
+		          	<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
+		          </TableColumn>
+		          <TableColumn prefWidth="150" text="Подробности">
+		          	<cellValueFactory><PropertyValueFactory property="vicariousPowerDescription"/></cellValueFactory>
+		          </TableColumn>
+		          <TableColumn prefWidth="100.0" text="Дата заказа">
+		          	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
+		          </TableColumn>
+		          <TableColumn prefWidth="100.0" text="Плановая дата окончания">
+		          	<cellValueFactory><PropertyValueFactory property="dateEndPlanString"/></cellValueFactory>
+		          </TableColumn>
+		          <TableColumn prefWidth="200.0" text="Клиент">
+		          	<cellValueFactory><PropertyValueFactory property="customerFullName" /></cellValueFactory>
+		          </TableColumn>
+				  <TableColumn prefWidth="150.0" text="Исполнитель">
+		          	<cellValueFactory><PropertyValueFactory property="currentExecutorDescription" /></cellValueFactory>
+		          </TableColumn>
+		        </columns>
+		      </TableView>
+	      </ScrollPane>
+
+		</center>
+		<bottom>
+				<VBox>
+					<HBox spacing="10.0">
+						<children>
+							<Button onAction="#openOrderForm" alignment="TOP_LEFT">Изменить</Button>
+							<Button onAction="#printOrders" alignment="TOP_LEFT">Печать</Button>
+						</children>
+					</HBox>
+					<Label fx:id="errorLabel" text=""/>
+				</VBox>
+		</bottom>
+	</BorderPane>
+   
+
+	
+	</children>
+</AnchorPane>

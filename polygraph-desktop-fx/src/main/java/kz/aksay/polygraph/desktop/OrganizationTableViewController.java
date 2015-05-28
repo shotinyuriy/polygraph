@@ -74,7 +74,7 @@ public class OrganizationTableViewController implements Initializable,
 		parameters.put(ParameterKeys.ORGANIZATION_ID, organization.getId());
 		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 		if(mainMenu != null) {
-			mainMenu.loadFxmlAndOpenInTab("organization_form.fxml", 
+			mainMenu.loadFxmlAndOpenInTab("/organization_form.fxml", 
 					organization.getShortname(), parameters);
 		}
 	}
@@ -83,7 +83,7 @@ public class OrganizationTableViewController implements Initializable,
 	public void newOrganizationForm(ActionEvent actionEvent) {
 		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 		if(mainMenu != null) {
-			mainMenu.loadFxmlAndOpenInTab("organization_form.fxml", "Новый клиент юр.лицо");
+			mainMenu.loadFxmlAndOpenInTab("/organization_form.fxml", "Новый клиент юр.лицо");
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class OrganizationTableViewController implements Initializable,
 		parameters.put(ParameterKeys.CUSTOMER_ID, organization.getId());
 		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 		if(mainMenu != null) {
-			mainMenu.loadFxmlAndOpenInTab("order_form.fxml", 
+			mainMenu.loadFxmlAndOpenInTab("/order_form.fxml", 
 					"Новый заказ", parameters);
 		}
 	}

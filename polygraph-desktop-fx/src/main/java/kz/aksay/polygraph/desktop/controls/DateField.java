@@ -20,7 +20,7 @@ public class DateField extends AnchorPane {
 	private ObjectProperty<Date> dateProperty;
 	
 	public DateField() {
-		FXMLLoader loader = new FXMLLoader(packageInfo.class.getResource("DateField.fxml"));
+		FXMLLoader loader = new FXMLLoader(packageInfo.class.getResource("/custom/DateField.fxml"));
 		loader.setRoot(this);
 		loader.setController(this);
 		

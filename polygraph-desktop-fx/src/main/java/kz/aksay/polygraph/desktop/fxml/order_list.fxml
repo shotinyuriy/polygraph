@@ -41,6 +41,9 @@
 		          <TableColumn prefWidth="150" text="Номер заказа">
 		          	<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
 		          </TableColumn>
+		          <TableColumn prefWidth="150" text="Подробности">
+		          	<cellValueFactory><PropertyValueFactory property="vicariousPowerDescription"/></cellValueFactory>
+		          </TableColumn>
 		          <TableColumn prefWidth="100.0" text="Дата заказа">
 		          	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
 		          </TableColumn>

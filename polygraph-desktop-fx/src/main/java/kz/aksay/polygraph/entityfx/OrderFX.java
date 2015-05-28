@@ -201,6 +201,13 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	}
 
 	
+	public String getVicariousPowerDescription() {
+		if( getVicariousPowerProperty().get() != null ) {
+			return getVicariousPowerProperty().get().getDescription();
+		}
+		return null;
+	}
+	
 
 	public void setMaterialConsumptionProperty(
 			SimpleListProperty<MaterialConsumptionFX> materialConsumptionProperty) {

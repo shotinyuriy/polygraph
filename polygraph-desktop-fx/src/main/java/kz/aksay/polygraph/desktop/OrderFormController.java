@@ -110,7 +110,7 @@ public class OrderFormController implements
 			
 			if(dateEndPlan.getValue() != null) {
 				orderFX.getOrder().setDateEndPlan(
-						FormatUtil.convertLocalDate(dateEndPlan.getValue())
+						FormatUtil.convertToDate(dateEndPlan.getValue())
 					);
 			} else {
 				orderFX.getOrder().setDateEndPlan(null);
@@ -167,7 +167,7 @@ public class OrderFormController implements
 		parameters.put(ParameterKeys.ORDER_FORM, this);
 		
 		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-				packageInfo.class, "/produced_work_form.fxml", session, parameters);
+				packageInfo.class, StartingPane.FXML_ROOT+"produced_work_form.fxml", session, parameters);
 		
 		Stage stage = new Stage(); 
 		stage.setScene(new Scene(root));
@@ -187,7 +187,7 @@ public class OrderFormController implements
 		parameters.put(ParameterKeys.PRODUCED_WORK, producedWorkFX);
 		
 		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-				packageInfo.class, "/produced_work_form.fxml", session, parameters);
+				packageInfo.class, StartingPane.FXML_ROOT+"produced_work_form.fxml", session, parameters);
 		
 		Stage stage = new Stage(); 
 		stage.setScene(new Scene(root));
@@ -231,7 +231,7 @@ public class OrderFormController implements
 				customerField.setText(orderFX.getCustomerFullName());
 				descriptionField.textProperty().bindBidirectional(orderFX.getDescriptionProperty());
 				dateEndPlan.valueProperty().set(
-						FormatUtil.convertFromLocalDate(orderFX.getDateEndPlanProperty().get()));
+						FormatUtil.convertToLocalDate(orderFX.getDateEndPlanProperty().get()));
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
 				
 				
@@ -240,10 +240,8 @@ public class OrderFormController implements
 					currentStatusCombo.getSelectionModel().select(new StateFX(orderFX.getStateProperty().get(), orderFX.getStateProperty().get().getName()));
 				}
 				
-				VicariousPower vicariousPower = order.getVicariousPower();
-				if(vicariousPower != null) {
-					vicariousPowerNumberField.setText(vicariousPower.getNumber());
-					order.setVicariousPower(vicariousPower);
+				if(orderFX.getVicariousPowerProperty().get() != null) {
+					vicariousPowerNumberField.setText(orderFX.getVicariousPowerProperty().get().getDescription());
 				}
 				
 				producedWorksTableView.getItems().addAll(orderFX.getProducedWorkProperty());
@@ -297,7 +295,7 @@ public class OrderFormController implements
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put(ParameterKeys.MATERIAL_CONSUMER, orderFX);
 		Node node = SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
-				"/material_consumption_tableview.fxml", session, parameters);
+				StartingPane.FXML_ROOT+"material_consumption_tableview.fxml", session, parameters);
 		materialConsumptionPane.getChildren().add(node);
 		currentStatusCombo.getItems().clear();
 		currentStatusCombo.getItems().addAll(StateFX.VALUES);

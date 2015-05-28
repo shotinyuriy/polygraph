@@ -73,7 +73,7 @@ public class PersonTableViewController implements Initializable, SessionAware {
 				parameters.put(ParameterKeys.PERSON_ID, person.getId());
 				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 				mainMenu.loadFxmlAndOpenInTab(
-						"/person_form.fxml", person.getFullName(), parameters);
+						StartingPane.FXML_ROOT+"person_form.fxml", person.getFullName(), parameters);
 			}
 		}
 	}
@@ -82,7 +82,7 @@ public class PersonTableViewController implements Initializable, SessionAware {
 	public void newPersonForm(ActionEvent actionEvent) {
 		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 		if(mainMenu != null) {
-			mainMenu.loadFxmlAndOpenInTab("/person_form.fxml", "Новый клиент физ.лицо");
+			mainMenu.loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"person_form.fxml", "Новый клиент физ.лицо");
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class PersonTableViewController implements Initializable, SessionAware {
 				parameters.put(ParameterKeys.CUSTOMER_ID, person.getId());
 				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 				mainMenu.loadFxmlAndOpenInTab(
-						"/order_form.fxml", "Новый заказ клиента "+person.getFullName(), parameters);
+						StartingPane.FXML_ROOT+"order_form.fxml", "Новый заказ клиента "+person.getFullName(), parameters);
 			}
 		}
 	}

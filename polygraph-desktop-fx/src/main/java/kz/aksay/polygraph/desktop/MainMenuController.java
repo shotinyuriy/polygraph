@@ -33,72 +33,72 @@ public class MainMenuController implements MainMenu, SessionAware {
 	
 	@FXML
 	public void openNewPersonForm(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/person_form.fxml", "Новый клиент физ.лицо");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"person_form.fxml", "Новый клиент физ.лицо");
 	}
 	
 	@FXML
 	public void openNewOrganizaitonForm(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/organization_form.fxml", "Новый клиент юр.лицо");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"organization_form.fxml", "Новый клиент юр.лицо");
 	}
 	
 	@FXML
 	public void openPersonsList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/persons_list.fxml", "Список физ. лиц");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"persons_list.fxml", "Список физ. лиц");
 	}
 	
 	@FXML
 	public void openOrganizationList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/organization_list.fxml", "Список юр. лиц");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"organization_list.fxml", "Список юр. лиц");
 	}
 	
 	@FXML
 	public void openMaterialTypeList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/material_type_tableview.fxml", "Типы материалов");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"material_type_tableview.fxml", "Типы материалов");
 	}
 	
 	@FXML
 	public void openEmployeeTypeList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/employee_type_tableview.fxml", "Типы сотрудников");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"employee_type_tableview.fxml", "Типы сотрудников");
 	}
 	
 	@FXML
 	public void openEquipmentTypeList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/equipment_tableview.fxml", "Типы оборудования");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"equipment_tableview.fxml", "Типы оборудования");
 	}
 	
 	@FXML
 	public void openMaterialList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/paper_tableview.fxml", "Материалы");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"paper_tableview.fxml", "Материалы");
 	}
 	
 	@FXML
 	public void openNewEmployeeForm(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/employee_form.fxml", "Новый сотрудник");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"employee_form.fxml", "Новый сотрудник");
 	}
 	
 	@FXML
 	public void openEmployeeList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/employee_list.fxml", "Список сотрудников");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"employee_list.fxml", "Список сотрудников");
 	}
 	
 	@FXML
 	public void openEmployeeWorkload(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/employee_workload_view.fxml", "Загрузка сотрудников");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"employee_workload_view.fxml", "Загрузка сотрудников");
 	}
 	
 	@FXML
 	public void openOrderList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/order_list.fxml", "Список заказов");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_list.fxml", "Список заказов");
 	}
 	
 	@FXML
 	public void openWorkTypeList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/work_type_tableview.fxml", "Виды работ");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"work_type_tableview.fxml", "Виды работ");
 	}
 	
 	@FXML
 	public void openOrderConsumptionsList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab("/order_consumption_list.fxml", "Расходы по заказам");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_consumption_list.fxml", "Расходы по заказам");
 	}
 	
 	public Node loadFxmlNode(String url) {
@@ -149,7 +149,7 @@ public class MainMenuController implements MainMenu, SessionAware {
 	public void exit(ActionEvent actionEvent) {
 		try {
 			Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
-					"/fxml_login.fxml"));
+					StartingPane.FXML_ROOT+"fxml_login.fxml"));
 			StartingPane.changeScene(pane);
 		}
 		catch(Exception e) {

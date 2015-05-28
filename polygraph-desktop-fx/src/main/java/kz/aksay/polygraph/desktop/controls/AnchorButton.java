@@ -11,7 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import kz.aksay.polygraph.desktop.controls.fxml.packageInfo;
+import kz.aksay.polygraph.desktop.StartingPane;
+import kz.aksay.polygraph.desktop.fxml.packageInfo;
 
 public class AnchorButton extends AnchorPane {
 	
@@ -20,7 +21,7 @@ public class AnchorButton extends AnchorPane {
 	
 	public AnchorButton() {
 		super();
-		FXMLLoader loader = new FXMLLoader(packageInfo.class.getResource("/custom/AnchorButton.fxml"));
+		FXMLLoader loader = new FXMLLoader(packageInfo.class.getResource(StartingPane.FXML_ROOT+"custom/AnchorButton.fxml"));
 		loader.setRoot(this);
 		loader.setController(this);
 		

@@ -165,7 +165,7 @@ public class OrderTableViewController implements Initializable,
 			
 			MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 			mainMenu.loadFxmlAndOpenInTab(
-					"/order_form.fxml", "Заказ №"+orderId, parameters);
+					StartingPane.FXML_ROOT+"order_form.fxml", "Заказ №"+orderId, parameters);
 		}
 	}
 	

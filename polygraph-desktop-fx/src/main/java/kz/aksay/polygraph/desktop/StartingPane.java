@@ -1,4 +1,5 @@
 package kz.aksay.polygraph.desktop;
+import java.io.File;
 import java.util.Stack;
 
 import javafx.application.Application;
@@ -21,17 +22,14 @@ import org.springframework.context.ApplicationContext;
 
 
 public class StartingPane extends Application {
-
+	
+	public static String FXML_ROOT = ""; // for eclipse
+//	public static String FXML_ROOT = "/"; // for maven
 	private static ApplicationContext applicationContext;
-
 	private static Stage primaryStage;
-	
 	private static Stack<Scene> sceneStack;
-	
 	private static Pane contentPane;
-	
 	private static Pane pane;
-	
 	private static User currentUser;
 	
 	@Override
@@ -39,10 +37,13 @@ public class StartingPane extends Application {
 		try {
 			applicationContext = ContextUtils.getApplicationContext();
 			
+			File file = new File("tmp");
+			System.out.println("file "+file.getAbsolutePath());
+			
 			StartingPane.primaryStage = primaryStage;
 			primaryStage.setTitle("Управление задачами");
 			Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
-					"/fxml_login.fxml"));
+					FXML_ROOT+"fxml_login.fxml"));
 			Scene myScene = new Scene(pane);
 			
 			primaryStage.setScene(myScene);

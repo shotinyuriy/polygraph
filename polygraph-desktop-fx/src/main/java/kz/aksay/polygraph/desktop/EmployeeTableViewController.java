@@ -79,7 +79,7 @@ public class EmployeeTableViewController implements Initializable,
 		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 		if(mainMenu != null) {
 			mainMenu.loadFxmlAndOpenInTab(
-					"/employee_form.fxml", employeeFX.getFullName(), parameters);
+					StartingPane.FXML_ROOT+"employee_form.fxml", employeeFX.getFullName(), parameters);
 		}
 	}
 }

@@ -52,8 +52,8 @@ public class ContractFormController implements Initializable,
 			
 			Contract contract = contractFX.getEntity();
 			contract.setNumber(numberField.getText());
-			contract.setBeginDate(FormatUtil.convertLocalDate(beginDateField.getValue()));
-			contract.setEndDate(FormatUtil.convertLocalDate(endDateField.getValue()));
+			contract.setBeginDate(FormatUtil.convertToDate(beginDateField.getValue()));
+			contract.setEndDate(FormatUtil.convertToDate(endDateField.getValue()));
 			if(contract.getId() == null) {
 				contract.setCreatedAt(new Date());
 				contract.setCreatedBy(SessionUtil.retrieveUser(session));
@@ -94,10 +94,10 @@ public class ContractFormController implements Initializable,
 			party2NameLabel.setText(contractFX.getPartyName2());
 			numberField.setText(contractFX.getNumber());
 			if(contractFX.getEntity().getBeginDate() != null) {
-				beginDateField.valueProperty().set(FormatUtil.convertFromLocalDate(contractFX.getEntity().getBeginDate()));
+				beginDateField.valueProperty().set(FormatUtil.convertToLocalDate(contractFX.getEntity().getBeginDate()));
 			}
 			if(contractFX.getEntity().getEndDate() != null) {
-				endDateField.valueProperty().set(FormatUtil.convertFromLocalDate(contractFX.getEntity().getEndDate()));
+				endDateField.valueProperty().set(FormatUtil.convertToLocalDate(contractFX.getEntity().getEndDate()));
 			}
 		}
 	}

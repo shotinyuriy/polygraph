@@ -95,7 +95,7 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 		person.setMobile(mobileField.getText());
 		person.setPhone(phoneField.getText());
 		person.setBirthDate(
-				FormatUtil.convertLocalDate(birthDateField.getValue()));
+				FormatUtil.convertToDate(birthDateField.getValue()));
 		
 		try {
 			personService.save(person);
@@ -134,7 +134,7 @@ public class PersonFormController implements Initializable, SessionAware, Parame
 			middleNameField.setText(person.getMiddleName());
 			if(person.getBirthDate() != null) {
 				birthDateField.setValue(
-						FormatUtil.convertFromLocalDate(person.getBirthDate()));
+						FormatUtil.convertToLocalDate(person.getBirthDate()));
 			}
 			emailField.setText(person.getEmail());
 			mobileField.setText(person.getMobile());

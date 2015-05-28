@@ -2,7 +2,6 @@ package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -20,13 +19,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
-import kz.aksay.polygraph.desktop.controls.DateField;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
-import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
-import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -98,11 +94,11 @@ public class OrderConsumptionTableViewController implements Initializable,
 		
 		if(fromDate.getValue() != null) {
 			orderExample.setCreatedAt(
-					FormatUtil.convertLocalDate(fromDate.getValue()));
+					FormatUtil.convertToDate(fromDate.getValue()));
 		}
 		
 		if(toDate.getValue() != null) {
-			orderExample.setUpdatedAt(FormatUtil.convertLocalDate(toDate.getValue()));
+			orderExample.setUpdatedAt(FormatUtil.convertToDate(toDate.getValue()));
 		}
 		
 		materialConsumptionExample.setOrder(orderExample);
@@ -134,7 +130,7 @@ public class OrderConsumptionTableViewController implements Initializable,
 				
 				MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 				mainMenu.loadFxmlAndOpenInTab(
-						"/order_form.fxml", "Заказ №"+orderId, parameters);
+						StartingPane.FXML_ROOT+"order_form.fxml", "Заказ №"+orderId, parameters);
 			}
 		}
 	}

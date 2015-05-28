@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -63,7 +64,7 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 	private TextField middleNameField;
 	
 	@FXML
-	private TextField birthDateField;
+	private DatePicker birthDateField;
 	
 	@FXML
 	private Label birthDateValidator;
@@ -113,15 +114,9 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 			person.setFirstName(firstNameField.getText());
 			person.setMiddleName(middleNameField.getText());
 			
-			try {
-				person.setBirthDate(FormatUtil.dateFormatter.parse(birthDateField.getText()));
-			}
-			catch(ParseException pe) {
-				birthDateValidator.setText(
-						"Дата рождения указывается в формате "
-								+FormatUtil.DATE_FORMAT_DESCRIPTION);
-				isError = true;
-			}
+
+			person.setBirthDate(FormatUtil.convertToDate(birthDateField.getValue()));
+
 			
 			String login = loginField.getText();
 			String password = null;
@@ -216,7 +211,7 @@ public class EmployeeFormController implements Initializable, SessionAware, Para
 					lastNameField.setText(person.getLastName());
 					middleNameField.setText(person.getMiddleName());
 					if(person.getBirthDate() != null) {
-						birthDateField.setText(FormatUtil.dateFormatter.format(
+						birthDateField.setValue(FormatUtil.convertToLocalDate(
 								person.getBirthDate()));
 					}
 				}

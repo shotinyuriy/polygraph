@@ -139,7 +139,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		parameters.put(ParameterKeys.CONTRACT, contractFX);
 		
 		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-				packageInfo.class, "/short_contract_form.fxml", session, parameters);
+				packageInfo.class, StartingPane.FXML_ROOT+"short_contract_form.fxml", session, parameters);
 		
 		Stage stage = new Stage(); 
 		stage.setScene(new Scene(root));
@@ -161,7 +161,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			parameters.put(ParameterKeys.CONTRACT, contractFX);
 			
 			Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-					packageInfo.class, "/short_contract_form.fxml", session, parameters);
+					packageInfo.class, StartingPane.FXML_ROOT+"short_contract_form.fxml", session, parameters);
 			
 			Stage stage = new Stage(); 
 			stage.setScene(new Scene(root));
@@ -192,7 +192,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
 		
 		Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-				packageInfo.class, "/vicarious_power_form.fxml", session, parameters);
+				packageInfo.class, StartingPane.FXML_ROOT+"vicarious_power_form.fxml", session, parameters);
 		
 		Stage stage = new Stage(); 
 		stage.setScene(new Scene(root));
@@ -214,7 +214,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
 			
 			Parent root = (Parent) SessionUtil.loadFxmlNodeWithSession(
-					packageInfo.class, "/vicarious_power_form.fxml", session, parameters);
+					packageInfo.class, StartingPane.FXML_ROOT+"vicarious_power_form.fxml", session, parameters);
 			
 			Stage stage = new Stage(); 
 			stage.setScene(new Scene(root));
@@ -254,7 +254,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 					parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
 					MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 					if(mainMenu != null) {
-						mainMenu.loadFxmlAndOpenInTab("/order_form.fxml", 
+						mainMenu.loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_form.fxml", 
 								"Новый заказ", parameters);
 					}
 				}

@@ -56,8 +56,8 @@ public class VicariousPowerFormController implements Initializable,
 			
 			contract.setNumber(numberField.getText());
 			contract.setPersonName(personNameField.getText());
-			contract.setBeginDate(FormatUtil.convertLocalDate(beginDateField.getValue()));
-			contract.setEndDate(FormatUtil.convertLocalDate(endDateField.getValue()));
+			contract.setBeginDate(FormatUtil.convertToDate(beginDateField.getValue()));
+			contract.setEndDate(FormatUtil.convertToDate(endDateField.getValue()));
 			
 			if(contract.getId() == null) {
 				contract.setCreatedAt(new Date());
@@ -98,10 +98,10 @@ public class VicariousPowerFormController implements Initializable,
 			personNameField.setText(vicariousPowerFX.getPersonName());
 			numberField.setText(vicariousPowerFX.getNumber());
 			if(vicariousPowerFX.getEntity().getBeginDate() != null) {
-				beginDateField.valueProperty().set(FormatUtil.convertFromLocalDate(vicariousPowerFX.getEntity().getBeginDate()));
+				beginDateField.valueProperty().set(FormatUtil.convertToLocalDate(vicariousPowerFX.getEntity().getBeginDate()));
 			}
 			if(vicariousPowerFX.getEntity().getEndDate() != null) {
-				endDateField.valueProperty().set(FormatUtil.convertFromLocalDate(vicariousPowerFX.getEntity().getEndDate()));
+				endDateField.valueProperty().set(FormatUtil.convertToLocalDate(vicariousPowerFX.getEntity().getEndDate()));
 			}
 		}
 	}

@@ -62,6 +62,7 @@
                                           <AnchorButton fx:id="paperTypeListButton" mnemonicParsing="false" onAction="#openMaterialTypeList" text="Типы бумаги" />
                                           <AnchorButton fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Типы сотрудников" />
                                           <AnchorButton fx:id="paperListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Бумага" />
+                                          <AnchorButton fx:id="bindingSpringListButton" mnemonicParsing="false" onAction="#openBindingSpringList" text="Пружины" />
                                           <AnchorButton fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" />
                                           <AnchorButton fx:id="equipmentListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Виды оборудования" />
                                        </children>

@@ -38,6 +38,7 @@ import javafx.util.Callback;
 import kz.aksay.polygraph.api.ICustomerService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
+import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.desktop.reports.PrintFacade;
 import kz.aksay.polygraph.entity.Employee;
@@ -46,6 +47,7 @@ import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
+import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
@@ -67,12 +69,12 @@ public class OrderFormController implements
 	private IOrderService orderService = StartingPane.getBean(IOrderService.class);
 	private IEmployeeService employeeService = StartingPane.getBean(IEmployeeService.class);
 	private ICustomerService customerService = StartingPane.getBean(ICustomerService.class);
+	private IProducedWorkService producedWorkService = StartingPane.getBean(IProducedWorkService.class);
 	
 	private Map<String, Object> parameters;
 	private Map<String, Object> session;
 	
 	private boolean isNewOrder;
-	//private Order order;
 	private OrderFX orderFX;
 	private Subject customer;
 	
@@ -93,6 +95,9 @@ public class OrderFormController implements
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
 	@FXML private AnchorPane materialConsumptionPane;
 	@FXML private Button addProducedWorkButton;
+	
+	private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
+	private List<ProducedWork> producedWorksToRemove = new LinkedList<ProducedWork>();
 
 	@FXML
 	public void save(ActionEvent actionEvent) {
@@ -117,6 +122,12 @@ public class OrderFormController implements
 			}
 			
 			orderService.save(orderFX.getOrder());
+			
+			if(!producedWorksToRemove.isEmpty() ) {
+				for(ProducedWork producedWork : producedWorksToRemove) {
+					producedWorkService.delete(producedWork);
+				}
+			}
 			
 			validationLabel.setText("Сохранение успешно");
 			
@@ -203,12 +214,11 @@ public class OrderFormController implements
 		List<ProducedWorkFX> producedWorksFXToRemove 
 			= producedWorksTableView.getSelectionModel().getSelectedItems();
 		
-		List<ProducedWork> producedWorksToRemove = new LinkedList<ProducedWork>();
 		for(ProducedWorkFX producedWorkFX : producedWorksFXToRemove) {
-			producedWorksToRemove.add(producedWorkFX.getProducedWork());
+			producedWorksToRemove.add(producedWorkFX.getEntity());
 		}
-		producedWorksTableView.getItems().removeAll(producedWorksFXToRemove);
 		
+		producedWorksTableView.getItems().removeAll(producedWorksFXToRemove);
 	}
 	
 	@Override
@@ -294,6 +304,7 @@ public class OrderFormController implements
 	private void initializeMaterialConsumptionTableView() {
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put(ParameterKeys.MATERIAL_CONSUMER, orderFX);
+		parameters.put(ParameterKeys.ORDER_FORM, this); 
 		Node node = SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
 				StartingPane.FXML_ROOT+"material_consumption_tableview.fxml", session, parameters);
 		materialConsumptionPane.getChildren().add(node);
@@ -314,7 +325,7 @@ public class OrderFormController implements
 			
 			@Override
 			public TableRow<ProducedWorkFX> call(TableView<ProducedWorkFX> param) {
-				// TODO Auto-generated method stub
+				
 				TableRow<ProducedWorkFX> tableRow = new TableRow<>();
 				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -339,11 +350,25 @@ public class OrderFormController implements
 		producedWorksFX.addAll(producedWorksTableView.getItems());
 		producedWorksTableView.getItems().removeAll(producedWorksFX);
 		producedWorksTableView.getItems().addAll(producedWorksFX);
+		
+		refreshMaterialConsumptionsTableView();
+	}
+	
+	private void refreshMaterialConsumptionsTableView() {
+		if(materialConsumptionsTableView != null) {
+			materialConsumptionsTableView.getItems().clear();
+			for(ProducedWorkFX prodWorkFX : producedWorksTableView.getItems()) {
+				if(prodWorkFX.getMaterialConsumptionFX() != null) {
+					materialConsumptionsTableView.getItems().addAll(
+							prodWorkFX.getMaterialConsumptionFX());
+				}
+			}
+		}
 	}
 	
 	@Override
 	public void addProducedWork(ProducedWorkFX producedWorkFX) {
-		System.out.println("ADD NEW PRODUCED WORK "+producedWorkFX);
+		
 		producedWorkFX.setDirty(true);
 		producedWorksTableView.getItems().add(producedWorkFX);
 		refreshProducedWorkTableView();
@@ -351,6 +376,7 @@ public class OrderFormController implements
 
 	@Override
 	public void saveProducedWork(ProducedWorkFX producedWorkFX) {
+		
 		producedWorkFX.setDirty(true);
 		refreshProducedWorkTableView();
 	}
@@ -369,6 +395,14 @@ public class OrderFormController implements
 	public void afterPropertiesSet() {
 		initializeByParameters();
 		initializeMaterialConsumptionTableView();
+		
+	}
+
+	@Override
+	public void setMaterialConsumptionTableView(
+			TableView<MaterialConsumptionFX> tableView) {
+		materialConsumptionsTableView = tableView;
+		refreshMaterialConsumptionsTableView();
 	}
 
 	

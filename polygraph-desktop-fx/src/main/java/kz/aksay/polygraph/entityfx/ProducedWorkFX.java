@@ -3,36 +3,32 @@ package kz.aksay.polygraph.entityfx;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.util.FormatUtil;
 
-public class ProducedWorkFX {
+public class ProducedWorkFX extends EntityFX<ProducedWork> implements MaterialConsumptionHolderFX {
 	
-	private ProducedWork producedWork;
+	
 	private EmployeeFX executorFX;
 	private WorkTypeFX workTypeFX;
 	private EquipmentFX equipmentFX;
+	private ObservableList<MaterialConsumptionFX> materialConsumptionProperty;
 	private boolean dirty = false;
 	
-	public static Collection<ProducedWorkFX> convertListEntityToFX(
-			Collection<ProducedWork> producedWorks) {
-		Collection<ProducedWorkFX> producedWorksFX = new LinkedList<>();
-		if(producedWorks != null) {
-			for(ProducedWork producedWork : producedWorks) {
-				producedWorksFX.add(new ProducedWorkFX(producedWork));
-			}
-		}
-		return producedWorksFX;
-	}
-
 	public ProducedWorkFX(ProducedWork producedWork) {
-		this.producedWork = producedWork;
+		
+		super(producedWork);
 		if(producedWork.getExecutor() != null) {
 			executorFX = new EmployeeFX(producedWork.getExecutor());
 		}
@@ -42,10 +38,27 @@ public class ProducedWorkFX {
 		if(producedWork.getEquipment() != null) {
 			equipmentFX = new EquipmentFX(producedWork.getEquipment());
 		}
+		
+		List<MaterialConsumptionFX> materialConsumptionsFX 
+			= EntityFX.convertListEntityToFX(
+				producedWork.getMaterialConsumption(), MaterialConsumptionFX.class);
+		materialConsumptionProperty = FXCollections.observableArrayList(
+			materialConsumptionsFX);
 	}
 	
-	public ProducedWork getProducedWork() {
-		return producedWork;
+	@Override
+	public ProducedWork getEntity() {
+		fillEntity();
+		return entity;
+	}
+	
+	private void fillEntity() {
+		entity.setMaterialConsumption(new HashSet<MaterialConsumption>());
+		for(MaterialConsumptionFX materialConsumptionFX : materialConsumptionProperty) {
+			MaterialConsumption materialConsumption = materialConsumptionFX.getEntity();
+			materialConsumption.setProducedWork(entity);
+			entity.getMaterialConsumption().add(materialConsumption);
+		}
 	}
 	
 	public EmployeeFX getExecutorFX() {
@@ -57,29 +70,22 @@ public class ProducedWorkFX {
 	}
 	
 	public BigDecimal getCost() {
-		if(producedWork.getCost() != null) {
-			return producedWork.getCost();
+		if(entity.getCost() != null) {
+			return entity.getCost();
 		}
 		return BigDecimal.ZERO;
 	}
 	
 	public String getBeginDateTimeString() {
-		if(producedWork.getCreatedAt() != null) {
-			return FormatUtil.dateFormatter.format(producedWork.getCreatedAt());
-		}
-		return null;
-	}
-	
-	public String getFinishDateTimeString() {
-		if(producedWork.getFinishedAt() != null) {
-			return FormatUtil.dateFormatter.format(producedWork.getFinishedAt());
+		if(entity.getCreatedAt() != null) {
+			return FormatUtil.dateFormatter.format(entity.getCreatedAt());
 		}
 		return null;
 	}
 	
 	public String getWorkTypeName() {
-		if( producedWork.getWorkType() != null) {
-			return producedWork.getWorkType().getName();
+		if( entity.getWorkType() != null) {
+			return entity.getWorkType().getName();
 		}
 		return null;
 	}
@@ -88,12 +94,12 @@ public class ProducedWorkFX {
 		
 		StringBuffer sb = new StringBuffer();
 		
-		if( producedWork.getWorkType() != null) {
-			sb.append(producedWork.getWorkType().getName());
+		if( entity.getWorkType() != null) {
+			sb.append(entity.getWorkType().getName());
 		}
 		
-		if(producedWork.getEquipment() != null) {
-			sb.append(" ").append(producedWork.getEquipment().getName());
+		if(entity.getEquipment() != null) {
+			sb.append(" ").append(entity.getEquipment().getName());
 		}
 		
 		return sb.toString();
@@ -106,28 +112,46 @@ public class ProducedWorkFX {
 	}
 
 	public boolean isDirty() {
-		return this.producedWork.isDirty();
+		return this.entity.isDirty();
 	}
 
 	public void setDirty(boolean dirty) {
-		this.producedWork.setDirty(dirty);
-	}
-
-	public void finishWork() {
-		this.producedWork.setFinishedAt(new Date());
+		this.entity.setDirty(dirty);
 	}
 
 	public void setMaterialConsumption(
 			Set<MaterialConsumption> materialConsumption) {
-		this.producedWork.setMaterialConsumption(materialConsumption);
+		this.entity.setMaterialConsumption(materialConsumption);
 	}
 
 	public Long getId() {
-		return producedWork.getId();
+		return entity.getId();
 	}
 
 	public EquipmentFX getEquipmentFX() {
 		
 		return equipmentFX;
+	}
+
+	@Override
+	public ObservableList<MaterialConsumptionFX> getMaterialConsumptionFX() {
+		return materialConsumptionProperty;
+	}
+
+	@Override
+	public void setMaterialConsumptionFX(
+			ObservableList<MaterialConsumptionFX> materialConsumption) {
+		this.materialConsumptionProperty = materialConsumption;
+		
+	}
+
+	@Override
+	public Set<MaterialConsumption> getMaterialConsumption() {
+		return entity.getMaterialConsumption();
+	}
+
+	@Override
+	public boolean isAllowedToEdit() {
+		return true;
 	}
 }

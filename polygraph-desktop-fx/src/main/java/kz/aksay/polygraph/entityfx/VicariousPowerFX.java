@@ -42,14 +42,16 @@ public class VicariousPowerFX extends EntityFX<VicariousPower> {
 	}
 	
 	public String getDescription() {
-		
-		StringBuffer description = new StringBuffer();
-		description.append("Доверенность №").append(entity.getNumber());
-		if(entity.getBeginDate() != null) {
-			description.append(" от ").append(getBeginDateString());
+		if( entity != null) {
+			StringBuffer description = new StringBuffer();
+			description.append("Доверенность №").append(entity.getNumber());
+			if(entity.getBeginDate() != null) {
+				description.append(" от ").append(getBeginDateString());
+			}
+			description.append(" ").append(this.getPersonName());
+			
+			return description.toString();
 		}
-		description.append(" ").append(this.getPersonName());
-		
-		return description.toString();
+		return null;
 	}
 }

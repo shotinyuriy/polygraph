@@ -278,13 +278,14 @@ public class TestDataCreator {
 		return organizationCustomer;
 	}
 	
-	public WorkType createWorkType(User creator, String name) throws Exception {
+	public WorkType createWorkType(User creator, String name, String code) throws Exception {
 		WorkType xerocopy = workTypeService.findByName(name);
 		if(xerocopy == null) {
 			xerocopy = new WorkType();
 			xerocopy.setCreatedAt(new Date());
 			xerocopy.setCreatedBy(creator);
 			xerocopy.setName(name);
+			xerocopy.setCode(code);
 			workTypeService.save(xerocopy);
 			xerocopy = workTypeService.find(xerocopy.getId());
 		}
@@ -355,12 +356,13 @@ public class TestDataCreator {
 		return producedWork;
 	}
 	
-	public MaterialConsumption createMaterialConsumption(Material material, Order order) throws Exception {
+	public MaterialConsumption createMaterialConsumption(Material material, Order order, ProducedWork producedWork) throws Exception {
 		MaterialConsumption copyMaterialConsumption = new MaterialConsumption();
 		copyMaterialConsumption.setCreatedAt(new Date());
 		copyMaterialConsumption.setCreatedBy(User.TECH_USER);
 		copyMaterialConsumption.setMaterial(material);
 		copyMaterialConsumption.setOrder(order);
+		copyMaterialConsumption.setProducedWork(producedWork);
 		copyMaterialConsumption.setQuantity(BigDecimal.valueOf(1.0));
 		copyMaterialConsumption.setDirty(true);
 		copyMaterialConsumption = materialConsumptionService.save(

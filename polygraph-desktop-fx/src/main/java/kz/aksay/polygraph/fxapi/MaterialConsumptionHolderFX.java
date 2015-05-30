@@ -18,4 +18,6 @@ public interface MaterialConsumptionHolderFX {
 	public void setMaterialConsumption(
 			Set<MaterialConsumption> materialConsumptions);
 
+	public boolean isAllowedToEdit();
+
 }

@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -35,20 +36,19 @@ public class StartingPane extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			applicationContext = ContextUtils.getApplicationContext();
-			
 			File file = new File("tmp");
 			System.out.println("file "+file.getAbsolutePath());
 			
 			StartingPane.primaryStage = primaryStage;
 			primaryStage.setTitle("Управление задачами");
-			Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
+			TabPane pane = (TabPane)FXMLLoader.load(packageInfo.class.getResource(
 					FXML_ROOT+"fxml_login.fxml"));
 			Scene myScene = new Scene(pane);
 			
 			primaryStage.setScene(myScene);
 			primaryStage.show();
 		} catch (Exception e) {
+			e.printStackTrace();
 			Pane pane = new Pane();
 			VBox vbox = new VBox();
 			Label label = new Label();
@@ -66,6 +66,11 @@ public class StartingPane extends Application {
 			primaryStage.setScene(myScene);
 			primaryStage.show();
 		}
+	}
+	
+	public static void loadContext() {
+		ContextUtils.resetContext();
+		applicationContext = ContextUtils.getApplicationContext();
 	}
 	
 	public static void main(String[] args) {		

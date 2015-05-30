@@ -24,17 +24,6 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	 * 
 	 */
 	private static final long serialVersionUID = -9184662638673352545L;
-
-	public static enum State {
-		PROCESSED("В работе"),
-		FINISHED("Завершена");
-		
-		private String name;
-		
-		private State(String name) {
-			this.name = name;
-		}
-	}
 	
 	@Transient
 	private Set<MaterialConsumption> materialConsumption;
@@ -55,27 +44,17 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	@JoinColumn(name="equipment_id")
 	private Equipment equipment;
 	
-	@Column(name="finished_at")
-	private Date finishedAt;
-	
 	@Column
 	private BigDecimal price = BigDecimal.ZERO;
 	
 	@Column
 	private Integer quantity = 0;
 	
-	@Column
-	private Integer coloredQuantity = 0;
-	
 	@Transient
 	private BigDecimal cost;
 	
 	@Transient
 	private boolean dirty;
-	
-	@Column
-	@Enumerated(EnumType.STRING)
-	private State state;
 
 	@Override
 	public String toString() {
@@ -90,6 +69,20 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 		if(price == null) price = BigDecimal.ZERO;
 		if(quantity == null) quantity = Integer.valueOf(0);
 		cost = price.multiply(BigDecimal.valueOf(quantity));
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) return false;
+		if(!(obj instanceof ProducedWork)) return false;
+		ProducedWork other = (ProducedWork) obj;
+		if(this.id == null) {
+			if(other.getId() != null) return false;
+			return true;
+		} else {
+			if(other.getId() == null) return false;
+			return this.id.equals(other.getId());
+		}
 	}
 	
 	public Employee getExecutor() {
@@ -132,14 +125,6 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 		this.dirty = dirty;
 	}
 
-	public Date getFinishedAt() {
-		return finishedAt;
-	}
-
-	public void setFinishedAt(Date finishedAt) {
-		this.finishedAt = finishedAt;
-	}
-
 	public BigDecimal getCost() {
 		calcCost();
 		return cost;
@@ -161,27 +146,11 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 		this.quantity = quantity;
 	}
 
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
 	public Equipment getEquipment() {
 		return equipment;
 	}
 
 	public void setEquipment(Equipment equipment) {
 		this.equipment = equipment;
-	}
-
-	public Integer getColoredQuantity() {
-		return coloredQuantity;
-	}
-
-	public void setColoredQuantity(Integer coloredQuantity) {
-		this.coloredQuantity = coloredQuantity;
 	}
 }

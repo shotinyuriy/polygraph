@@ -169,7 +169,8 @@ public class TestDesignerBaseScenario extends Assert {
 	}
 
 	private void createMaterialConsumption() throws Exception {
-		copyMaterialConsumption = testDataCreator.createMaterialConsumption(paperA4, firstOrder);
+		copyMaterialConsumption = testDataCreator.createMaterialConsumption(
+				paperA4, firstOrder, producedWork);
 	}
 
 	private void createProducedWork() throws Exception {
@@ -186,7 +187,8 @@ public class TestDesignerBaseScenario extends Assert {
 	}
 
 	private void createWorkTypeXerocopy() throws Exception {
-		xerocopy = testDataCreator.createWorkType(User.TECH_USER, "КСЕРОКОПИЯ");
+		xerocopy = testDataCreator.createWorkType(
+				User.TECH_USER, "КСЕРОКОПИЯ", "XEROCOPYING");
 	}
 
 	private void createOrderForPerson() throws Exception {

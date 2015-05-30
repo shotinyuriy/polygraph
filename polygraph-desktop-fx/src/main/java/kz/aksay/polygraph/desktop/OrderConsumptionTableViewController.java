@@ -21,6 +21,7 @@ import javafx.util.Callback;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entityfx.EntityFX;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.util.FormatUtil;
@@ -50,7 +51,8 @@ public class OrderConsumptionTableViewController implements Initializable,
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {		
 		List<MaterialConsumption> materialConsumptions= materialConsumptionService.findAll();
-		Collection<MaterialConsumptionFX> ordersFX = MaterialConsumptionFX.convertListEntityToFX(materialConsumptions);
+		List<MaterialConsumptionFX> ordersFX = EntityFX.convertListEntityToFX(
+				materialConsumptions, MaterialConsumptionFX.class);
 		
 		orderConsumptionsTableView.getItems().addAll(ordersFX);
 		
@@ -109,7 +111,8 @@ public class OrderConsumptionTableViewController implements Initializable,
 				materialConsumptionExample);
 		
 		if(materialConsumptions != null) {
-			Collection<MaterialConsumptionFX> ordersFX = MaterialConsumptionFX.convertListEntityToFX(materialConsumptions);
+			List<MaterialConsumptionFX> ordersFX = EntityFX.convertListEntityToFX(
+					materialConsumptions, MaterialConsumptionFX.class);
 			orderConsumptionsTableView.getItems().addAll(ordersFX);
 		}
 		
@@ -121,7 +124,7 @@ public class OrderConsumptionTableViewController implements Initializable,
 		MaterialConsumptionFX materialConsumptionFX = orderConsumptionsTableView.getSelectionModel().getSelectedItem();
 		if(materialConsumptionFX != null) {
 			
-			Order order = materialConsumptionFX.getMaterialConsumption().getOrder();
+			Order order = materialConsumptionFX.getEntity().getOrder();
 		
 			if(order != null) {
 				Long orderId = order.getId();

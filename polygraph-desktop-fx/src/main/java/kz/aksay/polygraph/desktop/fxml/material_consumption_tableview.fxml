@@ -16,7 +16,7 @@
 		<TableView  fx:id="materialConsumptionsTableView" maxHeight="200.0">
 			<columns>
 				<TableColumn text="Материал" prefWidth="250.0">
-					<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
+					<cellValueFactory><PropertyValueFactory property="materialName"/></cellValueFactory>
 				</TableColumn>
 				<TableColumn text="Количество" prefWidth="150.0">
 					<cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
@@ -24,7 +24,7 @@
 			</columns>
 		</TableView>
 		
-		<HBox  spacing="10.0" prefHeight="120.0" alignment="TOP_CENTER">
+		<HBox fx:id="controlPanel" spacing="10.0" prefHeight="120.0" alignment="TOP_CENTER">
 			<Label text="Материал"/>
 			<ComboBox fx:id="materialCombo"/>
 			<Label text="Количество"/>

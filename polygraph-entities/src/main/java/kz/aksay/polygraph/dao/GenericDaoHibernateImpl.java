@@ -50,7 +50,9 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 					.iterator();
 			while (iter.hasNext()) {
 				ConstraintViolation<T> constraintViolation = iter.next();
-				exceptionBuffer.append(constraintViolation.getMessage());
+				exceptionBuffer.append(constraintViolation.getPropertyPath())
+				.append(" ")
+				.append(constraintViolation.getMessage());
 				if (iter.hasNext()) {
 					exceptionBuffer.append("\n");
 				}

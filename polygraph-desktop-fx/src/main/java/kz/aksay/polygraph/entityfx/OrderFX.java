@@ -67,15 +67,15 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 			descriptionProperty = new SimpleStringProperty(order.getDescription());
 			vicariousPowerProperty = new SimpleObjectProperty<VicariousPowerFX>(vicariousPowerFX);
 			
-			Collection<ProducedWorkFX> producedWorksFX = ProducedWorkFX.
-					convertListEntityToFX(order.getProducedWorks());
+			List<ProducedWorkFX> producedWorksFX = EntityFX.
+					convertListEntityToFX(order.getProducedWorks(), ProducedWorkFX.class);
 			
 			producedWorkProperty = FXCollections.observableArrayList(
 					producedWorksFX);
 			
-			Collection<MaterialConsumptionFX> materialConsumptionsFX 
-				= MaterialConsumptionFX.convertListEntityToFX(
-						order.getMaterialConsumption());
+			List<MaterialConsumptionFX> materialConsumptionsFX 
+				= EntityFX.convertListEntityToFX(
+						order.getMaterialConsumption(), MaterialConsumptionFX.class);
 			materialConsumptionProperty = FXCollections.observableArrayList(
 					materialConsumptionsFX);
 		}
@@ -158,7 +158,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	public Set<MaterialConsumption> getMaterialConsumption() {
 		Set<MaterialConsumption> resultSet = new HashSet<>();
 		for(MaterialConsumptionFX materialConsumptionFX : materialConsumptionProperty) {
-			resultSet.add(materialConsumptionFX.getMaterialConsumption());
+			resultSet.add(materialConsumptionFX.getEntity());
 		}
 		return resultSet;
 	}
@@ -183,14 +183,13 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 		
 		order.setMaterialConsumption(new HashSet<MaterialConsumption>());
 		for(MaterialConsumptionFX materialConsumptionFX : materialConsumptionProperty) {
-			MaterialConsumption materialConsumption = materialConsumptionFX.getMaterialConsumption();
-			System.out.println(materialConsumption);
+			MaterialConsumption materialConsumption = materialConsumptionFX.getEntity();
 			order.getMaterialConsumption().add(materialConsumption);
 		}
 		
 		order.setProducedWorks(new HashSet<ProducedWork>());
 		for(ProducedWorkFX producedWorkFX : producedWorkProperty) {
-			ProducedWork producedWork = producedWorkFX.getProducedWork();
+			ProducedWork producedWork = producedWorkFX.getEntity();
 			producedWork.setOrder(order);
 			order.getProducedWorks().add(producedWork);
 		}
@@ -320,5 +319,10 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	public void setVicariousPowerProperty(
 			ObjectProperty<VicariousPowerFX> vicariousPowerProperty) {
 		this.vicariousPowerProperty = vicariousPowerProperty;
+	}
+
+	@Override
+	public boolean isAllowedToEdit() {
+		return false;
 	}
 }

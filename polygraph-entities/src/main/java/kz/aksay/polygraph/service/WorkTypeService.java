@@ -38,4 +38,17 @@ public class WorkTypeService extends AbstractGenericService<WorkType, Long>
 		this.workTypeDao = workTypeDao;
 	}
 
+	@Override
+	public WorkType findByCode(String workTypeCode) {
+		WorkType workType = null;
+		
+		if(workTypeCode != null && !workTypeCode.isEmpty()) {
+			Criteria findbyName = getDao().getSession().createCriteria(getDao().clazz());
+			findbyName.add(Restrictions.ilike("code", workTypeCode));
+			workType = getDao().readUniqueByCriteria(findbyName);
+		}
+		
+		return workType;
+	}
+
 }

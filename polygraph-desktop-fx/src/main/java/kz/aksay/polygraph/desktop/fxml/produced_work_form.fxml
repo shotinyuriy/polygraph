@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TableColumn?>
@@ -26,20 +27,20 @@
 			      <Label fx:id="workTypeLabel" alignment="CENTER_RIGHT" text="Тип работ" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 			      <Label fx:id="priceLabel" alignment="CENTER_RIGHT" text="Цена" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 			      <Label fx:id="amountLabel" alignment="CENTER_RIGHT" text="Количество" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-			      <Label fx:id="coloredAmountLabel" alignment="CENTER_RIGHT" text="Количество цветных проходов" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
-			      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
-			      <Label fx:id="equipmentLabel" alignment="CENTER_RIGHT" text="Машина" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+			      <Label fx:id="costLabel" alignment="CENTER_RIGHT" text="Стоимость" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+			      <Label fx:id="equipmentLabel" alignment="CENTER_RIGHT" text="Машина" GridPane.rowIndex="6" GridPane.columnIndex="1" visible="false"/>
 			      
 			      <ComboBox fx:id="executorCombo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 				  <ComboBox fx:id="workTypeCombo" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
 				  <TextField fx:id="priceField" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
 				  <TextField fx:id="quantityField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-				  <TextField fx:id="coloredQuantityField" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-				  <Label fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
-				  <ComboBox fx:id="equipmentCombo" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
+				  <Label fx:id="costField" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+				  <ComboBox fx:id="equipmentCombo" GridPane.columnIndex="2" GridPane.rowIndex="6" visible="false"/>
 			</GridPane>
 		</children>
 	</AnchorPane>
+	
+	<AnchorPane fx:id="materialConsumptionPane"/>
 	
 	<Label fx:id="errorLabel" alignment="CENTER_RIGHT" text=""/>
 	
@@ -48,9 +49,10 @@
 	      	text="ОК" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 		<Button fx:id="saveAndOpenNewButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#saveAndOpenNew" 
 	      	text="OK+1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-		<Button fx:id="finishWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#finishWork" 
-	      	text="Завершить работу"/>
 	</HBox>
 	
 	<Label fx:id="validationLabel"/>
+	  <stylesheets>
+	    <URL value="@./dark-theme.css" />
+	  </stylesheets>
 </VBox>

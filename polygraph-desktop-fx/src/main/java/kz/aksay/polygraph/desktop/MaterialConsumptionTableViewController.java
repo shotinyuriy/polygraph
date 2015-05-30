@@ -14,13 +14,16 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.entity.MaterialConsumer;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.MaterialFX;
+import kz.aksay.polygraph.exception.InternalLogicException;
 import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
+import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -38,11 +41,10 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 	@FXML private TextField quantityField;
 	@FXML private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
 	@FXML private Label validationLabel;
+	@FXML private HBox controlPanel;
 
 	private IMaterialService materialService;
 	private IMaterialConsumptionService materialConsumptionService;
-	
-	 
 	
 	private void initializeByParameters(Map<String, Object> parameters) {
 		MaterialConsumptionHolderFX materialConsumer = ParametersUtil.
@@ -53,6 +55,14 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 		if(materialConsumer != null) {
 			materialConsumptionsTableView.getItems().addAll(materialConsumer.getMaterialConsumptionFX());
 			materialConsumer.setMaterialConsumptionFX(materialConsumptionsTableView.getItems());
+//			controlPanel.setVisible(materialConsumer.isAllowedToEdit());
+		}
+		
+		OrderForm orderForm = ParametersUtil.extractParameter(
+				parameters, ParameterKeys.ORDER_FORM, OrderForm.class);
+		if(orderForm != null) {
+			orderForm.setMaterialConsumptionTableView(materialConsumptionsTableView);
+			controlPanel.setVisible(false);
 		}
 	}
 	
@@ -67,13 +77,17 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 			materialConsumptionFX.setDirty(true);
 			MaterialFX materialFX = materialCombo.getSelectionModel().
 					getSelectedItem();
+			
+			if(materialFX == null) throw new InternalLogicException("Необходимо указать материал");
 			materialConsumptionFX.setMaterialFX(materialFX);
 			materialConsumptionFX.setQuantity(retrieveQuantity());
 			materialConsumptionsTableView.getItems().add(materialConsumptionFX);
 			
 			clearForm();
 		}
-		catch(Exception e) {
+		catch(InternalLogicException ie) {
+			validationLabel.setText(ie.getMessage());
+		} catch(Exception e) {
 			e.printStackTrace();
 			validationLabel.setText(e.getMessage());
 		}
@@ -95,7 +109,7 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 			
 			if(!materialConsumptionFXToRemove.isDirty()) {
 				materialConsumptionService.delete(
-					materialConsumptionFXToRemove.getMaterialConsumption());
+					materialConsumptionFXToRemove.getEntity());
 			}
 		}
 		catch(Exception e) {

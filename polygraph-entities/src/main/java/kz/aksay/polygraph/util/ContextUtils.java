@@ -2,7 +2,6 @@ package kz.aksay.polygraph.util;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class ContextUtils {
 	private static ApplicationContext context;
@@ -13,6 +12,10 @@ public class ContextUtils {
 					"classpath*:/META-INF/application-context.xml");
 		}
 		return context;
+	}
+	
+	public static synchronized void resetContext() {
+		context = null;
 	}
 	
 	public static <T> T getBean(Class<T> clazz) {

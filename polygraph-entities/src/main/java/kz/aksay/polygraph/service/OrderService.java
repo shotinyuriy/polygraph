@@ -2,6 +2,7 @@ package kz.aksay.polygraph.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
+import kz.aksay.polygraph.entity.WorkType;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -55,6 +57,19 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			Set<MaterialConsumption> materialConsumptions 
 				= materialConsumptionService.findAllByOrderId(order.getId());
 			order.setMaterialConsumption(materialConsumptions);
+			
+			for(ProducedWork producedWork : producedWorks) {
+				Iterator<MaterialConsumption> iterMC = materialConsumptions.iterator();
+				while(iterMC.hasNext()) {
+					MaterialConsumption mc = iterMC.next();
+					if(mc.getProducedWork() != null) {
+						if(producedWork.equals(mc.getProducedWork())) {
+							producedWork.getMaterialConsumption().add(mc);
+							iterMC.remove();
+						}
+					}
+				}
+			}
 		}
 		return order;
 	}
@@ -77,8 +92,6 @@ public class OrderService extends AbstractGenericService<Order, Long>
 				if(order.getVicariousPower() == null) {
 					throw new Exception("Укажите доверенность!");
 				}
-				System.out.println(" order.getVicariousPower() "+order.getVicariousPower());
-				System.out.println(" order.getVicariousPower().getOrganization() "+order.getVicariousPower().getOrganization());
 				if( !organizationId.equals( order.getVicariousPower().getOrganization().getId()) ) {
 					throw new Exception("Организация в доверенности и в заказе не совпадают!");
 				}
@@ -99,29 +112,32 @@ public class OrderService extends AbstractGenericService<Order, Long>
 						order.getState().equals(Order.State.FINISHED) && 
 						( oldState == null || !oldState.equals(Order.State.FINISHED)) ) {
 					
-					if(producedWork.getColoredQuantity() != null)
-						equipment.setColoredUsageCount(equipment.getColoredUsageCount()+producedWork.getColoredQuantity());
-					
-					if(producedWork.getQuantity() != null)
-						equipment.setMonochromeUsageCount(equipment.getMonochromeUsageCount()+producedWork.getQuantity());
-					
-					equipmentService.save(equipment);
+					if(producedWork.getQuantity() != null) {
+						if(WorkType.PRINTING_COLORED.equals( producedWork.getWorkType() ) )
+							equipment.setColoredUsageCount(equipment.getColoredUsageCount()+producedWork.getQuantity());
+						
+						if(WorkType.PRINTING_BLACK_AND_WHITE.equals( producedWork.getWorkType() ))
+							equipment.setMonochromeUsageCount(equipment.getMonochromeUsageCount()+producedWork.getQuantity());
+						
+						equipmentService.save(equipment);
+					}
 				}
+				
+//				if(producedWork.getMaterialConsumption() != null) {
+//					for(MaterialConsumption materialConsumption : producedWork.getMaterialConsumption() ){
+//						if(materialConsumption.isDirty()) {
+//							materialConsumption.setOrder(order);
+//							materialConsumption.setProducedWork(producedWork);
+//							materialConsumption = materialConsumptionService.save(materialConsumption);
+//						}
+//					}
+//					for(MaterialConsumption materialConsumption : producedWork.getMaterialConsumption()) {
+//						materialConsumption.setDirty(false);
+//					}
+//				}
 			}
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setDirty(false);
-			}
-			
-			if(order.getMaterialConsumption() != null) {
-				for(MaterialConsumption materialConsumption : order.getMaterialConsumption() ){
-					if(materialConsumption.isDirty()) {
-						materialConsumption.setOrder(order);
-						materialConsumption = materialConsumptionService.save(materialConsumption);
-					}
-				}
-				for(MaterialConsumption materialConsumption : order.getMaterialConsumption()) {
-					materialConsumption.setDirty(false);;
-				}
 			}
 		}
 		

@@ -54,14 +54,8 @@
 			  <VBox VBox.vgrow="SOMETIMES" alignment="TOP_CENTER">
 			  <children>
 			      <TableView fx:id="producedWorksTableView" 
-			      	maxWidth="1080.0" prefWidth="750.0" minHeight="240.0" prefHeight="240" maxHeight="240.0" VBox.vgrow="ALWAYS" HBox.hgrow="SOMETIMES">
+			      	maxWidth="1080.0" prefWidth="750.0" minHeight="240.0" prefHeight="240" maxHeight="240.0" VBox.vgrow="ALWAYS" HBox.hgrow="SOMETIMES" >
 			      	<columns>
-			      		<TableColumn text="Дата начала" prefWidth="150.0">
-			      			<cellValueFactory><PropertyValueFactory property="beginDateTimeString"/></cellValueFactory>
-			      		</TableColumn>
-			      		<TableColumn text="Дата завершения"  prefWidth="150.0">
-			      			<cellValueFactory><PropertyValueFactory property="finishDateTimeString"/></cellValueFactory>
-			      		</TableColumn>
 			      		<TableColumn text="Тип работ" prefWidth="150.0">
 			      			<cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
 			      		</TableColumn>

@@ -59,7 +59,7 @@
 	<classpathentry kind="lib" path="/dependencies/jars/lucene-sandbox-4.5.1.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/olap4j-0.9.7.309-JS-3.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/postgresql-9.0-801.jdbc4.jar"/>
-	<classpathentry kind="lib" path="/dependencies/jars/spring-aop-4.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/spring-aop-4.0.5.RELEASE.jar" sourcepath="D:/Projects/m2/org/springframework/spring-aop/4.0.5.RELEASE/spring-aop-4.0.5.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/spring-jdbc-4.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/xml-apis-1.3.02.jar"/>

@@ -4,29 +4,76 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
-	prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.LoginController">
-   <children>
-      <GridPane layoutX="200.0" layoutY="140.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Логин" />
-            <Label text="Пароль" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" text="techUser" fx:id="loginField" onKeyPressed="#keyLogin"/>
-            <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="1" text="test" fx:id="passwordField" onKeyPressed="#keyLogin"/>
-            <Label fx:id="errorLabel" textFill="#e81e08" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            <Button mnemonicParsing="false" onAction="#actionLogin" text="Войти" GridPane.columnIndex="1" GridPane.rowIndex="2" onKeyPressed="#keyLogin"/>
-         </children>
-      </GridPane>
-   </children>
-</Pane>
+
+<TabPane tabMaxHeight="768.0" tabMaxWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.LoginController">
+   <tabs>
+      <Tab text="Вход">
+         <content>
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+               <children>
+                  <GridPane layoutX="200.0" layoutY="140.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Логин" />
+                        <Label text="Пароль" GridPane.rowIndex="1" />
+                        <TextField fx:id="loginField" onKeyPressed="#keyLogin" text="techUser" GridPane.columnIndex="1" />
+                        <PasswordField fx:id="passwordField" onKeyPressed="#keyLogin" text="test" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="errorLabel" textFill="#e81e08" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                        <Button mnemonicParsing="false" onAction="#actionLogin" onKeyPressed="#keyLogin" text="Войти" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </Pane>
+         </content>
+      </Tab>
+      <Tab text="Выбор БД">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <VBox layoutX="70.0" layoutY="26.0" prefHeight="426.0" prefWidth="602.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <GridPane alignment="CENTER" hgap="10.0" vgap="10.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="147.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="445.0" minWidth="10.0" prefWidth="445.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <ComboBox fx:id="dbCombo" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <TextField fx:id="dialectField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Название БД" />
+                              <Label text="Диалект" GridPane.rowIndex="1" />
+                              <Label text="Драйвер" GridPane.rowIndex="2" />
+                              <Label text="URL" GridPane.rowIndex="3" />
+                              <Label text="Логин" GridPane.rowIndex="4" />
+                              <TextField fx:id="urlField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Пароль" GridPane.rowIndex="5" />
+                              <TextField fx:id="dbUsernameField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <PasswordField fx:id="dbPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <TextField fx:id="driverField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+   </tabs>
+</TabPane>

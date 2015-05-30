@@ -35,6 +35,7 @@ import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.api.IWorkTypeService;
+import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.ProducedWork;
@@ -43,13 +44,16 @@ import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.EquipmentFX;
 import kz.aksay.polygraph.entityfx.MaterialFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
+import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
+import kz.aksay.polygraph.exception.InternalLogicException;
 import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.service.EmployeeService;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.service.WorkTypeService;
+import kz.aksay.polygraph.util.InitializingBean;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.ParametersAware;
 import kz.aksay.polygraph.util.ParametersUtil;
@@ -57,7 +61,7 @@ import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
 public class ProducedWorkFormController implements Initializable,
-		ParametersAware, SessionAware {
+		ParametersAware, SessionAware, InitializingBean {
 
 	private Map<String, Object> session;
 	
@@ -77,7 +81,6 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private Label coloredAmountLabel;
 	@FXML private Label equipmentLabel;
 	@FXML private Label errorLabel;
-	@FXML private Button finishWorkButton;
 	
 
 	private IEmployeeService employeeService;
@@ -93,6 +96,8 @@ public class ProducedWorkFormController implements Initializable,
 	private SimpleIntegerProperty quantity = new SimpleIntegerProperty(1);
 	private SimpleDoubleProperty cost = new SimpleDoubleProperty();
 	private boolean isPrinting = false;
+
+	private Map<String, Object> parameters;
 	
 	private void closeByActionEvent(ActionEvent actionEvent) {
 		Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
@@ -152,7 +157,7 @@ public class ProducedWorkFormController implements Initializable,
 		}
 		
 		if(isPrinting && equipment == null) {
-			throw new Exception("Для печати необходимо указать оборудование!");
+			throw new InternalLogicException("Для печати необходимо указать оборудование!");
 		}
 		
 		if(producedWork == null) {
@@ -170,61 +175,40 @@ public class ProducedWorkFormController implements Initializable,
 		producedWork.setEquipment(equipment);
 		producedWork.setPrice(BigDecimal.valueOf(price.get()));
 		producedWork.setQuantity(quantity.get());
-		if(coloredQuantityField.isVisible() && 
-				coloredQuantityField.getText() != null && 
-				!coloredQuantityField.getText().isEmpty()) {
-			producedWork.setColoredQuantity(Integer.parseInt(coloredQuantityField.getText()));
-		}
 		
-	}
-
-	@FXML
-	public void finishWork(ActionEvent actionEvent) {
-		if(producedWorkFX != null && producedWork != null) {
-			producedWorkFX.finishWork();
-			orderForm.saveProducedWork(producedWorkFX);
-		}
-		
-		closeByActionEvent(actionEvent);
 	}
 	
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
-		//initializeMaterialConsumptionTableView();
 	}
 
 	@Override
 	public void setParameters(Map<String, Object> parameters) {
-		initializeByParameters(parameters);
+		this.parameters = parameters;
 	}
 
-	private void initializeByParameters(Map<String, Object> parameters) {
-		orderForm = ParametersUtil.extractParameter(
-				parameters, ParameterKeys.ORDER_FORM, OrderForm.class);
-		producedWorkFX = ParametersUtil.extractParameter(
-				parameters, ParameterKeys.PRODUCED_WORK, ProducedWorkFX.class);
-		if(producedWorkFX != null) {
-			producedWork = producedWorkFX.getProducedWork();
-			
-			executorCombo.setValue( producedWorkFX.getExecutorFX() );
-			workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
-			equipmentCombo.setValue( producedWorkFX.getEquipmentFX() );
-			
-			quantity.set(producedWork.getQuantity());
-			price.set(producedWork.getPrice().doubleValue());
-			if(producedWork.getColoredQuantity() != null) {
-				coloredQuantityField.setText(producedWork.getColoredQuantity()+"");
-			}
-
-			finishWorkButton.setVisible(true);
-			
-		} else {
-			
-			finishWorkButton.setVisible(false);
-			
-			if(orderForm != null ) {
-				executorCombo.getSelectionModel().select(orderForm.getCurrentExecutor());
+	private void initializeByParameters() {
+		if(parameters != null) {
+			orderForm = ParametersUtil.extractParameter(
+					parameters, ParameterKeys.ORDER_FORM, OrderForm.class);
+			producedWorkFX = ParametersUtil.extractParameter(
+					parameters, ParameterKeys.PRODUCED_WORK, ProducedWorkFX.class);
+			if(producedWorkFX != null) {
+				producedWork = producedWorkFX.getEntity();
+				
+				executorCombo.setValue( producedWorkFX.getExecutorFX() );
+				workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
+				equipmentCombo.setValue( producedWorkFX.getEquipmentFX() );
+				
+				quantity.set(producedWork.getQuantity());
+				price.set(producedWork.getPrice().doubleValue());
+				
+			} else {
+				
+				if(orderForm != null ) {
+					executorCombo.getSelectionModel().select(orderForm.getCurrentExecutor());
+				}
 			}
 		}
 	}
@@ -237,7 +221,6 @@ public class ProducedWorkFormController implements Initializable,
 		materialConsumptionService = StartingPane.getBean(
 				IMaterialConsumptionService.class);
 		equipmentService = StartingPane.getBean(IEquipmentService.class);
-		
 		
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employeeService.findAll());
@@ -256,7 +239,6 @@ public class ProducedWorkFormController implements Initializable,
                 new NumberStringConverter());
 		
 		costField.textProperty().bind(cost.asString());
-		
 		cost.bind(price.multiply(quantity));
 		
 		workTypeCombo.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<WorkTypeFX>() {
@@ -265,39 +247,43 @@ public class ProducedWorkFormController implements Initializable,
 			public void changed(
 					ObservableValue<? extends WorkTypeFX> observable,
 					WorkTypeFX oldValue, WorkTypeFX newValue) {
-				if(newValue != null && newValue.getName().equalsIgnoreCase(WorkType.DefaultNames.PRINTING)) {
+				
+				if(newValue != null && 
+						( 
+								WorkType.PRINTING_BLACK_AND_WHITE.equals(newValue.getEntity()) || 
+								WorkType.PRINTING_COLORED.equals(newValue.getEntity())
+						)) {
+					
 					isPrinting = true;
-					coloredAmountLabel.setVisible(true);
-					coloredQuantityField.setVisible(true);
-					equipmentLabel.setVisible(true);
-					equipmentCombo.setVisible(true);
-					amountLabel.setText("Количество ч/б прогонов");
+					equipmentLabel.setVisible(isPrinting);
+					equipmentCombo.setVisible(isPrinting);
+					amountLabel.setText("Количество прогонов");
 				} else {
+					
 					isPrinting = false;
-					coloredAmountLabel.setVisible(false);
-					coloredQuantityField.setVisible(false);
-					equipmentLabel.setVisible(false);
-					equipmentCombo.setVisible(false);
+					equipmentLabel.setVisible(isPrinting);
+					equipmentCombo.setVisible(isPrinting);
 					amountLabel.setText("Количество");
 				}
 			}
 			
 		});
 		
-		coloredQuantityField.textProperty().addListener(new ChangeListener<String>() {
-
-			@Override
-			public void changed(ObservableValue<? extends String> observable,
-					String oldValue, String newValue) {
-				if(newValue != null && !newValue.isEmpty()) {
-					if(!newValue.matches("^[0-9]*$")) {
-						coloredQuantityField.setText(oldValue);
-					}
-				}
-			}
-			
-		});
+	}
+	
+	private void initializeMaterialConsumptionTableView() {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put(ParameterKeys.MATERIAL_CONSUMER, producedWorkFX);
+		Node node = SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
+				StartingPane.FXML_ROOT+"material_consumption_tableview.fxml", session, parameters);
+		materialConsumptionPane.getChildren().add(node);
 		
+	}
+	
+	@Override
+	public void afterPropertiesSet() {
+		initializeByParameters();
+		initializeMaterialConsumptionTableView();
 	}
 	
 	public IntegerProperty getQuantityProperty() {

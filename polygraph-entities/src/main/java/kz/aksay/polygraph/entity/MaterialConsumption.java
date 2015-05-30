@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -28,6 +29,7 @@ public class MaterialConsumption extends EntitySupport {
 	@Column
 	private BigDecimal quantity;
 	
+	@NotNull
 	@ManyToOne
 	@ForeignKey(name="material_consumption_fk_produced_work")
 	@JoinColumn(name="produced_work_id")

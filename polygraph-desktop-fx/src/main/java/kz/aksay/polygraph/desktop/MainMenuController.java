@@ -68,7 +68,12 @@ public class MainMenuController implements MainMenu, SessionAware {
 	
 	@FXML
 	public void openMaterialList(ActionEvent actionEvent) {
-		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"paper_tableview.fxml", "Материалы");
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"paper_tableview.fxml", "Бумага");
+	}
+	
+	@FXML
+	public void openBindingSpringList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"binding_spring_tableview.fxml", "Пружины");
 	}
 	
 	@FXML
@@ -148,7 +153,7 @@ public class MainMenuController implements MainMenu, SessionAware {
 	@FXML
 	public void exit(ActionEvent actionEvent) {
 		try {
-			Pane pane = (Pane)FXMLLoader.load(packageInfo.class.getResource(
+			TabPane pane = (TabPane)FXMLLoader.load(packageInfo.class.getResource(
 					StartingPane.FXML_ROOT+"fxml_login.fxml"));
 			StartingPane.changeScene(pane);
 		}

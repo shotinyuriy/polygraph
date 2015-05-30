@@ -10,33 +10,16 @@ import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.util.FormatUtil;
 
-public class MaterialConsumptionFX {
-
-	private MaterialConsumption materialConsumption;
+public class MaterialConsumptionFX extends EntityFX<MaterialConsumption> {
+	
 	private MaterialFX materialFX;
 	
 	public MaterialConsumptionFX(MaterialConsumption materialConsumption) {
-		this.materialConsumption = materialConsumption;
+		super(materialConsumption);
 		Material material = materialConsumption.getMaterial();
 		if(material != null) {
 			materialFX = new  MaterialFX(material);
 		}
-	}
-	
-	public static Collection<MaterialConsumptionFX> convertListEntityToFX(
-			Collection<MaterialConsumption> materialConsumtions) {
-		Collection<MaterialConsumptionFX> materialConsumptionsFX 
-			= new LinkedList<MaterialConsumptionFX>();
-		if(materialConsumtions != null) {
-			for(MaterialConsumption materialConsumption : materialConsumtions) {
-				materialConsumptionsFX.add(new MaterialConsumptionFX(materialConsumption));
-			}
-		}
-		return materialConsumptionsFX;
-	}
-
-	public MaterialConsumption getMaterialConsumption() {
-		return materialConsumption;
 	}
 	
 	public String getMaterialName() {
@@ -47,33 +30,35 @@ public class MaterialConsumptionFX {
 	}
 	
 	public BigDecimal getQuantity() {
-		return materialConsumption.getQuantity();
+		return entity.getQuantity();
 	}
 	
 	public boolean isDirty() {
-		return materialConsumption.isDirty();
+		return entity.isDirty();
 	}
 	
 	public void setDirty(boolean dirty) {
-		materialConsumption.setDirty(dirty);
+		entity.setDirty(dirty);
 	}
 	
 	public void setProducedWork(ProducedWorkFX producedWorkFX) {
-		this.materialConsumption.setProducedWork(
-				producedWorkFX.getProducedWork());
+		this.entity.setProducedWork(
+				producedWorkFX.getEntity());
 	}
 	
 	public void setMaterialFX(MaterialFX materialFX) {
-		this.materialFX = materialFX;
-		this.materialConsumption.setMaterial(materialFX.getMaterial());
+		if(materialFX != null) {
+			this.materialFX = materialFX;
+			this.entity.setMaterial(materialFX.getMaterial());
+		}
 	}
 	
 	public void setQuantity(BigDecimal quantity) {
-		this.materialConsumption.setQuantity(quantity);
+		this.entity.setQuantity(quantity);
 	}
 	
 	public String getOrderCreatedAtString() {
-		Order order = getMaterialConsumption().getOrder();
+		Order order = getEntity().getOrder();
 		if(order  != null ) {
 			if( order.getCreatedAt() != null ) {
 				return FormatUtil.dateFormatter.format(order.getCreatedAt());

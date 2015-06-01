@@ -6,6 +6,28 @@
         Light Metro style sheet for use in JavaFX applications
 */
 
+.orderInTimeRow {
+    -fx-background-color: rgba(100,200,100,0.8);
+    -fx-background-insets: 0, 1, 2;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.orderLateRow {
+    -fx-background-color: rgba(200,100,100,0.8);
+    -fx-background-insets: 0, 1, 2;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.orderInTimeRow:selected {
+	-fx-background-color: rgba(80,180,80,1);
+}
+
+.orderLateRow:selected {
+	-fx-background-color: rgba(180,80,80,1);
+}
+
 .label .text {
 	-fx-font-weight: bolder;
 }

@@ -45,7 +45,7 @@ import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
-import kz.aksay.polygraph.entity.VicariousPower;
+import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
@@ -91,10 +91,12 @@ public class OrderFormController implements
 	@FXML private TextArea descriptionField;
 	@FXML private ComboBox<StateFX> currentStatusCombo;
 	@FXML private DatePicker dateEndPlan;
+	@FXML private Button showEmployeeWorkLoad;
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
 	@FXML private AnchorPane materialConsumptionPane;
 	@FXML private Button addProducedWorkButton;
+	@FXML private AnchorPane employeeWorkloadPane;
 	
 	private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
 	private List<ProducedWork> producedWorksToRemove = new LinkedList<ProducedWork>();
@@ -130,6 +132,7 @@ public class OrderFormController implements
 			}
 			
 			validationLabel.setText("Сохранение успешно");
+			showWorkload();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -221,6 +224,13 @@ public class OrderFormController implements
 		producedWorksTableView.getItems().removeAll(producedWorksFXToRemove);
 	}
 	
+	private void showWorkload() {
+		AnchorPane employeeWorkloadView = (AnchorPane)SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
+				StartingPane.FXML_ROOT+"employee_workload_view.fxml", session, parameters);
+		employeeWorkloadPane.getChildren().clear();
+		employeeWorkloadPane.getChildren().add(employeeWorkloadView);
+	}
+	
 	@Override
 	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
@@ -299,9 +309,11 @@ public class OrderFormController implements
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 		initializeMaterialConsumptionTableView();
+		showWorkload();
 	}
 	
 	private void initializeMaterialConsumptionTableView() {
+		
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put(ParameterKeys.MATERIAL_CONSUMER, orderFX);
 		parameters.put(ParameterKeys.ORDER_FORM, this); 
@@ -310,13 +322,12 @@ public class OrderFormController implements
 		materialConsumptionPane.getChildren().add(node);
 		currentStatusCombo.getItems().clear();
 		currentStatusCombo.getItems().addAll(StateFX.VALUES);
-		
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		List<Employee> employees = employeeService.findAll();
+		List<Employee> employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
 		Collection<EmployeeFX> employeesFX = EmployeeFX.contvertListEntityToFX(employees);
 		
 		currentExecutorCombo.getItems().setAll(employeesFX);

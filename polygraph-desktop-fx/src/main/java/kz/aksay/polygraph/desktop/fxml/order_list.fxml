@@ -41,14 +41,20 @@
 		          <TableColumn prefWidth="150" text="Номер заказа">
 		          	<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
 		          </TableColumn>
-		          <TableColumn prefWidth="150" text="Подробности">
+		          <TableColumn prefWidth="250.0" text="Подробности">
 		          	<cellValueFactory><PropertyValueFactory property="vicariousPowerDescription"/></cellValueFactory>
+		          </TableColumn>
+		          <TableColumn prefWidth="100.0" text="Статус заказа">
+		          	<cellValueFactory><PropertyValueFactory property="stateName"/></cellValueFactory>
 		          </TableColumn>
 		          <TableColumn prefWidth="100.0" text="Дата заказа">
 		          	<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
 		          </TableColumn>
 		          <TableColumn prefWidth="100.0" text="Плановая дата окончания">
 		          	<cellValueFactory><PropertyValueFactory property="dateEndPlanString"/></cellValueFactory>
+		          </TableColumn>
+		          <TableColumn prefWidth="100.0" text="Отставание">
+		          	<cellValueFactory><PropertyValueFactory property="delayFromPlanString"/></cellValueFactory>
 		          </TableColumn>
 		          <TableColumn prefWidth="200.0" text="Клиент">
 		          	<cellValueFactory><PropertyValueFactory property="customerFullName" /></cellValueFactory>

@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.api.IGenericService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
@@ -23,6 +26,7 @@ import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
@@ -37,6 +41,7 @@ import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
+import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.util.GeneratorUtils;
 import kz.aksay.polygraph.util.OrgNameGenerator.OrgName;
 import kz.aksay.polygraph.util.PersonNameGenerator.FullName;
@@ -51,6 +56,7 @@ public class TestDataCreator {
 	private ApplicationContext context;
 	private IUserService userService;
 	private IEmployeeService employeeService;
+	private IEquipmentService equipmentService;
 	private IPersonService personService;
 	private IOrganizationService organizationService;
 	private IOrderService orderService;
@@ -58,10 +64,13 @@ public class TestDataCreator {
 	private IWorkTypeService workTypeService;
 	private IPaperTypeService paperTypeService;
 	private IPaperService paperService;
+	private IMaterialService materialService;
 	private IMaterialConsumptionService materialConsumptionService;
 	private IOrderFullTextIndexService orderFullTextIndexService;
 	private IFullTextIndexService fullTextIndexService;
 	private IVicariousPowerService vicariousPowerService;
+	
+	private Random dateEndRealRandom = new Random();
 
 	public TestDataCreator(ApplicationContext context) {
 		this.context = context;
@@ -71,6 +80,7 @@ public class TestDataCreator {
 	public void setUp() {
 		userService = context.getBean(IUserService.class);
 		employeeService = context.getBean(IEmployeeService.class);
+		equipmentService = context.getBean(IEquipmentService.class);
 		personService = context.getBean(IPersonService.class);
 		organizationService = context.getBean(IOrganizationService.class);
 		orderService = context.getBean(IOrderService.class);
@@ -78,6 +88,7 @@ public class TestDataCreator {
 		workTypeService = context.getBean(IWorkTypeService.class);
 		paperTypeService = context.getBean(IPaperTypeService.class);
 		paperService = context.getBean(IPaperService.class);
+		materialService = context.getBean(IMaterialService.class);
 		materialConsumptionService = context.getBean(IMaterialConsumptionService.class);
 		orderFullTextIndexService = context.getBean(IOrderFullTextIndexService.class);
 		fullTextIndexService = context.getBean(IFullTextIndexService.class);
@@ -89,10 +100,16 @@ public class TestDataCreator {
 		List<Person> employeePeople = createPersonList(User.TECH_USER, rolesCount);
 		List<Employee> employees = createEmployees(User.TECH_USER, employeePeople);
 		List<User> users = createUsers(User.TECH_USER, employees);
+		List<User> executors = new ArrayList<>();
+		for(User user : users) {
+			if(user.getRole().equals(Role.DESIGNER)) {
+				executors.add(user);
+			}
+		}
 		employeePeople = null;
 		employees = null;
 		List<Subject> customers = createCustomers(users);
-		List<Order> orders = createOrders(users, customers);
+		List<Order> orders = createOrders(users, executors, customers);
 		customers = null;
 	}
 	
@@ -127,13 +144,17 @@ public class TestDataCreator {
 		
 		Role role = null;
 		for(Employee employee : employees) {
+			
 			role = Role.values()[roleIndex];
-			String login = generateLogin(employee);
-			String password = login;
-			try {
-				users.add(createUser(creator, employee, login, password, role));
-			} catch (Exception e) {
-				e.printStackTrace();
+			
+			if(!role.equals(Role.ADMIN)) { 
+				String login = generateLogin(employee);
+				String password = login;
+				try {
+					users.add(createUser(creator, employee, login, password, role));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 			if(roleIndex < roleCount-1)
@@ -173,7 +194,7 @@ public class TestDataCreator {
 		return customers;
 	}
 	
-	private List<Order> createOrders(List<User> creators, List<Subject> customers) {
+	private List<Order> createOrders(List<User> creators, List<User> executors, List<Subject> customers) {
 		List<Order> orders = new ArrayList<>(customers.size()*3);
 		List<WorkType> workTypes = workTypeService.findAll();
 		Random r  = new Random();
@@ -181,16 +202,21 @@ public class TestDataCreator {
 			for(int i = 0; i < 1; i++) {
 				int userIndex = r.nextInt(creators.size());
 				User creator = creators.get(userIndex);
-				int employeeIndex = r.nextInt(creators.size());
-				Employee employee = creators.get(employeeIndex).getEmployee();
+				int employeeIndex = r.nextInt(executors.size());
+				Employee employee = executors.get(employeeIndex).getEmployee();
 				try {
 					VicariousPower vicariousPower = null;
 					if(customer instanceof Organization) {
 						vicariousPower = createVicariousPower((Organization)customer);
 					}
-					Order order = createOrder(creator, customer, employee, vicariousPower);
+					Order.State state = Order.State.values()[r.nextInt(Order.State.values().length)];
+					Order order = createOrder(creator, customer, employee, vicariousPower, state);
 					for(WorkType workType : workTypes) {
-						createProducedWork(order, workType, employee);
+						Equipment equipment = null;
+						if(workTypeService.isEquipmentRequired(workType)) {
+							equipment = equipmentService.findByName("DC-12");
+						}
+						createProducedWork(order, workType, employee, equipment);
 					}
 					orders.add( order );
 				} catch(Exception e) {
@@ -315,18 +341,25 @@ public class TestDataCreator {
 		return paperA4;
 	}
 	
-	public Order createOrder(User creator, Subject customer, Employee executorEmployee, VicariousPower vicariousPower) throws Exception {
+	public Order createOrder(User creator, Subject customer, 
+			Employee executorEmployee, VicariousPower vicariousPower, Order.State state) throws Exception {
 		Order firstOrder = new Order();
 		firstOrder.setCreatedAt(new Date());
 		firstOrder.setCreatedBy(creator);
 		firstOrder.setCustomer(customer);
 		firstOrder.setCurrentExecutor(executorEmployee);
 		firstOrder.setDescription("Описание заказа на ксерокопию");
-		firstOrder.setState(Order.State.PROCESSED);
+		firstOrder.setState(state);
 		firstOrder.setVicariousPower(vicariousPower);
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, 3);
 		firstOrder.setDateEndPlan(calendar.getTime());
+		if(state.equals(Order.State.FINISHED)) {
+			int delay = dateEndRealRandom.nextInt(5) - 2;
+			calendar.add(Calendar.DAY_OF_YEAR, delay);
+			firstOrder.setDateEndReal(calendar.getTime());
+		}
+			
 		orderService.save(firstOrder);
 		return firstOrder;
 	}
@@ -338,25 +371,50 @@ public class TestDataCreator {
 		secondOrder.setCustomer(customer);
 		secondOrder.setCurrentExecutor(executorEmployee);
 		secondOrder.setDescription("Описание заказа на ксерокопию");
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 1);
+		secondOrder.setDateEndPlan(calendar.getTime());
 		orderService.save(secondOrder);
 		return secondOrder;
 	}
 
-	public ProducedWork createProducedWork(Order order, WorkType workType, Employee executorEmployee) throws Exception {
+	public ProducedWork createProducedWork(Order order, WorkType workType, Employee executorEmployee, Equipment equipment) throws Exception {
 		ProducedWork producedWork = new ProducedWork();
 		producedWork.setCreatedAt(new Date());
 		producedWork.setCreatedBy(User.TECH_USER);
 		producedWork.setOrder(order);
 		producedWork.setWorkType(workType);
 		producedWork.setExecutor(executorEmployee);
+		producedWork.setEquipment(equipment);
 		producedWork.setDirty(true);
 		producedWork.setQuantity(1);
 		producedWork.setPrice(BigDecimal.valueOf(100));
+		
+		Set<MaterialConsumption> materialConsumptions = createMaterialConsumptions(producedWork);
+		producedWork.setMaterialConsumption(materialConsumptions);
+		
 		producedWork = producedWorkService.save(producedWork);		
 		return producedWork;
 	}
 	
-	public MaterialConsumption createMaterialConsumption(Material material, Order order, ProducedWork producedWork) throws Exception {
+	private Set<MaterialConsumption> createMaterialConsumptions(
+			ProducedWork producedWork) throws Exception {
+		Set<MaterialConsumption> materialConsumptions = new HashSet<>();
+		
+		List<Material> materials = materialService.findMaterialsByWorkType(producedWork.getWorkType());
+		if(!materials.isEmpty()) {
+			Random r = new Random();
+			int index = r.nextInt(materials.size());
+			Material material = materials.get(index);
+			MaterialConsumption materialConsumption = 
+					createMaterialConsumption(material, producedWork.getOrder(), producedWork, false);
+			materialConsumptions.add(materialConsumption);
+		}
+		
+		return materialConsumptions;
+	}
+
+	public MaterialConsumption createMaterialConsumption(Material material, Order order, ProducedWork producedWork, boolean save) throws Exception {
 		MaterialConsumption copyMaterialConsumption = new MaterialConsumption();
 		copyMaterialConsumption.setCreatedAt(new Date());
 		copyMaterialConsumption.setCreatedBy(User.TECH_USER);
@@ -365,8 +423,10 @@ public class TestDataCreator {
 		copyMaterialConsumption.setProducedWork(producedWork);
 		copyMaterialConsumption.setQuantity(BigDecimal.valueOf(1.0));
 		copyMaterialConsumption.setDirty(true);
-		copyMaterialConsumption = materialConsumptionService.save(
-				copyMaterialConsumption);
+		if(save) {
+			copyMaterialConsumption = materialConsumptionService.save(
+					copyMaterialConsumption);
+		}
 		return copyMaterialConsumption;
 	}
 }

@@ -19,11 +19,32 @@ public class Equipment extends EntitySupport {
 	@JoinColumn(name="work_type_id")
 	private WorkType workType;
 	
-	@Column
+	@Column(name="monochrome_usage_count")
 	private int monochromeUsageCount = 0;
 	
-	@Column
+	@Column(name="colored_usage_count")
 	private int coloredUsageCount = 0;
+	
+	@Override
+	public int hashCode() {
+		if(id != null) {
+			return id.hashCode();
+		}
+		return -1;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object == null) return false;
+		if(object instanceof Equipment == false) return false;
+		Equipment other = (Equipment) object;
+		if(this.id == null) {
+			if(other.getId() != null) return false;
+			return true;
+		}
+		if(other.getId() == null) return true;
+		return this.id.equals(other.getId());
+	}
 
 	public String getName() {
 		return name;

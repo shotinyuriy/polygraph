@@ -14,4 +14,5 @@ public abstract class ParameterKeys {
 	public static final String ORGANIZATION_FORM = "organizationForm";
 	public static final String CONTRACT = "contract";
 	public static final String VICARIOUS_POWER = "vicariousPower";
+	public static final String PRODUCED_WORK_FORM = "producedWorkForm";
 }

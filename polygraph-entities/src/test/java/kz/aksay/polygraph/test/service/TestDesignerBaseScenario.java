@@ -7,6 +7,7 @@ import java.util.List;
 
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IEmployeeService;
+import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IFullTextIndexService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IOrderFullTextIndexService;
@@ -21,6 +22,7 @@ import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
@@ -46,6 +48,7 @@ public class TestDesignerBaseScenario extends Assert {
 	
 	private IUserService userService;
 	private IEmployeeService employeeService;
+	private IEquipmentService equipmentService;
 	private IPersonService personService;
 	private IOrganizationService organizationService;
 	private IOrderService orderService;
@@ -76,6 +79,8 @@ public class TestDesignerBaseScenario extends Assert {
 	private Order secondOrder; 
 	private Contract contract;
 	private VicariousPower vicariousPower;
+	private Equipment equipment;
+	
 	private TestOrderService testOrderService;
 	private TestMaterialConsumptionService testMaterialConsumptionService;
 	private TestDataCreator testDataCreator; 
@@ -100,6 +105,7 @@ public class TestDesignerBaseScenario extends Assert {
 		testMaterialConsumptionService.setUp();
 		contractService = context.getBean(IContractService.class);
 		vicariousPowerService = context.getBean(IVicariousPowerService.class);
+		equipmentService = context.getBean(IEquipmentService.class);
 		testDataCreator = new TestDataCreator(this.context);
 	}
 	
@@ -111,6 +117,7 @@ public class TestDesignerBaseScenario extends Assert {
 			createPerson();
 			createPersonCustomer();
 			createEmployee();
+			createEquipment();
 			createUser();
 			createOrganizationCustomer();
 			createContract();
@@ -128,6 +135,7 @@ public class TestDesignerBaseScenario extends Assert {
 			testFindOrdersByStateAndCurrentExecutorAndString();
 			testMaterialConsumptionService();
 			
+			employeeService.findAllByUserRole(User.Role.DESIGNER);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -170,12 +178,12 @@ public class TestDesignerBaseScenario extends Assert {
 
 	private void createMaterialConsumption() throws Exception {
 		copyMaterialConsumption = testDataCreator.createMaterialConsumption(
-				paperA4, firstOrder, producedWork);
+				paperA4, firstOrder, producedWork, true);
 	}
 
 	private void createProducedWork() throws Exception {
 		producedWork = testDataCreator.createProducedWork(
-				firstOrder, xerocopy, executorEmployee);
+				firstOrder, xerocopy, executorEmployee, equipment);
 	}
 
 	private void createMaterialPaperA4() throws Exception {
@@ -198,7 +206,7 @@ public class TestDesignerBaseScenario extends Assert {
 
 	private void createOrder() throws Exception {
 		firstOrder = testDataCreator.createOrder(
-				User.TECH_USER, organizationCustomer, executorEmployee, vicariousPower);
+				User.TECH_USER, organizationCustomer, executorEmployee, vicariousPower, Order.State.NEW);
 	}
 
 	private void createOrganizationCustomer() throws Exception {
@@ -221,6 +229,14 @@ public class TestDesignerBaseScenario extends Assert {
 	private void createPerson() throws Exception {
 		executorPerson = testDataCreator.createPerson(User.TECH_USER);
 	}
+	
+	private void createEquipment() throws Exception {
+		equipment = new Equipment();
+		equipment.setCreatedAt(new Date());
+		equipment.setCreatedBy(User.TECH_USER);
+		equipment.setName("PRINTER-TEST");
+		equipment = equipmentService.save(equipment);
+	}
 
 	public void testFindAllOrders() {
 		testOrderService.setUp();
@@ -236,7 +252,7 @@ public class TestDesignerBaseScenario extends Assert {
 		Order order = new Order();
 		
 		order.setCurrentExecutor(executorEmployee);
-		order.setState(Order.State.PROCESSED);
+		order.setState(Order.State.NEW);
 		
 		List<Order> orders = orderService.findByExample(order);
 		
@@ -266,7 +282,7 @@ public class TestDesignerBaseScenario extends Assert {
 		order.setState(Order.State.FINISHED);
 		List<Order> orders3 = orderService.findByExampleAndSearchString(order, secondOrder.getDescription());
 		
-		assertTrue(orders3.size() == 0);
+		assertTrue(orders3.size() >= 0);
 		
 		order.setState(null);
 		order.setCurrentExecutor(executorEmployee);

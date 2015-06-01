@@ -4,16 +4,20 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class Sticker extends Material {
 	
+	@NotNull(message="Не указан формат наклейки")
 	@Enumerated(EnumType.ORDINAL)
 	private Format format;
 	
+	@NotNull(message="Не указан тип наклейки")
 	@Enumerated(EnumType.ORDINAL)
 	private Type type;
 	
-	@Min(value=1)
+	@NotNull(message="Не указана плотность наклейки")
+	@Min(value=1, message="Минимальное значение плотности 1мк")
 	@Column
 	private Integer density;
 
@@ -66,6 +70,8 @@ public class Sticker extends Material {
 	public String getName() {
 		StringBuffer sb = new StringBuffer();
 		
+		sb.append(getMaterialClass().getName());
+		sb.append(" ");
 		if(format != null) {
 			sb.append(format.name());
 		}

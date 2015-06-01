@@ -15,7 +15,10 @@ import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -24,10 +27,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import kz.aksay.polygraph.api.IUserService;
+import kz.aksay.polygraph.desktop.controls.IndefiniteProgressMaker;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.util.PropertiesUtils;
@@ -46,8 +51,10 @@ public class LoginController implements Initializable {
 	@FXML private TextField urlField;
 	@FXML private TextField dbUsernameField;
 	@FXML private TextField dbPasswordField;
+	@FXML private ProgressIndicator progressIndicator;
 	
 	private Properties properties;
+	private IndefiniteProgressMaker ipm;
 	
 	@FXML
 	public void actionLogin(ActionEvent actionEvent) throws IOException {
@@ -64,28 +71,60 @@ public class LoginController implements Initializable {
 	
 	public void login() throws IOException {
 		
-		writeDatabaseProperties();
-		loadContext();
+		final Thread progressThread = new Thread(ipm);
+		progressThread.start();
 		
-		userService = StartingPane.getBean(IUserService.class);
-		User user = userService.findByLoginAndPassword(
-				loginField.getText(), passwordField.getText());
-		
-		if(user == null) {
-			errorLabel.setText("Вы ввели неправильные логин и пароль");
-		}
-		else {
-			Map<String, Object> session = new HashMap<>();
-			session.put(SessionUtil.USER_KEY, user);
+		final Task<Void> task = new Task<Void>() {
+	         @Override 
+	         protected Void call() throws Exception {
+	        	 	updateProgress(0, 0);
+					return null;
+	         }
+	         
+	        @Override
+	        protected void updateProgress(double workDone, double max) {
+	        	writeDatabaseProperties();
+				loadContext();
+	        }
+	     };
+	     
+	     task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 			
-			Node node = SessionUtil.loadFxmlNodeWithSession(
-					packageInfo.class, StartingPane.FXML_ROOT+"main_menu.fxml", session, null);
-			
-			if(node instanceof Parent) {
-				Scene scene = new Scene((Parent)node);
-				StartingPane.getPrimaryStage().setScene(scene);
+			@Override
+			public void handle(WorkerStateEvent event) {
+				ipm.cancel(true);
+				progressIndicator.setProgress(1);
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			     
+				userService = StartingPane.getBean(IUserService.class);
+				User user = userService.findByLoginAndPassword(
+						loginField.getText(), passwordField.getText());
+				
+				if(user == null) {
+					errorLabel.setText("Вы ввели неправильные логин и пароль");
+				}
+				else {
+					Map<String, Object> session = new HashMap<>();
+					session.put(SessionUtil.USER_KEY, user);
+					
+					Node node = SessionUtil.loadFxmlNodeWithSession(
+							packageInfo.class, StartingPane.FXML_ROOT+"main_menu.fxml", session, null);
+					
+					if(node instanceof Parent) {
+						Scene scene = new Scene((Parent)node);
+						StartingPane.getPrimaryStage().setScene(scene);
+					}
+				}
 			}
-		}
+		});
+	     
+	     final Thread loginThread = new Thread(task);
+	     loginThread.start();
 	}
 
 	private void loadContext() {
@@ -114,6 +153,10 @@ public class LoginController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		progressIndicator.setVisible(false);
+		ipm = new IndefiniteProgressMaker(progressIndicator);
+		
 		dbCombo.getItems().add("default-postgresql");
 		dbCombo.getItems().add("default-hsql");
 		

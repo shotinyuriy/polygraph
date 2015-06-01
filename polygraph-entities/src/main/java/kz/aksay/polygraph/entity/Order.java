@@ -51,7 +51,7 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	@Transient
 	private Set<MaterialConsumption> materialConsumption;
 	
-	@NotNull
+	@NotNull(message="Не указан заказчик в заказе")
 	@ManyToOne
 	@JoinColumn(name="customer_id", nullable=false)
 	private Subject customer;
@@ -64,8 +64,12 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	@JoinColumn(name="current_executor_id")
 	private Employee currentExecutor;
 	
-	@Column
+	@NotNull(message="Не указана плановая дата завершения")
+	@Column(name="date_end_plan")
 	private Date dateEndPlan;
+	
+	@Column(name="date_end_real")
+	private Date dateEndReal;
 	
 	@Transient
 	private Set<ProducedWork> producedWorks;
@@ -161,5 +165,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	public void setVicariousPower(VicariousPower vicariousPower) {
 		this.vicariousPower = vicariousPower;
+	}
+
+	public Date getDateEndReal() {
+		return dateEndReal;
+	}
+
+	public void setDateEndReal(Date dateEndReal) {
+		this.dateEndReal = dateEndReal;
 	}
 }

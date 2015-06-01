@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,7 +22,8 @@ public class MaterialConsumption extends EntitySupport {
 	 */
 	private static final long serialVersionUID = 8066545437632459224L;
 	
-	@ManyToOne
+	@NotNull(message="Не указан израсходованный материал")
+	@ManyToOne(fetch=FetchType.EAGER)
 	@ForeignKey(name="material_consumption_fk_material")
 	@JoinColumn(name="material_id", nullable=false)
 	private Material material;
@@ -29,7 +31,7 @@ public class MaterialConsumption extends EntitySupport {
 	@Column
 	private BigDecimal quantity;
 	
-	@NotNull
+	@NotNull(message="Не указана произведенная работа")
 	@ManyToOne
 	@ForeignKey(name="material_consumption_fk_produced_work")
 	@JoinColumn(name="produced_work_id")

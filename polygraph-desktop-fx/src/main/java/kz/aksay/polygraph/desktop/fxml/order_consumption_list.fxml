@@ -41,12 +41,13 @@
 	   	  
 		      <TableView fx:id="orderConsumptionsTableView" prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER" VBox.vgrow="SOMETIMES">
 		        <columns>
-		          <TableColumn prefWidth="350.0" text="Материал">
-		          	<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
-		          </TableColumn>
-		          <TableColumn prefWidth="100.0" text="Дата заказа">
+		        <TableColumn prefWidth="100.0" text="Дата заказа">
 		          	<cellValueFactory><PropertyValueFactory property="orderCreatedAtString"/></cellValueFactory>
 		          </TableColumn>
+		          <TableColumn prefWidth="350.0" text="Материал">
+		          	<cellValueFactory><PropertyValueFactory property="materialName"/></cellValueFactory>
+		          </TableColumn>
+		          
 		          <TableColumn prefWidth="200.0" text="Количество">
 		          	<cellValueFactory><PropertyValueFactory property="quantity" /></cellValueFactory>
 		          </TableColumn>

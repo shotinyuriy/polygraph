@@ -32,8 +32,8 @@ public class User implements Serializable {
 		ADMIN("АДМИНИСТРАТОР"),
 		DIRECTOR("ДИРЕКТОР"),
 		DESIGNER("ДИЗАЙНЕР"),
-		MANAGER("БУХГАЛТЕР"),
-		ACCOUNTANT("МЕНЕДЖЕР");
+		MANAGER("МЕНЕДЖЕР"),
+		ACCOUNTANT("БУХГАЛТЕР");
 		
 		private String name;
 		

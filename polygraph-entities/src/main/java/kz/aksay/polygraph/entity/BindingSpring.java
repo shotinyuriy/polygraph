@@ -6,6 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="spring")
@@ -27,10 +28,12 @@ public class BindingSpring extends Material {
 		}
 	}
 	
+	@NotNull(message="Не указан диаметр в миллиметрах")
 	@Column
-	@Min(value=1)
+	@Min(value=1, message="Диаметр должен быть от 1мм")
 	private Integer diameter;
 	
+	@NotNull(message="Не указан тип пружины")
 	@Enumerated(EnumType.STRING)
 	private Type type;
 
@@ -59,8 +62,10 @@ public class BindingSpring extends Material {
 	public String getName() {
 		StringBuffer sb = new StringBuffer();
 		
+		sb.append(getMaterialClass().getName());
+		sb.append(" ");
 		if(type != null) {
-			sb.append(type.name());
+			sb.append(type.getName());
 		}
 		if(sb.length() > 0) {
 			sb.append(" ");

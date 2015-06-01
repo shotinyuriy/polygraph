@@ -61,6 +61,8 @@ public class Paper extends Material {
 	public String getName() {
 		StringBuffer sb = new StringBuffer();
 		
+		sb.append(getMaterialClass().getName());
+		sb.append(" ");
 		if(format != null) {
 			sb.append(format.name());
 		}

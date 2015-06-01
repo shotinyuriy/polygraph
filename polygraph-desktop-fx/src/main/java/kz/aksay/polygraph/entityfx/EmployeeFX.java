@@ -55,7 +55,7 @@ public class EmployeeFX {
 	}
 	
 	public String toString() {
-		if(personFX == null || personFX.getPerson() == null) return "Все";
+		if(employee == null) return "Все";
 		return personFX.getFullName()+" ("+this.getTypeName()+")";
 	}
 }

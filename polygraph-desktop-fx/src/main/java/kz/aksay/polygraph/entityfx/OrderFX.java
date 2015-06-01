@@ -26,6 +26,7 @@ import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
+import kz.aksay.polygraph.util.DateUtils;
 import kz.aksay.polygraph.util.FormatUtil;
 
 public class OrderFX implements MaterialConsumptionHolderFX {
@@ -203,6 +204,46 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	public String getVicariousPowerDescription() {
 		if( getVicariousPowerProperty().get() != null ) {
 			return getVicariousPowerProperty().get().getDescription();
+		}
+		return null;
+	}
+	
+	public String getStateName() {
+		if(order.getState() != null) {
+			return order.getState().getName();
+		}
+		return null;
+	}
+	
+	public Boolean isInTime() {
+		if(order !=null && order.getState() != null) {
+			Integer delayFromPlan = delayFromPlan();
+			if(delayFromPlan != null) {
+				return delayFromPlan <= 0;
+			}
+		}
+		return null;
+	}
+	
+	public Integer delayFromPlan() {
+		if(order != null) {
+			switch(order.getState()) {
+				case PROCESSED:
+				case NEW:
+					return DateUtils.differenceInDays(new Date(), order.getDateEndPlan());
+				case FINISHED:
+					return  DateUtils.differenceInDays(order.getDateEndReal(), order.getDateEndPlan());
+			}
+		}
+		return null;
+	}
+	
+	public String getDelayFromPlanString() {
+		Integer delayFromPlan = delayFromPlan();
+		if(delayFromPlan != null){
+//			if(delayFromPlan > 0) {
+				return delayFromPlan.toString();
+//			}
 		}
 		return null;
 	}

@@ -100,6 +100,11 @@ public class WorkType extends EntitySupport {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.code.hashCode();
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) return false;
 		if(!(obj instanceof WorkType)) return false;
@@ -109,7 +114,7 @@ public class WorkType extends EntitySupport {
 			return true;
 		} else {
 			if(other.code == null) return false;
-			return true;
+			return this.code.equals(other.code);
 		}
 	}
 }

@@ -51,4 +51,15 @@ public class WorkTypeService extends AbstractGenericService<WorkType, Long>
 		return workType;
 	}
 
+	@Override
+	public boolean isEquipmentRequired(WorkType workType) {
+		if(workType != null && (
+				workType.equals(WorkType.PRINTING_BLACK_AND_WHITE) ||
+				workType.equals(WorkType.PRINTING_COLORED)
+				)) {
+			return true;
+		}
+		return false;
+	}
+
 }

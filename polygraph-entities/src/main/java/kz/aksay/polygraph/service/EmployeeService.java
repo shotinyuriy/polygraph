@@ -1,5 +1,7 @@
 package kz.aksay.polygraph.service;
 
+import java.util.List;
+
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IUserService;
@@ -7,7 +9,11 @@ import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entity.User.Role;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +73,15 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 	@Autowired
 	public void setUserService(IUserService userService) {
 		this.userService = userService;
+	}
+
+	@Override
+	public List<Employee> findAllByUserRole(Role role) {
+		Query query = getDao().getSession().createQuery(
+				"SELECT emp FROM Employee emp WHERE emp.user.role = :userRole")
+				.setParameter("userRole", role);
+				
+		return query.list();
 	}
 	 
 }

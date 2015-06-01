@@ -6,4 +6,6 @@ public interface IWorkTypeService extends IGenericService<WorkType, Long> {
 	public WorkType findByName(String workTypeName);
 	
 	public WorkType findByCode(String workTypeCode);
+	
+	public boolean isEquipmentRequired(WorkType workType);
 }

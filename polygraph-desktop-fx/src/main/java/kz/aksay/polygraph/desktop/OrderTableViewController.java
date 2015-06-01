@@ -2,6 +2,8 @@ package kz.aksay.polygraph.desktop;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -72,7 +75,7 @@ public class OrderTableViewController implements Initializable,
 		List<Order> orders = orderService.findAll();
 		List<OrderFX> ordersFX = OrderFX.convertListEntityToFX(orders);
 		
-		List<Employee> employees = employeeService.findAll();
+		List<Employee> employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
 		
 		onlyMy.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -91,29 +94,7 @@ public class OrderTableViewController implements Initializable,
 		executorCombo.getItems().add(EmployeeFX.ALL_EMPLOYEES);
 		executorCombo.getItems().addAll(EmployeeFX.contvertListEntityToFX(employees));
 		
-		
-		ordersTableView.setRowFactory(new Callback<TableView<OrderFX>, TableRow<OrderFX>>() {
-			
-			@Override
-			public TableRow<OrderFX> call(TableView<OrderFX> param) {
-				// TODO Auto-generated method stub
-				TableRow<OrderFX> tableRow = new TableRow<>();
-				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-					@Override
-					public void handle(MouseEvent event) {
-						int clickCount = event.getClickCount();
-						if(clickCount == 2) {
-							openOrderForm(new ActionEvent(event.getSource(), 
-								event.getTarget()));
-						}
-					}
-					
-				});
-				
-				return tableRow;
-			}
-		});
+		setTableRowFactory();
 	}
 	
 	@FXML
@@ -193,5 +174,72 @@ public class OrderTableViewController implements Initializable,
 		} catch (JRException e) {
 			errorLabel.setText(e.getLocalizedMessage());
 		}
+	}
+	
+	private void setTableRowFactory() {
+		
+		final List<String> classes = new ArrayList<>(2);
+		classes.add("orderInTimeRow");
+		classes.add("orderLateRow");
+		
+		ordersTableView.setRowFactory(new Callback<TableView<OrderFX>, TableRow<OrderFX>>() {
+	        @Override
+	        public TableRow<OrderFX> call(TableView<OrderFX> tableView) {
+	            final TableRow<OrderFX> tableRow = new TableRow<OrderFX>() {
+	                @Override
+	                protected void updateItem(OrderFX orderFX, boolean empty){
+	                	if(orderFX != null) {
+		                    super.updateItem(orderFX, empty);
+		                    getStyleClass().removeAll(classes);
+		                    Boolean inTime = orderFX.isInTime();
+		                    if (inTime != null) {
+		                    	if(inTime) {
+			                        if (! getStyleClass().contains("orderInTimeRow")) {
+			                            getStyleClass().add("orderInTimeRow");
+			                        }
+		                    	} else {
+		                    		if (! getStyleClass().contains("orderLateRow")) {
+			                            getStyleClass().add("orderLateRow");
+			                        }
+		                    	}
+		                    }
+		                }
+	                }
+	            };
+	            
+				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						int clickCount = event.getClickCount();
+						if(clickCount == 2) {
+							openOrderForm(new ActionEvent(event.getSource(), 
+								event.getTarget()));
+						}
+					}
+					
+				});
+				
+				ordersTableView.getItems().addListener(new ListChangeListener<OrderFX>() {
+	                @Override
+	                public void onChanged(Change<? extends OrderFX> change) {
+	                    tableRow.getStyleClass().removeAll(classes);
+	                    Boolean inTime = tableRow.getItem().isInTime();
+	                    if (inTime != null) {
+	                    	if(inTime) {
+		                        if (! tableRow.getStyleClass().contains("orderInTimeRow")) {
+		                        	tableRow.getStyleClass().add("orderInTimeRow");
+		                        }
+	                    	} else {
+	                    		if (! tableRow.getStyleClass().contains("orderLateRow")) {
+	                    			tableRow.getStyleClass().add("orderLateRow");
+		                        }
+	                    	}
+	                    }
+	                }
+	            });
+	            return tableRow;
+	        }
+	    });
 	}
 }

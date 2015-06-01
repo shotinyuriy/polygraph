@@ -47,8 +47,10 @@ import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
 import kz.aksay.polygraph.entityfx.WorkTypeFX;
 import kz.aksay.polygraph.exception.InternalLogicException;
+import kz.aksay.polygraph.fxapi.MaterialConsumptionForm;
 import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
+import kz.aksay.polygraph.fxapi.ProducedWorkForm;
 import kz.aksay.polygraph.service.EmployeeService;
 import kz.aksay.polygraph.service.MaterialConsumptionService;
 import kz.aksay.polygraph.service.MaterialService;
@@ -61,7 +63,7 @@ import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
 public class ProducedWorkFormController implements Initializable,
-		ParametersAware, SessionAware, InitializingBean {
+		ParametersAware, SessionAware, InitializingBean, ProducedWorkForm {
 
 	private Map<String, Object> session;
 	
@@ -91,6 +93,7 @@ public class ProducedWorkFormController implements Initializable,
 	private ProducedWorkFX producedWorkFX;
 	private ProducedWork producedWork;
 	private OrderForm orderForm;
+	private MaterialConsumptionForm materialConsumptionForm;
 		
 	private SimpleDoubleProperty price = new SimpleDoubleProperty();
 	private SimpleIntegerProperty quantity = new SimpleIntegerProperty(1);
@@ -187,34 +190,11 @@ public class ProducedWorkFormController implements Initializable,
 	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
 	}
-
-	private void initializeByParameters() {
-		if(parameters != null) {
-			orderForm = ParametersUtil.extractParameter(
-					parameters, ParameterKeys.ORDER_FORM, OrderForm.class);
-			producedWorkFX = ParametersUtil.extractParameter(
-					parameters, ParameterKeys.PRODUCED_WORK, ProducedWorkFX.class);
-			if(producedWorkFX != null) {
-				producedWork = producedWorkFX.getEntity();
-				
-				executorCombo.setValue( producedWorkFX.getExecutorFX() );
-				workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
-				equipmentCombo.setValue( producedWorkFX.getEquipmentFX() );
-				
-				quantity.set(producedWork.getQuantity());
-				price.set(producedWork.getPrice().doubleValue());
-				
-			} else {
-				
-				if(orderForm != null ) {
-					executorCombo.getSelectionModel().select(orderForm.getCurrentExecutor());
-				}
-			}
-		}
-	}
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		employeeService = StartingPane.getBean(IEmployeeService.class);
 		workTypeService = StartingPane.getBean(IWorkTypeService.class);
 		materialService = StartingPane.getBean(IMaterialService.class);
@@ -241,7 +221,8 @@ public class ProducedWorkFormController implements Initializable,
 		costField.textProperty().bind(cost.asString());
 		cost.bind(price.multiply(quantity));
 		
-		workTypeCombo.getSelectionModel().selectedItemProperty().addListener( new ChangeListener<WorkTypeFX>() {
+		workTypeCombo.getSelectionModel().selectedItemProperty().addListener( 
+				new ChangeListener<WorkTypeFX>() {
 
 			@Override
 			public void changed(
@@ -265,25 +246,68 @@ public class ProducedWorkFormController implements Initializable,
 					equipmentCombo.setVisible(isPrinting);
 					amountLabel.setText("Количество");
 				}
+				
+				if(materialConsumptionForm != null) {
+					materialConsumptionForm.loadMaterialsByWorkType(
+							newValue.getEntity());
+				}
 			}
 			
 		});
 		
 	}
 	
+	private void initializeByParameters() {
+		if(parameters != null) {
+			orderForm = ParametersUtil.extractParameter(
+					parameters, ParameterKeys.ORDER_FORM, OrderForm.class);
+			producedWorkFX = ParametersUtil.extractParameter(
+					parameters, ParameterKeys.PRODUCED_WORK, ProducedWorkFX.class);
+			if(producedWorkFX != null) {
+				producedWork = producedWorkFX.getEntity();
+				
+				executorCombo.setValue( producedWorkFX.getExecutorFX() );
+				workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
+				equipmentCombo.setValue( producedWorkFX.getEquipmentFX() );
+				
+				quantity.set(producedWork.getQuantity());
+				price.set(producedWork.getPrice().doubleValue());
+				
+			} else {
+				
+				if(orderForm != null ) {
+					executorCombo.getSelectionModel().select(orderForm.getCurrentExecutor());
+				}
+			}
+		}
+	}
+	
 	private void initializeMaterialConsumptionTableView() {
+		
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put(ParameterKeys.MATERIAL_CONSUMER, producedWorkFX);
+		parameters.put(ParameterKeys.PRODUCED_WORK_FORM, this);
 		Node node = SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
-				StartingPane.FXML_ROOT+"material_consumption_tableview.fxml", session, parameters);
+				StartingPane.FXML_ROOT+"material_consumption_tableview.fxml", 
+				session, parameters);
 		materialConsumptionPane.getChildren().add(node);
-		
+		WorkTypeFX workTypeFX = workTypeCombo.getSelectionModel().getSelectedItem();
+		if(materialConsumptionForm != null && workTypeFX != null) {
+			materialConsumptionForm.loadMaterialsByWorkType(workTypeFX.getEntity());
+		}
 	}
 	
 	@Override
 	public void afterPropertiesSet() {
 		initializeByParameters();
 		initializeMaterialConsumptionTableView();
+	}
+
+	@Override
+	public void setMaterialConsumptionForm(
+			MaterialConsumptionForm materialConsumptionForm) {
+		
+		this.materialConsumptionForm = materialConsumptionForm;
 	}
 	
 	public IntegerProperty getQuantityProperty() {

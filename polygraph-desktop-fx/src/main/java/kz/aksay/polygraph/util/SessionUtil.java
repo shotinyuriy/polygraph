@@ -50,7 +50,6 @@ public abstract class SessionUtil {
 				ParametersAware parametersAwareController = (ParametersAware)controller;
 				parametersAwareController.setParameters(parameters);
 			}
-			
 			if(controller instanceof InitializingBean) {
 				InitializingBean initializableBean = (InitializingBean)controller;
 				initializableBean.afterPropertiesSet();

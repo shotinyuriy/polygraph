@@ -98,6 +98,8 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			}
 		}
 		
+		Set<Equipment> equipmentsToUpdate = new HashSet<Equipment>();
+		
 		order = super.save(order);
 		if(order.getProducedWorks() != null) {
 			for(ProducedWork producedWork : order.getProducedWorks()) {
@@ -107,19 +109,29 @@ public class OrderService extends AbstractGenericService<Order, Long>
 				}
 				
 				Equipment equipment = producedWork.getEquipment();
+				boolean newEquipment = true;
 				
 				if(equipment != null &&
 						order.getState().equals(Order.State.FINISHED) && 
 						( oldState == null || !oldState.equals(Order.State.FINISHED)) ) {
+				
+					for(Equipment currentEquipment : equipmentsToUpdate) {
+						if(currentEquipment.equals(equipment)) { 
+							equipment = currentEquipment;
+							newEquipment = false;
+							break;
+						}
+					}
 					
 					if(producedWork.getQuantity() != null) {
-						if(WorkType.PRINTING_COLORED.equals( producedWork.getWorkType() ) )
+						
+						if(WorkType.PRINTING_COLORED.equals( producedWork.getWorkType() ) ) {
 							equipment.setColoredUsageCount(equipment.getColoredUsageCount()+producedWork.getQuantity());
-						
-						if(WorkType.PRINTING_BLACK_AND_WHITE.equals( producedWork.getWorkType() ))
+							if(newEquipment) equipmentsToUpdate.add(equipment);
+						} else if(WorkType.PRINTING_BLACK_AND_WHITE.equals( producedWork.getWorkType() )) {
 							equipment.setMonochromeUsageCount(equipment.getMonochromeUsageCount()+producedWork.getQuantity());
-						
-						equipmentService.save(equipment);
+							if(newEquipment) equipmentsToUpdate.add(equipment);
+						}
 					}
 				}
 				
@@ -139,6 +151,10 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setDirty(false);
 			}
+		}
+		
+		for(Equipment equipment : equipmentsToUpdate) {
+			equipmentService.save(equipment);
 		}
 		
 		orderFullTextIndexService.recreateOrderFullTextIndexes(order);

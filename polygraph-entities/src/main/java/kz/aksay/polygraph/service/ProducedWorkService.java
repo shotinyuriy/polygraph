@@ -3,6 +3,8 @@ package kz.aksay.polygraph.service;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.ValidationException;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
@@ -13,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
+import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IProducedWorkService;
+import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.dao.GenericDao;
 
 @Service
@@ -23,6 +27,7 @@ public class ProducedWorkService extends AbstractGenericService<ProducedWork, Lo
 	
 	private GenericDao<ProducedWork, Long> producedWorkDao;
 	private IMaterialConsumptionService materialConsumptionService;
+	private IWorkTypeService workTypeService;
 
 	@Transactional(readOnly=true)
 	public List<ProducedWork> findAllByOrderId(Long orderId) {
@@ -41,6 +46,14 @@ public class ProducedWorkService extends AbstractGenericService<ProducedWork, Lo
 	@Override
 	@Transactional
 	public ProducedWork save(ProducedWork producedWork) throws Exception {
+		
+		WorkType workType = producedWork.getWorkType();
+		
+		if(workTypeService.isEquipmentRequired(workType)) {
+			if(producedWork.getEquipment() == null)
+				throw new ValidationException("Необходимо указать печатное оборудование");
+		}
+		
 		producedWork = super.save(producedWork);
 		
 		if(producedWork.getMaterialConsumption() != null) {
@@ -76,5 +89,10 @@ public class ProducedWorkService extends AbstractGenericService<ProducedWork, Lo
 	@Autowired
 	public void setMaterialConsumptionService(IMaterialConsumptionService materialConsumptionService) {
 		this.materialConsumptionService = materialConsumptionService;
+	}
+
+	@Autowired
+	public void setWorkTypeService(IWorkTypeService workTypeService) {
+		this.workTypeService = workTypeService;
 	}
 }

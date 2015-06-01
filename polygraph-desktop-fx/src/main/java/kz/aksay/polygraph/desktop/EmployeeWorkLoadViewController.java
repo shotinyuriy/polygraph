@@ -21,6 +21,7 @@ import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Person;
+import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.util.SessionAware;
 
 public class EmployeeWorkLoadViewController implements Initializable, SessionAware {
@@ -46,7 +47,7 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		employees = employeeService.findAll();
+		employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
 		employeeNames = FXCollections.observableArrayList();
 		orders = orderService.findAll();
 		

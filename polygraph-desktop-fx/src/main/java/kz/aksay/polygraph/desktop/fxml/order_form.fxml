@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.Scene?>
@@ -15,98 +16,123 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.DatePicker?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
-	fx:controller="kz.aksay.polygraph.desktop.OrderFormController" prefWidth="640.0" prefHeight="480.0">
+<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
 	<children>
-		<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
-			AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-		<VBox maxWidth="800">
-			<VBox VBox.vgrow="SOMETIMES" alignment="TOP_CENTER">
-				<AnchorPane>
-					<children>
-						<GridPane fx:id="orderContainer" hgap="10.0" vgap="10.0" 
-							alignment="TOP_CENTER" 
-							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" 
-							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-					
-					      <Label fx:id="orderIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-					      <Label fx:id="customerIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-					      
-					      <Label alignment="CENTER_RIGHT" text="Заказчик" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-					      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-					      
-					      <Label text="Плановая дата оконания:" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-					      
-					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-					      <Label fx:id="vicariousPowerNumberField" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
-					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
-					      
-	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
-						 </GridPane>
-					 </children>
-				 </AnchorPane>
-			 </VBox>
-		  
-			  <VBox VBox.vgrow="SOMETIMES" alignment="TOP_CENTER">
-			  <children>
-			      <TableView fx:id="producedWorksTableView" 
-			      	maxWidth="1080.0" prefWidth="750.0" minHeight="240.0" prefHeight="240" maxHeight="240.0" VBox.vgrow="ALWAYS" HBox.hgrow="SOMETIMES" >
-			      	<columns>
-			      		<TableColumn text="Тип работ" prefWidth="150.0">
-			      			<cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
-			      		</TableColumn>
-			      		<TableColumn text="Исполнитель" prefWidth="150.0">
-			      			<cellValueFactory><PropertyValueFactory property="executorName"/></cellValueFactory>
-			      		</TableColumn>
-			      		<TableColumn text="Стоимость" prefWidth="150.0">
-			      			<cellValueFactory><PropertyValueFactory property="cost"/></cellValueFactory>
-			      		</TableColumn>
-			      	</columns>
-			      </TableView>
-		     
-		     	  <HBox alignment="TOP_RIGHT">
-			      	<children>
-			      	<Label text="Итого"/>
-			      	<Label fx:id="totalCostLabel" prefWidth="100.0"/>
-			      	</children>
-			      </HBox>
-		      
-			      <HBox alignment="TOP_CENTER">
-			      	<children>
-				      	<Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" 
-				      		text="Добавить"  />
-				      	
-					  	<Button fx:id="editProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editProducedWork" 
-				      		text="Изменить" />
-				      	
-						<Button fx:id="deleteProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteProducedWork" 
-				      		text="Удалить" />
-				     </children>
-			      </HBox>
-			     
-			     <AnchorPane fx:id="materialConsumptionPane">
+		<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <content>
+            <HBox>
+               <children>
+         		<VBox maxWidth="800">
+            <children>
+            			<VBox alignment="TOP_CENTER" VBox.vgrow="SOMETIMES">
+               <children>
+               				<AnchorPane>
+               					<children>
+               						<GridPane fx:id="orderContainer" alignment="TOP_CENTER" hgap="10.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  						<children>
+                  					
+                  					      <Label fx:id="orderIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  					      <Label fx:id="customerIdLabel" alignment="CENTER_RIGHT" text="" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  					      
+                  					      <Label alignment="CENTER_RIGHT" text="Заказчик" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  					      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  					      
+                  					      <Label text="Плановая дата оконания:" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  					      
+                  					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  					      <Label fx:id="vicariousPowerNumberField" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  					      
+                  	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                  	           			  
+                  						</children>
+                                       <columnConstraints>
+                                          <ColumnConstraints />
+                                          <ColumnConstraints />
+                                          <ColumnConstraints />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                       </rowConstraints>
+               						 </GridPane>
+               					 </children>
+               				 </AnchorPane>
+               </children>
+            			 </VBox>
+            		  
+            			  <VBox alignment="TOP_CENTER" VBox.vgrow="SOMETIMES">
+            			  <children>
+            			      <TableView fx:id="producedWorksTableView" maxHeight="240.0" maxWidth="1080.0" minHeight="240.0" prefHeight="240" prefWidth="750.0" HBox.hgrow="SOMETIMES" VBox.vgrow="ALWAYS">
+            			      	<columns>
+            			      		<TableColumn prefWidth="150.0" text="Тип работ">
+            			      			<cellValueFactory>
+                                          <PropertyValueFactory property="description" />
+                                       </cellValueFactory>
+            			      		</TableColumn>
+            			      		<TableColumn prefWidth="150.0" text="Исполнитель">
+            			      			<cellValueFactory>
+                                          <PropertyValueFactory property="executorName" />
+                                       </cellValueFactory>
+            			      		</TableColumn>
+            			      		<TableColumn prefWidth="150.0" text="Стоимость">
+            			      			<cellValueFactory>
+                                          <PropertyValueFactory property="cost" />
+                                       </cellValueFactory>
+            			      		</TableColumn>
+            			      	</columns>
+            			      </TableView>
+            		     
+            		     	  <HBox alignment="TOP_RIGHT">
+            			      	<children>
+            			      	<Label text="Итого" />
+            			      	<Label fx:id="totalCostLabel" prefWidth="100.0" />
+            			      	</children>
+            			      </HBox>
+            		      
+            			      <HBox alignment="TOP_CENTER">
+            			      	<children>
+            				      	<Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" text="Добавить" />
+            				      	
+            					  	<Button fx:id="editProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editProducedWork" text="Изменить" />
+            				      	
+            						<Button fx:id="deleteProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteProducedWork" text="Удалить" />
+            				     </children>
+            			      </HBox>
+            			     
+            			     <AnchorPane fx:id="materialConsumptionPane">
 			     </AnchorPane>
-			     
-			     <Label fx:id="validationLabel"/>
-			     
-			     <HBox alignment="TOP_CENTER">
-			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" 
-			      		text="Сохранить" />
-			      	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" 
-			      		text="Печать" />
-			      	<Button fx:id="exportToDocxButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#exportToDocx" 
-			      		text="Экспорт в DOCX" />
-			    </HBox>
-			    
-			    <Label fx:id="errorLabel"/>
-				</children>	      	
-			  </VBox>
-		  
-		  </VBox>
+            			     
+            			     <Label fx:id="validationLabel" />
+            			     
+            			     <HBox alignment="TOP_CENTER">
+               <children>
+               			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" text="Сохранить" />
+               			      	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" text="Печать" />
+               			      	<Button fx:id="exportToDocxButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#exportToDocx" text="Экспорт в DOCX" />
+               </children>
+            			    </HBox>
+            			    
+            			    <Label fx:id="errorLabel" />
+            				</children>	      	
+            			  </VBox>
+            </children>
+         		  
+         		  </VBox>
+               <AnchorPane fx:id="employeeWorkloadPane"/>
+               </children>
+            </HBox>
+   </content>
 		  
 		  </ScrollPane>
 	  </children>

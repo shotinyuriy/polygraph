@@ -13,6 +13,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 <context:annotation-config/>
 <context:component-scan base-package="kz.aksay.polygraph.dao"/>
 <context:component-scan base-package="kz.aksay.polygraph.service"/>
+<context:component-scan base-package="kz.aksay.polygraph.integration1c"/>
 <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 </beans>

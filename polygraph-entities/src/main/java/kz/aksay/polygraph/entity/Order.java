@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -50,6 +51,9 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	
 	@Transient
 	private Set<MaterialConsumption> materialConsumption;
+	
+	@Column
+	private String code1c;
 	
 	@NotNull(message="Не указан заказчик в заказе")
 	@ManyToOne

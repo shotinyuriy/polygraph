@@ -9,4 +9,6 @@ public interface IContractService extends IGenericService<Contract, Long> {
 
 	List<Contract> findByParty2(Organization organization);
 
+	Contract findActiveByParty2(Organization organization);
+
 }

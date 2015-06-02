@@ -59,6 +59,31 @@
                     <mainClass>kz.aksay.polygraph.desktop.StartingPane</mainClass>
                 </configuration>
             </plugin>
+            
+			<plugin>
+			    <artifactId>maven-resources-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-FXML</id>
+			            <phase>generate-resources</phase>
+			            <goals>
+			                <goal>copy-resources</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${basedir}/src/main/resources</outputDirectory>
+			                <overwrite>true</overwrite>
+			                <resources>
+			                    <resource>
+			                        <directory>${basedir}/src/main/java/kz/aksay/polygraph/desktop/fxml</directory>
+			                        <includes>
+			                            <include>*.*</include>
+			                        </includes>
+			                    </resource>
+			                </resources>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
  
 	       <plugin>
 	        <artifactId>maven-compiler-plugin</artifactId>

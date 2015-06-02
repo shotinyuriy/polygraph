@@ -54,33 +54,45 @@ public class WorkType extends EntitySupport {
 	@Column
 	private String code;
 	
+	@Column
+	private String code1c;
+	
 	static {
 		DEVELOPMENT.name = "РАЗРАБОТКА";
 		DEVELOPMENT.code = "DEVELOPMENT";
+		DEVELOPMENT.code1c = "001001";
 		
 		CORRECTION.name = "КОРРЕКТИРОВКА";
 		CORRECTION.code = "CORRECTION";
+		CORRECTION.code1c = "001002";
 		
 		SCANNING.name = "СКАНИРОВАНИЕ";
 		SCANNING.code = "SCANNING";
+		SCANNING.code1c = "001003";
 		
 		BINDING.name = "ПЕРЕПЛЕТ";
 		BINDING.code = "BINDING";
+		BINDING.code1c = "001004";
 		
 		CUTTING.name = "РЕЗКА";
 		CUTTING.code = "CUTTING";
+		CUTTING.code1c = "001005";
 		
 		LAMINATION.name = "ЛАМИНИРОВАНИЕ";
 		LAMINATION.code = "LAMINATION";
+		LAMINATION.code1c = "001006";
 		
 		COPYING.name = "КОПИРОВАНИЕ";
 		COPYING.code = "COPYING";
+		COPYING.code1c = "001007";
 		
 		PRINTING_BLACK_AND_WHITE.name = "Ч/Б ПЕЧАТЬ";
 		PRINTING_BLACK_AND_WHITE.code = "PRINTING_BLACK_AND_WHITE";
+		PRINTING_BLACK_AND_WHITE.code1c = "001008";
 		
 		PRINTING_COLORED.name = "ЦВЕТНАЯ ПЕЧАТЬ";
 		PRINTING_COLORED.code = "PRINTING_COLORED";
+		PRINTING_COLORED.code1c = "001009";
 	}
 
 	public String getCode() {
@@ -116,5 +128,13 @@ public class WorkType extends EntitySupport {
 			if(other.code == null) return false;
 			return this.code.equals(other.code);
 		}
+	}
+
+	public String getCode1c() {
+		return code1c;
+	}
+
+	public void setCode1c(String code1c) {
+		this.code1c = code1c;
 	}
 }

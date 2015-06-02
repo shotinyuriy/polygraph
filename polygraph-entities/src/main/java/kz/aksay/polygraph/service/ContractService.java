@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
@@ -35,6 +36,15 @@ public class ContractService extends AbstractGenericService<Contract, Long> impl
 		return getDao().getSession().createCriteria(getDao().clazz())
 				.add(Restrictions.eq("party2", organization))
 				.list();
+	}
+
+	@Override
+	public Contract findActiveByParty2(Organization organization) {
+		return (Contract) getDao().getSession().createCriteria(getDao().clazz())
+				.add(Restrictions.eq("party2", organization))
+				.add(Restrictions.le("endDate", new Date()))
+				.setMaxResults(1)
+				.uniqueResult();
 	}
 	
 }

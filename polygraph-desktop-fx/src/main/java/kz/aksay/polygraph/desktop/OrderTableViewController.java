@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.desktop;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,12 +24,14 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -42,7 +45,10 @@ import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.OrderFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
+import kz.aksay.polygraph.exception.InternalLogicException;
+import kz.aksay.polygraph.integration1c.OrderToXMLExporter;
 import kz.aksay.polygraph.service.OrderService;
+import kz.aksay.polygraph.util.FormatUtil;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.ParametersAware;
@@ -63,6 +69,10 @@ public class OrderTableViewController implements Initializable,
 	@FXML ComboBox<EmployeeFX> executorCombo;
 	@FXML CheckBox onlyMy;
 	@FXML Label errorLabel;
+	@FXML DatePicker dateFromPicker;
+	@FXML DatePicker dateToPicker;
+	
+	private List<Order> orders;
 	
 	@Override
 	public void setSession(Map<String, Object> session) {
@@ -72,7 +82,7 @@ public class OrderTableViewController implements Initializable,
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		List<Order> orders = orderService.findAll();
+		orders = orderService.findAll();
 		List<OrderFX> ordersFX = OrderFX.convertListEntityToFX(orders);
 		
 		List<Employee> employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
@@ -101,7 +111,7 @@ public class OrderTableViewController implements Initializable,
 	public void findOrders() {
 		Order orderExample = new Order();
 		orderExample.setState(stateCombo.getSelectionModel().getSelectedItem().getState());
-		System.out.println("onlyMy.isSelected(): "+onlyMy.isSelected());
+		
 		if(onlyMy.isSelected()) {
 			User user = SessionUtil.retrieveUser(session);
 			if(user != null && user.getEmployee() != null) {
@@ -119,7 +129,13 @@ public class OrderTableViewController implements Initializable,
 			}
 		}
 		
-		List<Order> orders = null;
+		if(dateFromPicker.getValue() != null) {
+			orderExample.setCreatedAt(FormatUtil.convertToDate(dateFromPicker.getValue()));
+		}
+		if(dateToPicker.getValue() != null) {
+			orderExample.setUpdatedAt(FormatUtil.convertToDate(dateToPicker.getValue()));
+		}
+		
 		if(searchField.getText() != null && !searchField.getText().isEmpty()) {
 			orders = orderService.findByExampleAndSearchString(
 					orderExample, searchField.getText());
@@ -173,6 +189,21 @@ public class OrderTableViewController implements Initializable,
 			stage.show();
 		} catch (JRException e) {
 			errorLabel.setText(e.getLocalizedMessage());
+		}
+	}
+	
+	@FXML
+	public void exportToXML(ActionEvent actionEvent) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Укажите файл для сохранения");
+		File file = fileChooser.showSaveDialog(StartingPane.getPrimaryStage());
+		if(file != null) {
+			try {
+				OrderToXMLExporter exporter = StartingPane.getBean(OrderToXMLExporter.class);
+				exporter.export(orders, file);
+			} catch (InternalLogicException e) {
+				errorLabel.setText(e.getLocalizedMessage());
+			}
 		}
 	}
 	

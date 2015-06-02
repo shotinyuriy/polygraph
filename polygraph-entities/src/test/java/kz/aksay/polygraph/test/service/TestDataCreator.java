@@ -42,6 +42,8 @@ import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.service.MaterialService;
+import kz.aksay.polygraph.util.AddressGenerator;
+import kz.aksay.polygraph.util.Code1cGenerator;
 import kz.aksay.polygraph.util.GeneratorUtils;
 import kz.aksay.polygraph.util.OrgNameGenerator.OrgName;
 import kz.aksay.polygraph.util.PersonNameGenerator.FullName;
@@ -294,12 +296,14 @@ public class TestDataCreator {
 	public Organization createOrganizationCustomer(User creator) throws Exception {
 		Organization organizationCustomer = new Organization();
 		organizationCustomer.setCreatedAt(new Date());
+		organizationCustomer.setCode1c(Code1cGenerator.generateCode());
 		organizationCustomer.setCreatedBy(creator);
 		OrgName orgName = GeneratorUtils.generateOrgName();
 		organizationCustomer.setFullname(orgName.getFullName());
 		organizationCustomer.setShortname(orgName.getShortName());
 		organizationCustomer.setInn(orgName.getNumber());
 		organizationCustomer.setKpp("123123123");
+		organizationCustomer.setAddress(AddressGenerator.generateAddress());
 		organizationService.save(organizationCustomer);
 		return organizationCustomer;
 	}
@@ -312,6 +316,7 @@ public class TestDataCreator {
 			xerocopy.setCreatedBy(creator);
 			xerocopy.setName(name);
 			xerocopy.setCode(code);
+			xerocopy.setCode1c("0003");
 			workTypeService.save(xerocopy);
 			xerocopy = workTypeService.find(xerocopy.getId());
 		}

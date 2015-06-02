@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.test.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +36,7 @@ import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
+import kz.aksay.polygraph.integration1c.OrderToXMLExporter;
 import kz.aksay.polygraph.test.ContextUtils;
 
 import org.springframework.context.ApplicationContext;
@@ -61,6 +63,7 @@ public class TestDesignerBaseScenario extends Assert {
 	private IFullTextIndexService fullTextIndexService;
 	private IContractService contractService;
 	private IVicariousPowerService vicariousPowerService;
+	private OrderToXMLExporter orderToXMLExporter;
 	
 	private final String executorLogin = "executorLogin";
 	private final String executorPassword = "exectorPassword";
@@ -107,6 +110,7 @@ public class TestDesignerBaseScenario extends Assert {
 		vicariousPowerService = context.getBean(IVicariousPowerService.class);
 		equipmentService = context.getBean(IEquipmentService.class);
 		testDataCreator = new TestDataCreator(this.context);
+		orderToXMLExporter = context.getBean(OrderToXMLExporter.class);
 	}
 	
 	@Test
@@ -136,6 +140,8 @@ public class TestDesignerBaseScenario extends Assert {
 			testMaterialConsumptionService();
 			
 			employeeService.findAllByUserRole(User.Role.DESIGNER);
+			
+			orderToXMLExporter.export(orderService.findAll(), new File("test.xml"));
 		}
 		catch(Exception e) {
 			e.printStackTrace();

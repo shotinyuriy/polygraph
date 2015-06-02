@@ -26,6 +26,7 @@ import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
+import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.VicariousPower;
@@ -48,7 +49,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	private IContractService contractService = StartingPane.getBean(IContractService.class);
 	private IVicariousPowerService vicariousPowerService = StartingPane.getBean(IVicariousPowerService.class);
 	
-	@FXML private Label idLabel;
+	@FXML private TextField code1cField;
 	@FXML private TextField innField;
 	@FXML private TextField kppField;
 	@FXML private TextArea fullNameField;
@@ -58,6 +59,10 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	@FXML private TextField mobileField;
 	@FXML private TextField phoneField;
 	@FXML private TextField directorNameField;
+	@FXML private TextField cityField;
+	@FXML private TextField streetField;
+	@FXML private TextField houseField;
+	@FXML private TextField apartmentField;
 	@FXML private Button newOrderButton;
 	@FXML private TableView<ContractFX> contractsTableView;
 	@FXML private TableView<VicariousPowerFX> vicariousPowerTableView;
@@ -98,6 +103,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			organization.setUpdatedAt(new Date());
 			organization.setUpdatedBy(SessionUtil.retrieveUser(session));
 		}
+		organization.setCode1c(code1cField.getText());
 		organization.setInn(innField.getText());
 		organization.setFullname(fullNameField.getText());
 		organization.setDirectorName(directorNameField.getText());
@@ -106,6 +112,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		organization.setEmail(emailField.getText());
 		organization.setMobile(mobileField.getText());
 		organization.setPhone(phoneField.getText());
+		organization.setAddress(createAddress());
 		
 		try {
 			organization = organizationService.save(organization);
@@ -120,6 +127,15 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		}
 	}
 	
+	private Address createAddress() {
+		Address address = new Address();
+		address.setCity(cityField.getText());
+		address.setStreet(streetField.getText());
+		address.setHouse(houseField.getText());
+		address.setApartment(apartmentField.getText());
+		return address;
+	}
+
 	@FXML
 	public void cancel(ActionEvent actionEvent) {
 		StartingPane.popScene();
@@ -267,7 +283,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		if(organization != null) {
 			organizationId = id;
 			directorNameField.setText(organization.getDirectorName());
-			idLabel.setText(organization.getId().toString());
+			code1cField.setText(organization.getCode1c());
 			innField.setText(organization.getInn());
 			kppField.setText(organization.getKpp());
 			fullNameField.setText(organization.getFullname());
@@ -275,6 +291,14 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			emailField.setText(organization.getEmail());
 			mobileField.setText(organization.getMobile());
 			phoneField.setText(organization.getPhone());
+			
+			if(organization.getAddress() != null) {
+				Address address = organization.getAddress();
+				cityField.setText(address.getCity());
+				streetField.setText(address.getStreet());
+				houseField.setText(address.getHouse());
+				apartmentField.setText(address.getApartment());
+			}
 			newOrderButton.setVisible(true);
 			
 			loadContracts(organization);

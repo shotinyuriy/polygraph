@@ -171,6 +171,12 @@ public class OrderService extends AbstractGenericService<Order, Long>
 		if( example.getCurrentExecutor() != null )
 			criteria.add(Restrictions.eq("currentExecutor.id", example.getCurrentExecutor().getId() ));
 		
+		if( example.getCreatedAt() != null)
+			criteria.add(Restrictions.ge("createdAt", example.getCreatedAt()));
+		
+		if( example.getUpdatedAt() != null)
+			criteria.add(Restrictions.le("createdAt", example.getUpdatedAt()));
+		
 		return getDao().readByCriteria(criteria);
 	}
 	
@@ -197,6 +203,18 @@ public class OrderService extends AbstractGenericService<Order, Long>
 					}
 					whereClause.append("o.currentExecutor.id = :currentExecutorId ");
 				}
+				if(example.getCreatedAt() != null) {
+					if(whereClause.length() > 0) {
+						whereClause.append(" AND ");
+					}
+					whereClause.append(" o.createdAt >= :dateFrom ");
+				}
+				if(example.getUpdatedAt() != null) {
+					if(whereClause.length() > 0) {
+						whereClause.append(" AND ");
+					}
+					whereClause.append(" o.createdAt <= :dateTo ");
+				}
 			}
 			
 			if(whereClause.length() >0) {
@@ -213,6 +231,12 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			}
 			if(example.getCurrentExecutor() != null) {
 				query.setParameter("currentExecutorId", example.getCurrentExecutor().getId());
+			}
+			if(example.getCreatedAt() != null) {
+				query.setParameter("dateFrom", example.getCreatedAt());
+			}
+			if(example.getUpdatedAt() != null) {
+				query.setParameter("dateTo", example.getUpdatedAt());
 			}
 			
 			orders = (List<Order>)query.list();	

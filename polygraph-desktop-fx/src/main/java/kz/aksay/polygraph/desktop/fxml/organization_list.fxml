@@ -35,10 +35,10 @@
           <TableColumn prefWidth="150.0" text="Краткое наименование">
           	<cellValueFactory><PropertyValueFactory property="shortname" /></cellValueFactory>
           </TableColumn>
-          <TableColumn prefWidth="150" text="ИНН">
+          <TableColumn prefWidth="150" text="ИИН/БИН">
           	<cellValueFactory><PropertyValueFactory property="inn" /></cellValueFactory>
           </TableColumn>
-		  <TableColumn prefWidth="150.0" text="КПП">
+		  <TableColumn prefWidth="150.0" text="ИИК">
           	<cellValueFactory><PropertyValueFactory property="kpp" /></cellValueFactory>
           </TableColumn>
         </columns>

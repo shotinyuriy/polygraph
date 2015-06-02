@@ -51,9 +51,6 @@ public class OrgNameGenerator {
 		}
 		orgName.setNumber(inn.toString());
 		
-		//System.out.println("ORG FULL NAME "+orgName.getFullName());
-		//System.out.println("ORG SHORT NAME "+orgName.getShortName());
-		
 		return orgName;
 	}
 	

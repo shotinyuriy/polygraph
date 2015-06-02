@@ -12,6 +12,7 @@ import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.service.OrganizationService;
 import kz.aksay.polygraph.test.ContextUtils;
+import kz.aksay.polygraph.util.AddressGenerator;
 
 public class TestOrganizationService extends Assert {
 	private ApplicationContext context;
@@ -35,6 +36,8 @@ public class TestOrganizationService extends Assert {
 		organization.setShortname("Тестовая Организация");
 		organization.setInn("0123456789");
 		organization.setKpp("0123456789");
+		organization.setAddress(AddressGenerator.generateAddress());
+		
 		organizationService.save(organization);
 		
 		return organization;

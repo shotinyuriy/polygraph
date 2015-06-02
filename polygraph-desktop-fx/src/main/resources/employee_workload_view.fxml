@@ -6,10 +6,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="kz.aksay.polygraph.desktop.EmployeeWorkLoadViewController">
    <children>
-   	
+   	<Label text="Загруженность дизайнеров" /> 
    	<VBox prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BarChart fx:id="barChart" legendSide="LEFT">

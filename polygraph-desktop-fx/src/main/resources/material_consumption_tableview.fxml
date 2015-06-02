@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.Label?>
@@ -10,29 +14,35 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" 
-	fx:controller="kz.aksay.polygraph.desktop.MaterialConsumptionTableViewController" maxHeight="320.0" alignment="TOP_CENTER">
-		<Label  text="Расход материалов" />
-		<TableView  fx:id="materialConsumptionsTableView" maxHeight="200.0">
-			<columns>
-				<TableColumn text="Материал" prefWidth="250.0">
-					<cellValueFactory><PropertyValueFactory property="materialFullName"/></cellValueFactory>
-				</TableColumn>
-				<TableColumn text="Количество" prefWidth="150.0">
-					<cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
-				</TableColumn>
-			</columns>
-		</TableView>
-		
-		<HBox  spacing="10.0" prefHeight="120.0" alignment="TOP_CENTER">
-			<Label text="Материал"/>
-			<ComboBox fx:id="materialCombo"/>
-			<Label text="Количество"/>
-			<TextField fx:id="quantityField" />
-			<Button text="Добавить расход" onAction="#addConsumption"/>
-			<Button text="Удалить расход" onAction="#removeConsumption"/>
-		</HBox>
-		
-		<Label fx:id="validationLabel"/>
+<VBox alignment="TOP_CENTER" maxHeight="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="kz.aksay.polygraph.desktop.MaterialConsumptionTableViewController">
+   <children>
+   		<Label text="Расход материалов" />
+   		<TableView fx:id="materialConsumptionsTableView" maxHeight="200.0">
+   			<columns>
+   				<TableColumn prefWidth="300.0" text="Материал">
+   					<cellValueFactory>
+                  <PropertyValueFactory property="materialName" />
+               </cellValueFactory>
+   				</TableColumn>
+   				<TableColumn prefWidth="150.0" text="Количество">
+   					<cellValueFactory>
+                  <PropertyValueFactory property="quantity" />
+               </cellValueFactory>
+   				</TableColumn>
+   			</columns>
+   		</TableView>
+   		
+   		<HBox fx:id="controlPanel" alignment="TOP_CENTER" prefHeight="120.0" spacing="10.0">
+      <children>
+      			<Label text="Материал" />
+      			<ComboBox fx:id="materialCombo" editable="true" />
+      			<Label text="Количество" />
+      			<TextField fx:id="quantityField" />
+      			<Button onAction="#addConsumption" text="Добавить расход" />
+      			<Button onAction="#removeConsumption" text="Удалить расход" />
+      </children>
+   		</HBox>
+   		
+   		<Label fx:id="validationLabel" />
+   </children>
 </VBox>
-

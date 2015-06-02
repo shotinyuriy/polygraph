@@ -14,6 +14,7 @@ import kz.aksay.polygraph.api.IPaperTypeService;
 import kz.aksay.polygraph.api.IStickerService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
+import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.BindingSpring;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
@@ -145,14 +146,6 @@ public class DefaultDataCreationService {
 		return paperType;
 	}
 	
-	private WorkType createWorkType(String name) {
-		WorkType workType = new WorkType();
-		workType.setCreatedAt(new Date());
-		workType.setCreatedBy(User.TECH_USER);
-		workType.setName(name);
-		return workType;
-	}
-	
 	private Paper createPaper(Paper material) {
 		material.setCreatedAt(new Date());
 		material.setCreatedBy(User.TECH_USER);
@@ -236,6 +229,12 @@ public class DefaultDataCreationService {
 		if(foundOrganizations.isEmpty()) {
 			organization.setCreatedAt(new Date());
 			organization.setCreatedBy(User.TECH_USER);
+			
+			Address address = new Address();
+			address.setCity("г. Уральск");
+			address.setStreet("ул.Курмангазы");
+			address.setHouse("162");
+			organization.setAddress(address);
 			
 			organizationService.save(organization);
 		} else {

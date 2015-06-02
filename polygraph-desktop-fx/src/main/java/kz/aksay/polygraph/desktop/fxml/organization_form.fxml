@@ -16,15 +16,16 @@
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController"  alignment="TOP_CENTER">
 <children>
 	<GridPane vgap="10" hgap="10" alignment="TOP_CENTER">
-		<Label fx:id="idLabel" visible="false" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+		<Label text="Код в 1С" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 		<Label text="Полное наименование" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 		<Label text="Краткое наименование" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 		<Label text="Фио директора" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-		<Label text="БИН" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+		<Label text="ИИН/БИН" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 		<Label text="ИИК" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 		<Label text="E-mail" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
 		<Label text="Моб." GridPane.rowIndex="7" GridPane.columnIndex="1"/>
 		<Label text="Тел." GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+		<TextField fx:id="code1cField" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
 		<TextArea fx:id="fullNameField" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
 		<TextField fx:id="shortNameField" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
 		<TextField fx:id="directorNameField" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
@@ -34,6 +35,18 @@
 		<TextField fx:id="mobileField" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
 		<TextField fx:id="phoneField" GridPane.rowIndex="8" GridPane.columnIndex="2"/>
 		
+	</GridPane>
+	<Label text="Адрес" alignment="TOP_CENTER"/>
+	<GridPane vgap="10" hgap="10" alignment="TOP_CENTER">
+		<Label text="Город" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+		<Label text="Улица" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+		<Label text="Дом" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+		<Label text="Квартира" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+		<TextField fx:id="cityField" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+		<TextField fx:id="streetField" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+		<TextField fx:id="houseField" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+		<TextField fx:id="apartmentField" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
 	</GridPane>
 	
 	<VBox prefWidth="640.0">

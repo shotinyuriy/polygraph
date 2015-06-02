@@ -164,7 +164,7 @@ public class OrderFormController implements
 	public void exportToDocx(ActionEvent actionEvent) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Укажите файл для сохранения");
-		File file = fileChooser.showOpenDialog(StartingPane.getPrimaryStage());
+		File file = fileChooser.showSaveDialog(StartingPane.getPrimaryStage());
 		if(file != null) {
 			try {
 				PrintFacade.generateOrderDetails(orderFX);

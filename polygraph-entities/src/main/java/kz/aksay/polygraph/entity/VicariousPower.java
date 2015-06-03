@@ -9,16 +9,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ForeignKey;
+
 @Entity
 @Table(name="vicarious_power")
 public class VicariousPower extends EntitySupport {
 
 	@NotNull
 	@ManyToOne
+	@ForeignKey(name="FK_VICARIOUS_POWER_ORGANIZATION")
 	@JoinColumn(name="organization_id")
 	private Organization organization;
 	
 	@ManyToOne
+	@ForeignKey(name="FK_VICARIOUS_POWER_PERSON")
 	@JoinColumn(name="person_id")
 	private Person person;
 	

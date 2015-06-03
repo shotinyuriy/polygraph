@@ -46,10 +46,10 @@
    </center>
 	<bottom>
 	<AnchorPane>
-		<HBox>
+		<HBox spacing="10.0">
 			<Button onAction="#openOrganizationForm">Изменить</Button>
 			<Button onAction="#newOrganizationForm">Новая организация</Button>
-			<Button onAction="#openNewOrder">Новый заказ</Button>
+			<Button onAction="#openNewOrder" visible="false">Новый заказ</Button>
 		</HBox>
 	</AnchorPane>
 	</bottom>   

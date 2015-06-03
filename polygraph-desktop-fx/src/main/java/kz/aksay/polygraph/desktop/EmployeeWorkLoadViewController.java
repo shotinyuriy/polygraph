@@ -100,8 +100,6 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 		}
 		
 		xAxis.setCategories(employeeNames);
-		
-		
 	}
 	
 	private static String createCategoryName(Employee employee, Order.State state) {

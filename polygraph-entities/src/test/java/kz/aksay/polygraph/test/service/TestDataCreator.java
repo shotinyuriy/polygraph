@@ -41,6 +41,7 @@ import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
+import kz.aksay.polygraph.service.DefaultDataCreationService;
 import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.util.AddressGenerator;
 import kz.aksay.polygraph.util.Code1cGenerator;
@@ -73,6 +74,7 @@ public class TestDataCreator {
 	private IVicariousPowerService vicariousPowerService;
 	
 	private Random dateEndRealRandom = new Random();
+	private Random formatRandom = new Random(System.currentTimeMillis());
 
 	public TestDataCreator(ApplicationContext context) {
 		this.context = context;
@@ -98,8 +100,8 @@ public class TestDataCreator {
 	}
 	
 	public void createAllEntities() {
-		int rolesCount = User.Role.values().length;
-		List<Person> employeePeople = createPersonList(User.TECH_USER, rolesCount);
+		int rolesCount = User.roles.length;
+		List<Person> employeePeople = createPersonList(User.TECH_USER, rolesCount+2);
 		List<Employee> employees = createEmployees(User.TECH_USER, employeePeople);
 		List<User> users = createUsers(User.TECH_USER, employees);
 		List<User> executors = new ArrayList<>();
@@ -142,12 +144,15 @@ public class TestDataCreator {
 	public List<User> createUsers(User creator, List<Employee> employees) {
 		List<User> users = new ArrayList<>(employees.size());
 		int roleIndex = 0;
-		int roleCount = Role.values().length;
+		int roleCount = User.roles.length;
 		
 		Role role = null;
 		for(Employee employee : employees) {
 			
-			role = Role.values()[roleIndex];
+			if(roleIndex < roleCount-1)
+				role = User.roles[roleIndex];
+			else
+				role = Role.DESIGNER;
 			
 			if(!role.equals(Role.ADMIN)) { 
 				String login = generateLogin(employee);
@@ -159,10 +164,7 @@ public class TestDataCreator {
 				}
 			}
 			
-			if(roleIndex < roleCount-1)
-				roleIndex++;
-			else
-				roleIndex = 0;
+			roleIndex++;
 		}
 		return users;
 	}
@@ -187,7 +189,10 @@ public class TestDataCreator {
 				customers.add( createPerson(creator) );
 				
 				for(int i = 0; i < 10; i++) {
-					customers.add( createOrganizationCustomer(creator) );
+					Organization org = createOrganizationCustomer(creator);
+					if(org != null) {
+						customers.add(org);
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -216,7 +221,8 @@ public class TestDataCreator {
 					for(WorkType workType : workTypes) {
 						Equipment equipment = null;
 						if(workTypeService.isEquipmentRequired(workType)) {
-							equipment = equipmentService.findByName("DC-12");
+							int index = formatRandom.nextInt(DefaultDataCreationService.PRINTER_NAMES.length);
+							equipment = equipmentService.findByName(DefaultDataCreationService.PRINTER_NAMES[index]);
 						}
 						createProducedWork(order, workType, employee, equipment);
 					}
@@ -238,8 +244,9 @@ public class TestDataCreator {
 		vicariousPower.setBeginDate(calendar.getTime());
 		calendar.add(Calendar.MONTH, 2);
 		vicariousPower.setEndDate(calendar.getTime());
-		vicariousPower.setNumber("345345345");
-		vicariousPower.setPersonName("Микишева В.А.");
+		vicariousPower.setNumber(GeneratorUtils.generateCode(4));
+		FullName fullName = GeneratorUtils.generateFullName();
+		vicariousPower.setPersonName(fullName.toString());
 		vicariousPower.setOrganization(customer);
 		vicariousPowerService.save(vicariousPower);
 		return vicariousPower;
@@ -294,18 +301,32 @@ public class TestDataCreator {
 	}
 
 	public Organization createOrganizationCustomer(User creator) throws Exception {
-		Organization organizationCustomer = new Organization();
-		organizationCustomer.setCreatedAt(new Date());
-		organizationCustomer.setCode1c(Code1cGenerator.generateCode());
-		organizationCustomer.setCreatedBy(creator);
-		OrgName orgName = GeneratorUtils.generateOrgName();
-		organizationCustomer.setFullname(orgName.getFullName());
-		organizationCustomer.setShortname(orgName.getShortName());
-		organizationCustomer.setInn(orgName.getNumber());
-		organizationCustomer.setKpp("123123123");
-		organizationCustomer.setAddress(AddressGenerator.generateAddress());
-		organizationService.save(organizationCustomer);
-		return organizationCustomer;
+		boolean isCreated = false;
+		int attempts = 0;
+		
+		while(!isCreated && attempts <3) {
+			try {
+				attempts++;
+				Organization organizationCustomer = new Organization();
+				organizationCustomer.setCreatedAt(new Date());
+				organizationCustomer.setCode1c(Code1cGenerator.generateCode());
+				organizationCustomer.setCreatedBy(creator);
+				OrgName orgName = GeneratorUtils.generateOrgName();
+				FullName director = GeneratorUtils.generateFullName();
+				organizationCustomer.setDirectorName(director.toString());
+				organizationCustomer.setFullname(orgName.getFullName());
+				organizationCustomer.setShortname(orgName.getShortName());
+				organizationCustomer.setInn(orgName.getNumber());
+				organizationCustomer.setKpp(orgName.getKpp());
+				organizationCustomer.setAddress(AddressGenerator.generateAddress());
+				organizationService.save(organizationCustomer);
+				isCreated = true;
+				return organizationCustomer;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 	
 	public WorkType createWorkType(User creator, String name, String code) throws Exception {
@@ -394,6 +415,11 @@ public class TestDataCreator {
 		producedWork.setDirty(true);
 		producedWork.setQuantity(1);
 		producedWork.setPrice(BigDecimal.valueOf(100));
+		if(workTypeService.isEquipmentRequired(workType)) {
+			Format[] formats = {Format.A3, Format.A4 };
+			Format format = formats[ formatRandom.nextInt(2) ];
+			producedWork.setFormat(format);
+		}
 		
 		Set<MaterialConsumption> materialConsumptions = createMaterialConsumptions(producedWork);
 		producedWork.setMaterialConsumption(materialConsumptions);
@@ -426,8 +452,9 @@ public class TestDataCreator {
 		copyMaterialConsumption.setMaterial(material);
 		copyMaterialConsumption.setOrder(order);
 		copyMaterialConsumption.setProducedWork(producedWork);
-		copyMaterialConsumption.setQuantity(BigDecimal.valueOf(1.0));
+		copyMaterialConsumption.setQuantity(1);
 		copyMaterialConsumption.setDirty(true);
+		copyMaterialConsumption.setWasted(0);
 		if(save) {
 			copyMaterialConsumption = materialConsumptionService.save(
 					copyMaterialConsumption);

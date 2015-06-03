@@ -1,5 +1,7 @@
 package kz.aksay.polygraph.entityfx;
 
+import java.math.BigDecimal;
+
 import kz.aksay.polygraph.entity.BindingSpring;
 
 public class BindingSpringFX extends EntityFX<BindingSpring> {
@@ -24,6 +26,17 @@ public class BindingSpringFX extends EntityFX<BindingSpring> {
 	
 	public String getDescription() {
 		return entity.getDescription();
+	}
+	
+	public BigDecimal getPrice() {
+		return entity.getPrice();
+	}
+	
+	public String getPriceString() {
+		if(entity.getPrice() != null) {
+			return entity.getPrice().toString();
+		}
+		return null;
 	}
 
 }

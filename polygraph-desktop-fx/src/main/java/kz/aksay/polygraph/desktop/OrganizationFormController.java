@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.api.IContractService;
@@ -66,6 +67,8 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	@FXML private Button newOrderButton;
 	@FXML private TableView<ContractFX> contractsTableView;
 	@FXML private TableView<VicariousPowerFX> vicariousPowerTableView;
+	@FXML private HBox contractControls;
+	@FXML private HBox vicPowerControls;
 
 	private Map<String, Object> session;
 	private Map<String, Object> parameters;
@@ -117,6 +120,10 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		try {
 			organization = organizationService.save(organization);
 			newOrderButton.setVisible(true);
+			vicPowerControls.setManaged(true);
+			vicPowerControls.setVisible(true);
+			contractControls.setManaged(true);
+			contractControls.setVisible(true);
 			organizationId = organization.getId();
 		}
 		catch(ValidationException ve) {
@@ -300,6 +307,10 @@ public class OrganizationFormController implements Initializable, SessionAware,
 				apartmentField.setText(address.getApartment());
 			}
 			newOrderButton.setVisible(true);
+			vicPowerControls.setManaged(true);
+			vicPowerControls.setVisible(true);
+			contractControls.setManaged(true);
+			contractControls.setVisible(true);
 			
 			loadContracts(organization);
 			loadVicariousPower(organization);

@@ -22,7 +22,6 @@ public class TestMaterialConsumptionService {
 	}
 	
 	public void testFindByExample(MaterialConsumption materialConsumptionExample, List<MaterialConsumption> expected) {
-		String text = null;
 		List<MaterialConsumption> actual = 
 				materialConsumptionService.findByExample(materialConsumptionExample);
 		assertEquals(actual, expected);

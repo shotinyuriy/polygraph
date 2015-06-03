@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "organization", uniqueConstraints={@UniqueConstraint(name="UNQ_ORG_NUMBER", columnNames="inn")})
+@Table(name = "organization", uniqueConstraints={@UniqueConstraint(name="UNQ_ORG_NUMBER", columnNames={"inn","kpp"})})
 public class Organization extends Subject {
 
 	public static Organization FIRMA_SERVER_PLUS;

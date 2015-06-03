@@ -23,8 +23,8 @@ public class StickerFX extends EntityFX<Sticker> {
 	}
 	
 	public String getTypeName() {
-		if(entity.getType() != null) {
-			return entity.getType().getName();
+		if(entity.getStickerType() != null) {
+			return entity.getStickerType().getName();
 		}
 		return null;
 	}

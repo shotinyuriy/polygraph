@@ -76,6 +76,14 @@ public class ProducedWorkFX extends EntityFX<ProducedWork> implements MaterialCo
 		return BigDecimal.ZERO;
 	}
 	
+	public Integer getQuantity() {
+		return entity.getQuantity();
+	}
+	
+	public Integer getWasted() {
+		return entity.getWasted();
+	} 
+	
 	public String getBeginDateTimeString() {
 		if(entity.getCreatedAt() != null) {
 			return FormatUtil.dateFormatter.format(entity.getCreatedAt());
@@ -132,6 +140,10 @@ public class ProducedWorkFX extends EntityFX<ProducedWork> implements MaterialCo
 		
 		return equipmentFX;
 	}
+	
+	public Integer getEquipmentOrderNumber() {
+		return entity.getEquipmentOrderNumber();
+	}
 
 	@Override
 	public ObservableList<MaterialConsumptionFX> getMaterialConsumptionFX() {
@@ -154,4 +166,11 @@ public class ProducedWorkFX extends EntityFX<ProducedWork> implements MaterialCo
 	public boolean isAllowedToEdit() {
 		return true;
 	}
+
+	public String getEquipmentOrderNumberString() {
+		if(entity.getEquipmentOrderNumber() != null)
+			return entity.getEquipmentOrderNumber().toString();
+		return null;
+	}
+	
 }

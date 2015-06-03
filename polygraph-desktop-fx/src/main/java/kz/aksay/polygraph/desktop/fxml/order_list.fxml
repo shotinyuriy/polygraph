@@ -44,9 +44,9 @@
    	   	  
    		      <TableView fx:id="ordersTableView" prefHeight="480.0" prefWidth="640.0" BorderPane.alignment="CENTER" VBox.vgrow="SOMETIMES">
    		        <columns>
-   		          <TableColumn prefWidth="150" text="Номер заказа">
+   		          <TableColumn prefWidth="150" text="Тип заказчика">
    		          	<cellValueFactory>
-                              <PropertyValueFactory property="number" />
+                              <PropertyValueFactory property="customerType" />
                            </cellValueFactory>
    		          </TableColumn>
    		          <TableColumn prefWidth="250.0" text="Подробности">
@@ -96,8 +96,8 @@
    					<HBox spacing="10.0">
    						<children>
    							<Button alignment="TOP_LEFT" onAction="#openOrderForm">Изменить</Button>
-   							<Button alignment="TOP_LEFT" onAction="#printOrders">Печать</Button>
-   							<Button alignment="TOP_LEFT" onAction="#exportToXML">Выгрузить в XML</Button>
+   							<Button fx:id="printButton" alignment="TOP_LEFT" onAction="#printOrders">Печать</Button>
+   							<Button fx:id="exportButton" alignment="TOP_LEFT" onAction="#exportToXML">Выгрузить в XML</Button>
    						</children>
    					</HBox>
    					<Label fx:id="errorLabel" text="" />

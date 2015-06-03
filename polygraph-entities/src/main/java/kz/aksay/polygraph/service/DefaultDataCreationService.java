@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import kz.aksay.polygraph.entity.Laminate;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.PaperType;
+import kz.aksay.polygraph.entity.Sticker;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.WorkType;
 
@@ -34,6 +36,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 public class DefaultDataCreationService {
+	
+	public static final String[] PRINTER_NAMES = new String[] {"DC-242", "WC-24", "DC-12", "WC-55"};
 	
 	private IUserService userService;
 	private IPaperTypeService paperTypeService;
@@ -92,6 +96,7 @@ public class DefaultDataCreationService {
 					 createDefaultPaperTypes();
 					 createDefaultBindingSprings();
 					 createDefaultLaminates();
+					 createStickers();
 					 createDefaultEquipmentTypes();
 					 createOrganizations();
 				}
@@ -105,15 +110,15 @@ public class DefaultDataCreationService {
 	}
 	
 	private void createDefaultBindingSprings() throws Exception { 
-		createBindingSpring(10, BindingSpring.Type.METAL, "Обычная 1");
-		createBindingSpring(10, BindingSpring.Type.PLASTIC, "Обычная 2");
-		createBindingSpring(15, BindingSpring.Type.PLASTIC, "Большая");
+		createBindingSpring(10, BindingSpring.Type.METAL, "Обычная 1", 10.0);
+		createBindingSpring(10, BindingSpring.Type.PLASTIC, "Обычная 2", 11.0);
+		createBindingSpring(15, BindingSpring.Type.PLASTIC, "Большая", 15.0);
 	}
 	
 	private void createDefaultLaminates() throws Exception { 
-		createLaminate(120, Format.A4, "Обычная пленка");
-		createLaminate(200, Format.A4, "Толстая пленка");
-		createLaminate(100, Format.A3, "Большая тонкая");
+		createLaminate(120, Format.A4, "Обычная пленка", 5.0);
+		createLaminate(200, Format.A4, "Толстая пленка", 4.0);
+		createLaminate(100, Format.A3, "Большая тонкая", 3.0);
 	}
 
 	private void createDefaultPaperTypes() throws Exception {
@@ -124,7 +129,7 @@ public class DefaultDataCreationService {
 			 example.setFormat(Format.A4);
 			 
 			 if(paperService.findByExampleAndPaperType(example, paperType).size() == 0) {
-				 paperService.save(createPaper(example));
+				 paperService.save(createPaper(example, 20.0));
 			 }
 			 
 			 example = new Paper();
@@ -133,9 +138,37 @@ public class DefaultDataCreationService {
 			 example.setFormat(Format.A3);
 			 
 			 if(paperService.findByExampleAndPaperType(example, paperType).size() == 0) {
-				 paperService.save(createPaper(example));
+				 paperService.save(createPaper(example, 30.0));
 			 }
 		 }
+	}
+	
+	private void createStickers() throws Exception {
+		Sticker sticker = new Sticker();
+		sticker.setFormat(Format.A4);
+		sticker.setDensity(280);
+		sticker.setStickerType(Sticker.Type.ADASTER);
+		List<Sticker> stickers = stickerService.findByExample(sticker);
+		
+		if(stickers.isEmpty()) {
+			sticker.setCreatedAt(new Date());
+			sticker.setCreatedBy(User.TECH_USER);
+			sticker.setDescription("Обычная");
+			stickerService.save(sticker);
+		}
+		
+		sticker = new Sticker();
+		sticker.setFormat(Format.A4);
+		sticker.setDensity(280);
+		sticker.setStickerType(Sticker.Type.PLASTIC);
+		stickers = stickerService.findByExample(sticker);
+		
+		if(stickers.isEmpty()) {
+			sticker.setCreatedAt(new Date());
+			sticker.setCreatedBy(User.TECH_USER);
+			sticker.setDescription("Пластиковая");
+			stickerService.save(sticker);
+		}
 	}
 	
 	private PaperType createMaterialType(String name) {
@@ -146,13 +179,14 @@ public class DefaultDataCreationService {
 		return paperType;
 	}
 	
-	private Paper createPaper(Paper material) {
+	private Paper createPaper(Paper material, double price) {
 		material.setCreatedAt(new Date());
 		material.setCreatedBy(User.TECH_USER);
+		material.setPrice(BigDecimal.valueOf(price));
 		return material;
 	}
 	
-	private BindingSpring createBindingSpring(Integer diameter, BindingSpring.Type type, String description) throws Exception {
+	private BindingSpring createBindingSpring(Integer diameter, BindingSpring.Type type, String description, double price) throws Exception {
 		BindingSpring bindingSpring = new BindingSpring();
 		bindingSpring.setDiameter(diameter);
 		bindingSpring.setType(type);
@@ -165,6 +199,7 @@ public class DefaultDataCreationService {
 			bindingSpring.setCreatedAt(new Date());
 			bindingSpring.setCreatedBy(User.TECH_USER);
 			bindingSpring.setDescription(description);
+			bindingSpring.setPrice(BigDecimal.valueOf(price));
 			bindingSpringService.save(bindingSpring);
 		}
 		
@@ -172,7 +207,7 @@ public class DefaultDataCreationService {
 	}
 	
 	
-	private Laminate createLaminate(Integer density, Format format, String description) throws Exception {
+	private Laminate createLaminate(Integer density, Format format, String description, double price) throws Exception {
 		Laminate laminate = new Laminate();
 		laminate.setDensity(density);
 		laminate.setFormat(format);
@@ -185,6 +220,7 @@ public class DefaultDataCreationService {
 			laminate.setCreatedAt(new Date());
 			laminate.setCreatedBy(User.TECH_USER);
 			laminate.setDescription(description);
+			laminate.setPrice(BigDecimal.valueOf(price));
 			laminateService.save(laminate);
 		}
 		
@@ -197,9 +233,7 @@ public class DefaultDataCreationService {
 		 
 		if(printing != null) {
 			
-			String[] printerNames = new String[] {"DC-242", "WC-24", "DC-12", "WC-55"};
-			
-			for(String printerName : printerNames) {
+			for(String printerName : PRINTER_NAMES) {
 				
 				Equipment equipment = equipmentService.findByName(printerName);
 				
@@ -207,7 +241,6 @@ public class DefaultDataCreationService {
 					equipment = new Equipment();
 					equipment.setCreatedAt(new Date());
 					equipment.setCreatedBy(User.TECH_USER);
-					equipment.setWorkType(printing);
 					equipment.setName(printerName);
 					equipmentService.save(equipment);
 				}

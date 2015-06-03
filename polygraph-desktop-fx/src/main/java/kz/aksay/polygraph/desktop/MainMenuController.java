@@ -1,28 +1,45 @@
 package kz.aksay.polygraph.desktop;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
-import kz.aksay.polygraph.test.service.TestDataCreator;
+import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Person;
+import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
-public class MainMenuController implements MainMenu, SessionAware {
+public class MainMenuController implements MainMenu, SessionAware, Initializable {
 	
-	@FXML
-	private Pane contentPane;
+	@FXML private Pane contentPane;
+	@FXML private TabPane tabPane;
+	@FXML private TreeView<String> treeViewMenu;
+	@FXML private Label leftStatus;
+	@FXML private Label rightStatus;
+	@FXML private ProgressBar progressBar;
 	
-	@FXML
-	private TabPane tabPane;
+	@FXML private TitledPane clientsMenu;
+	@FXML private TitledPane ordersMenu;
+	@FXML private TitledPane employeesMenu;
+	@FXML private TitledPane dictionariesMenu;
 	
 	private Map<String, Object> session;
 	
@@ -166,5 +183,103 @@ public class MainMenuController implements MainMenu, SessionAware {
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 		session.put(SessionUtil.MAIN_MENU_KEY, this);
+		
+		User user = SessionUtil.retrieveUser(session);
+		if(user != null) {
+			Employee employee = user.getEmployee();
+			if(employee != null) {
+				EmployeeFX employeeFX = new EmployeeFX(employee);
+				setLeftStatus(employeeFX.toString());
+			} else {
+				setLeftStatus(user.getLogin());
+			}
+			User.Role role = user.getRole();
+			switch(role) {
+				case DESIGNER:
+					employeesMenu.setVisible(false);
+					dictionariesMenu.setVisible(false);
+					employeesMenu.setManaged(false);
+					dictionariesMenu.setManaged(false);
+					break;
+				case ACCOUNTANT:
+					clientsMenu.setVisible(false);
+					employeesMenu.setVisible(false);
+					dictionariesMenu.setVisible(false);
+					clientsMenu.setManaged(false);
+					employeesMenu.setManaged(false);
+					dictionariesMenu.setManaged(false);
+					break;
+				case DIRECTOR:
+					ordersMenu.setVisible(false);
+					employeesMenu.setVisible(false);
+					ordersMenu.setManaged(false);
+					employeesMenu.setManaged(false);
+			}
+		}
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		setRightStatus(null);
+		if(treeViewMenu != null) {
+			TreeItem<String> rootItem = new TreeItem<String>("Меню");
+			treeViewMenu.setRoot(rootItem);
+			
+			TreeItem<String> clients = new TreeItem<String>("Клиенты");
+			TreeItem<String> orders = new TreeItem<String>("Заказы");
+			TreeItem<String> employees = new TreeItem<String>("Сотрудники");
+			TreeItem<String> dictionaries = new TreeItem<String>("Справочники");
+			
+			TreeItem<String> persons = new TreeItem<String>("Физ. лица");
+			TreeItem<String> organizations = new TreeItem<String>("Юр. Лица");
+			clients.getChildren().add(persons);
+			clients.getChildren().add(organizations);
+			
+			TreeItem<String> orderList = new TreeItem<String>("Список заказов");
+			TreeItem<String> orderConsumptionList = new TreeItem<String>("Список расходов");
+			orders.getChildren().add(orderList);
+			orders.getChildren().add(orderConsumptionList);
+			
+			TreeItem<String> employeeList = new TreeItem<String>("Список сотрудников");
+			TreeItem<String> employeeWorkload = new TreeItem<String>("Заруженность");
+			employees.getChildren().add(employeeList);
+			employees.getChildren().add(employeeWorkload);
+			
+			TreeItem<String> paperTypes = new TreeItem<String>("Типы бумаги");
+			TreeItem<String> employeeRoles = new TreeItem<String>("Роли сотрудников");
+			TreeItem<String> bindingSprings = new TreeItem<String>("Пружины");
+			TreeItem<String> workTypes = new TreeItem<String>("Виды работ");
+			TreeItem<String> equipment = new TreeItem<String>("Оборудование");
+			
+			dictionaries.getChildren().add(paperTypes);
+			dictionaries.getChildren().add(employeeRoles);
+			dictionaries.getChildren().add(bindingSprings);
+			dictionaries.getChildren().add(workTypes);
+			dictionaries.getChildren().add(equipment);
+			
+			
+			rootItem.getChildren().add(clients);
+			rootItem.getChildren().add(orders);
+			rootItem.getChildren().add(employees);
+			rootItem.getChildren().add(dictionaries);
+			
+		}
+		
+		
+	}
+
+	@Override
+	public void setLeftStatus(String status) {
+		leftStatus.setText(status);
+	}
+
+	@Override
+	public void setRightStatus(String status) {
+		rightStatus.setText(status);
+	}
+
+	@Override
+	public void setProgressBarVisible(boolean visible) {
+		progressBar.setVisible(visible);
 	}
 }

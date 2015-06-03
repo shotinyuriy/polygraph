@@ -14,7 +14,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
-import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,7 +86,7 @@ public class MaterialConsumptionService extends
 			criteria = orderCriteria;
 		}
 		
-		return getDao().readByCriteria(criteria);
+		return criteria.list();
 	}
 	
 	@Transactional

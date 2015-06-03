@@ -53,6 +53,13 @@ public class User implements Serializable {
 	
 	public static User TECH_USER;
 	
+	public static Role[] roles = {
+		Role.DIRECTOR, 
+		Role.DESIGNER, 
+		Role.MANAGER, 
+		Role.ACCOUNTANT
+	};
+	
 	static {
 		TECH_USER = new User();
 		TECH_USER.setCreatedAt(new Date());

@@ -1,9 +1,11 @@
 package kz.aksay.polygraph.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import kz.aksay.polygraph.api.IEquipmentService;
@@ -77,13 +79,13 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Order save(Order order) throws Exception {
-		Order.State oldState = null;
-		
-		if(order.getId() != null) {
-			 Order oldOrder = find(order.getId());
-			 oldState = oldOrder.getState();
-			 getDao().getSession().clear();
-		}
+//		Order.State oldState = null;
+//		
+//		if(order.getId() != null) {
+//			 Order oldOrder = find(order.getId());
+//			 oldState = oldOrder.getState();
+//			 getDao().getSession().clear();
+//		}
 		
 		if(order.getCustomer() != null) {
 			Subject customer = order.getCustomer();
@@ -98,62 +100,53 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			}
 		}
 		
-		Set<Equipment> equipmentsToUpdate = new HashSet<Equipment>();
+		Map<Long, Equipment> equipmentMap = new HashMap<>();
 		
 		order = super.save(order);
 		if(order.getProducedWorks() != null) {
 			for(ProducedWork producedWork : order.getProducedWorks()) {
+				
 				if(producedWork.isDirty()) {
 					producedWork.setOrder(order);
 					producedWork = producedWorkService.save(producedWork);
 				}
 				
 				Equipment equipment = producedWork.getEquipment();
-				boolean newEquipment = true;
 				
-				if(equipment != null &&
-						order.getState().equals(Order.State.FINISHED) && 
-						( oldState == null || !oldState.equals(Order.State.FINISHED)) ) {
-				
-					for(Equipment currentEquipment : equipmentsToUpdate) {
-						if(currentEquipment.equals(equipment)) { 
-							equipment = currentEquipment;
-							newEquipment = false;
-							break;
-						}
-					}
+				if(equipment != null) {
 					
-					if(producedWork.getQuantity() != null) {
+					//equipment usage is counted at the moment of when produced work saving at the first time
+					if(producedWork.getEquipmentOrderNumber() == null) {
 						
-						if(WorkType.PRINTING_COLORED.equals( producedWork.getWorkType() ) ) {
-							equipment.setColoredUsageCount(equipment.getColoredUsageCount()+producedWork.getQuantity());
-							if(newEquipment) equipmentsToUpdate.add(equipment);
-						} else if(WorkType.PRINTING_BLACK_AND_WHITE.equals( producedWork.getWorkType() )) {
-							equipment.setMonochromeUsageCount(equipment.getMonochromeUsageCount()+producedWork.getQuantity());
-							if(newEquipment) equipmentsToUpdate.add(equipment);
+						Equipment equipmentFound = equipmentMap.get(equipment.getId());
+						if(equipmentFound == null) {
+							Integer orderCount = equipment.getOrdersCount()+1;
+							producedWork.setEquipmentOrderNumber(orderCount);
+							equipment.setOrdersCount(orderCount);
+							equipmentMap.put(equipment.getId(), equipment);
+							producedWork = producedWorkService.save(producedWork);
+						} else {
+							equipment = equipmentFound;
+						}
+						
+						if(producedWork.getQuantity() != null) {
+							
+							if(WorkType.PRINTING_COLORED.equals( producedWork.getWorkType() ) ) {
+								equipment.setColoredUsageCount(equipment.getColoredUsageCount()+producedWork.getQuantity());
+							} else if(WorkType.PRINTING_BLACK_AND_WHITE.equals( producedWork.getWorkType() )) {
+								equipment.setMonochromeUsageCount(equipment.getMonochromeUsageCount()+producedWork.getQuantity());
+							}
 						}
 					}
 				}
-				
-//				if(producedWork.getMaterialConsumption() != null) {
-//					for(MaterialConsumption materialConsumption : producedWork.getMaterialConsumption() ){
-//						if(materialConsumption.isDirty()) {
-//							materialConsumption.setOrder(order);
-//							materialConsumption.setProducedWork(producedWork);
-//							materialConsumption = materialConsumptionService.save(materialConsumption);
-//						}
-//					}
-//					for(MaterialConsumption materialConsumption : producedWork.getMaterialConsumption()) {
-//						materialConsumption.setDirty(false);
-//					}
-//				}
 			}
+			
 			for(ProducedWork producedWork : order.getProducedWorks()) {
 				producedWork.setDirty(false);
 			}
 		}
 		
-		for(Equipment equipment : equipmentsToUpdate) {
+		for(Equipment equipment : equipmentMap.values()) {
 			equipmentService.save(equipment);
 		}
 		
@@ -219,9 +212,7 @@ public class OrderService extends AbstractGenericService<Order, Long>
 			
 			if(whereClause.length() >0) {
 				selectClause.append(" WHERE ").append(whereClause);
-			} 
-			
-			System.out.println(selectClause);
+			}
 			
 			Query query = getDao().getSession().createQuery(selectClause.toString());
 			

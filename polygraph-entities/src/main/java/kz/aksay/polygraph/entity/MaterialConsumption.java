@@ -28,8 +28,12 @@ public class MaterialConsumption extends EntitySupport {
 	@JoinColumn(name="material_id", nullable=false)
 	private Material material;
 
+	@NotNull(message="Не указано количество израсходованного материала")
 	@Column
-	private BigDecimal quantity;
+	private Integer quantity;
+	
+	@Column
+	private Integer wasted = 0;
 	
 	@NotNull(message="Не указана произведенная работа")
 	@ManyToOne
@@ -45,6 +49,9 @@ public class MaterialConsumption extends EntitySupport {
 	@Transient
 	private boolean dirty = false;
 	
+	@Transient
+	private BigDecimal cost;
+	
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -58,6 +65,16 @@ public class MaterialConsumption extends EntitySupport {
 	}
 	
 	@Override
+	public int hashCode() {
+		if(id != null) {
+			return id.hashCode();
+		} else if(material != null && material.getName() != null){
+			return material.getName().hashCode();
+		}
+		return -1;
+	}
+	
+	@Override
 	public boolean equals(Object object) {
 		if(object == null) return false;
 		if(!(object instanceof MaterialConsumption)) return false;
@@ -68,6 +85,17 @@ public class MaterialConsumption extends EntitySupport {
 		}
 		return true;
 	}
+	
+	private void calcCost() {
+		BigDecimal price = null;
+		if(material != null) price = material.getPrice(); 
+		if(price == null) price = BigDecimal.ZERO; 
+		if(quantity == null) quantity = Integer.valueOf(0);
+		if(wasted == null) wasted = Integer.valueOf(0); 
+		cost = price.multiply(BigDecimal.valueOf(quantity));
+		BigDecimal wastedCost = price.multiply(BigDecimal.valueOf(wasted));
+		cost = cost.subtract(wastedCost);
+	}
 
 	public Material getMaterial() {
 		return material;
@@ -77,11 +105,11 @@ public class MaterialConsumption extends EntitySupport {
 		this.material = material;
 	}
 
-	public BigDecimal getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(BigDecimal quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -109,4 +137,18 @@ public class MaterialConsumption extends EntitySupport {
 		this.producedWork = producedWork;
 	}
 
+	public Integer getWasted() {
+		return wasted;
+	}
+
+	public void setWasted(Integer wasted) {
+		this.wasted = wasted;
+	}
+
+	public BigDecimal getCost() {
+		calcCost();
+		return cost;
+	}
+
+	
 }

@@ -13,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import kz.aksay.polygraph.desktop.controls.AnchorButton;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.test.service.TestDataCreator;
@@ -24,8 +23,8 @@ import org.springframework.context.ApplicationContext;
 
 public class StartingPane extends Application {
 	
-	public static String FXML_ROOT = ""; // for eclipse
-//	public static String FXML_ROOT = "/"; // for maven
+//	public static String FXML_ROOT = ""; // for eclipse
+	public static String FXML_ROOT = "/"; // for maven
 	private static ApplicationContext applicationContext;
 	private static Stage primaryStage;
 	private static Stack<Scene> sceneStack;

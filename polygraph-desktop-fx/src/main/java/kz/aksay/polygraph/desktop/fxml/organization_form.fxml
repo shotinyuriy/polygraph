@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -13,116 +14,167 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController"  alignment="TOP_CENTER">
-<children>
-	<GridPane vgap="10" hgap="10" alignment="TOP_CENTER">
-		<Label text="Код в 1С" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-		<Label text="Полное наименование" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-		<Label text="Краткое наименование" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-		<Label text="Фио директора" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-		<Label text="ИИН/БИН" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-		<Label text="ИИК" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
-		<Label text="E-mail" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
-		<Label text="Моб." GridPane.rowIndex="7" GridPane.columnIndex="1"/>
-		<Label text="Тел." GridPane.rowIndex="8" GridPane.columnIndex="1"/>
-		<TextField fx:id="code1cField" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-		<TextArea fx:id="fullNameField" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-		<TextField fx:id="shortNameField" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
-		<TextField fx:id="directorNameField" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
-		<TextField fx:id="innField" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
-		<TextField fx:id="kppField" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
-		<TextField fx:id="emailField" GridPane.rowIndex="6" GridPane.columnIndex="2"/>
-		<TextField fx:id="mobileField" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
-		<TextField fx:id="phoneField" GridPane.rowIndex="8" GridPane.columnIndex="2"/>
-		
-	</GridPane>
-	<Label text="Адрес" alignment="TOP_CENTER"/>
-	<GridPane vgap="10" hgap="10" alignment="TOP_CENTER">
-		<Label text="Город" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-		<Label text="Улица" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-		<Label text="Дом" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-		<Label text="Квартира" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-		<TextField fx:id="cityField" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-		<TextField fx:id="streetField" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
-		<TextField fx:id="houseField" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
-		<TextField fx:id="apartmentField" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
-	</GridPane>
-	
-	<VBox prefWidth="640.0">
-		<Label text="Договоры" alignment="BASELINE_CENTER"/>
-		
-		<TableView fx:id="contractsTableView">
-		  	<columns>
-		  		<TableColumn text="Номер" prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
-		 		</TableColumn>
-		 		<TableColumn text="Дата начала" prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="beginDateString"/></cellValueFactory>
-		 		</TableColumn>
-		 		<TableColumn text="Дата завершения"  prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="endDateString"/></cellValueFactory>
-		 		</TableColumn>
-		 	</columns>
-		</TableView>
-		
-		<HBox alignment="BASELINE_CENTER">
-			<children>
-				<Button fx:id="addContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addContract" 
-					text="Добавить"  />
-			    	
-				<Button fx:id="editContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editContract" 
-					text="Изменить" />
-			    	
-				<Button fx:id="deleteContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteContract" 
-					text="Удалить" />
-			</children>
-		</HBox>
-	</VBox>
-	
-	<VBox prefWidth="640.0">
-		<Label text="Доверенности" alignment="BASELINE_CENTER"/>
-		
-		<TableView fx:id="vicariousPowerTableView">
-		  	<columns>
-		  		<TableColumn text="Номер" prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="number"/></cellValueFactory>
-		 		</TableColumn>
-		 		<TableColumn text="ФИО доверенного" prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="personName"/></cellValueFactory>
-		 		</TableColumn>
-		 		<TableColumn text="Дата выдачи"  prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="beginDateString"/></cellValueFactory>
-		 		</TableColumn>
-		 		<TableColumn text="Дата завершения"  prefWidth="150.0">
-		 			<cellValueFactory><PropertyValueFactory property="endDateString"/></cellValueFactory>
-		 		</TableColumn>
-		 	</columns>
-		</TableView>
-		
-		<HBox alignment="BASELINE_CENTER">
-			<children>
-				<Button fx:id="addVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addVicariousPower" 
-					text="Добавить"  />
-			    	
-				<Button fx:id="editVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editVicariousPower" 
-					text="Изменить" />
-			    	
-				<Button fx:id="deleteVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteVicariousPower" 
-					text="Удалить" />
-			</children>
-		</HBox>
-	</VBox>
-	
-	<HBox alignment="BASELINE_CENTER">
-		<children>
-		<Button text="Сохранить"
-			onAction="#save" />
-		<Button fx:id="newOrderButton" text="Новый заказ"
-			onAction="#openNewOrder" visible="false"/>
-		</children>
-	</HBox>
-	
-	<Label text="" fx:id="validationLabel"/>
-</children>
-</VBox>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController">
+   <children>
+      <ScrollPane prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <VBox alignment="TOP_CENTER">
+            <children>
+            	<GridPane alignment="TOP_CENTER" hgap="10" vgap="10">
+               <children>
+               		<Label text="Код в 1С" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+               		<Label text="Полное наименование" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               		<Label text="Краткое наименование" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               		<Label text="Фио директора" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               		<Label text="ИИН/БИН" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+               		<Label text="ИИК" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+               		<Label text="E-mail" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+               		<Label text="Моб." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+               		<Label text="Тел." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+               		<TextField fx:id="code1cField" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+               		<TextArea fx:id="fullNameField" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+               		<TextField fx:id="shortNameField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+               		<TextField fx:id="directorNameField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+               		<TextField fx:id="innField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+               		<TextField fx:id="kppField" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+               		<TextField fx:id="emailField" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+               		<TextField fx:id="mobileField" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+               		<TextField fx:id="phoneField" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+               </children>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+            		
+            	</GridPane>
+            	<Label alignment="TOP_CENTER" text="Адрес" />
+            	<GridPane alignment="TOP_CENTER" hgap="10" vgap="10">
+               <children>
+               		<Label text="Город" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               		<Label text="Улица" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               		<Label text="Дом" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               		<Label text="Квартира" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+               
+               		<TextField fx:id="cityField" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+               		<TextField fx:id="streetField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+               		<TextField fx:id="houseField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+               		<TextField fx:id="apartmentField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+               </children>
+                     <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+            	</GridPane>
+            	
+            	<VBox prefWidth="640.0">
+               <children>
+               		<Label alignment="BASELINE_CENTER" text="Договоры" />
+               		
+               		<TableView fx:id="contractsTableView" prefHeight="200.0">
+               		  	<columns>
+               		  		<TableColumn prefWidth="150.0" text="Номер">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="number" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 		<TableColumn prefWidth="150.0" text="Дата начала">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="beginDateString" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 		<TableColumn prefWidth="150.0" text="Дата завершения">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="endDateString" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 	</columns>
+               		</TableView>
+               		
+               		<HBox alignment="BASELINE_CENTER" spacing="10.0" fx:id="contractControls" visible="false" managed="false">
+               			<children>
+               				<Button fx:id="addContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addContract" text="Добавить" />
+               			    	
+               				<Button fx:id="editContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editContract" text="Изменить" />
+               			    	
+               				<Button fx:id="deleteContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteContract" text="Удалить" />
+               			</children>
+               		</HBox>
+               </children>
+            	</VBox>
+            	
+            	<VBox prefWidth="640.0">
+               <children>
+               		<Label alignment="BASELINE_CENTER" text="Доверенности" />
+               		
+               		<TableView fx:id="vicariousPowerTableView" prefHeight="200.0">
+               		  	<columns>
+               		  		<TableColumn prefWidth="150.0" text="Номер">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="number" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 		<TableColumn prefWidth="150.0" text="ФИО доверенного">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="personName" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 		<TableColumn prefWidth="150.0" text="Дата выдачи">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="beginDateString" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 		<TableColumn prefWidth="150.0" text="Дата завершения">
+               		 			<cellValueFactory>
+                                    <PropertyValueFactory property="endDateString" />
+                                 </cellValueFactory>
+               		 		</TableColumn>
+               		 	</columns>
+               		</TableView>
+               		
+               		<HBox alignment="BASELINE_CENTER"  spacing="10.0" fx:id="vicPowerControls" visible="false" managed="false">
+               			<children>
+               				<Button fx:id="addVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addVicariousPower" text="Добавить" />
+               			    	
+               				<Button fx:id="editVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editVicariousPower" text="Изменить" />
+               			    	
+               				<Button fx:id="deleteVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteVicariousPower" text="Удалить" />
+               			</children>
+               		</HBox>
+               </children>
+            	</VBox>
+            	
+            	<HBox alignment="BASELINE_CENTER" spacing="10.0">
+            		<children>
+            		<Button onAction="#save" text="Сохранить" />
+            		<Button fx:id="newOrderButton" onAction="#openNewOrder" text="Новый заказ" visible="false" />
+            		</children>
+            	</HBox>
+            	
+            	<Label fx:id="validationLabel" text="" />
+            </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

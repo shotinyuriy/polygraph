@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.desktop;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
@@ -50,10 +51,12 @@ public class PaperTableViewController implements Initializable, SessionAware {
 	@FXML 	private TableColumn<PaperFX, Format> formatColumn;
 	@FXML	private TableColumn<PaperFX, PaperTypeFX> materialTypeColumn;
 	@FXML 	private TableColumn<PaperFX, String> densityColumn;
+	@FXML 	private TableColumn<PaperFX, String> priceColumn;
 	@FXML	private TextField nameField;
 	@FXML 	private ComboBox<Format> formatBox;
 	@FXML	private ComboBox<PaperTypeFX> paperTypeBox;
 	@FXML	private TextField densityField;
+	@FXML	private TextField priceField;
 	
 	private Map<String, Object> session;
 	
@@ -75,16 +78,22 @@ public class PaperTableViewController implements Initializable, SessionAware {
 			material.setFormat(formatBox.getValue());
 			
 			try {
-			
 				material.setDensity(Integer.valueOf( densityField.getText() ));
 			} catch (NumberFormatException nfe) {
 				throw new Exception("Плотность должна быть целым числом больше нуля");
 			}
 			
+			try {
+				material.setPrice(new BigDecimal(priceField.getText()));
+			} catch(NumberFormatException nfe) {
+				throw new Exception("Цена должна быть целым числом больше или равной нулю");
+			}
+			
 			save(material);
 			PaperFX paperFX = new PaperFX(material);
 			data.add(paperFX);
-			nameField.setText("");
+			nameField.setText(null);
+			priceField.setText(null);
 			paperTypeBox.setValue(null);
 		} catch(Exception e) {
 			
@@ -161,6 +170,22 @@ public class PaperTableViewController implements Initializable, SessionAware {
 		}
 	}
 	
+	@FXML
+	protected void updatePrice(
+			TableColumn.CellEditEvent<PaperFX, String> cellEditEvent) {
+		try {
+			PaperFX PaperFX = cellEditEvent.getRowValue();
+			Paper material = PaperFX.getEntity();
+			material.setPrice(new BigDecimal( cellEditEvent.getNewValue() ));
+			material.setUpdatedAt(new Date());
+			material.setUpdatedBy(SessionUtil.retrieveUser(session));
+		
+			save(material);
+		} catch (NumberFormatException nfe) {
+			
+		}
+	}
+	
 	protected void save(Paper paper) {
 		try {
 			paperService.save(paper);
@@ -205,6 +230,8 @@ public class PaperTableViewController implements Initializable, SessionAware {
 		nameColumn.setCellFactory(
 				TextFieldTableCell.<PaperFX>forTableColumn());
 		densityColumn.setCellFactory(
+				TextFieldTableCell.<PaperFX>forTableColumn());
+		priceColumn.setCellFactory(
 				TextFieldTableCell.<PaperFX>forTableColumn());
 		formatColumn.setCellFactory(
 				ComboBoxTableCell.<PaperFX, Format>forTableColumn(Format.values()));

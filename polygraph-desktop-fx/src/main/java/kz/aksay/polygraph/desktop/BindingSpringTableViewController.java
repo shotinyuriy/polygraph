@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.desktop;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,7 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 	@FXML	private TableColumn<BindingSpringFX, String> descriptionColumn;
 	@FXML	private TableColumn<BindingSpringFX, BindingSpring.Type> typeColumn;
 	@FXML 	private TableColumn<BindingSpringFX, String> diameterColumn;
+	@FXML 	private TableColumn<BindingSpringFX, String> priceColumn;
 	@FXML	private TextField descriptionField;
 	@FXML	private ComboBox<BindingSpring.Type> typeBox;
 	@FXML	private TextField diameterField;
@@ -124,6 +126,22 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 		}
 	}
 	
+	@FXML
+	protected void updatePrice(
+			TableColumn.CellEditEvent<BindingSpringFX, String> cellEditEvent) {
+		try {
+			BindingSpringFX bindingSpringFX = cellEditEvent.getRowValue();
+			BindingSpring material = bindingSpringFX.getEntity();
+			material.setPrice(new BigDecimal( cellEditEvent.getNewValue() ));
+			material.setUpdatedAt(new Date());
+			material.setUpdatedBy(SessionUtil.retrieveUser(session));
+		
+			save(material);
+		} catch (NumberFormatException nfe) {
+			
+		}
+	}
+	
 	protected void save(BindingSpring spring) {
 		try {
 			bindingSpringService.save(spring);
@@ -174,6 +192,8 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 		diameterColumn.setCellFactory(
 				TextFieldTableCell.<BindingSpringFX>forTableColumn());
 		descriptionColumn.setCellFactory(
+				TextFieldTableCell.<BindingSpringFX>forTableColumn());
+		diameterColumn.setCellFactory(
 				TextFieldTableCell.<BindingSpringFX>forTableColumn());
 		typeColumn.setCellFactory(
 				ComboBoxTableCell.<BindingSpringFX, BindingSpring.Type>forTableColumn(typeBox.getItems()));

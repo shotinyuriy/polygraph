@@ -1,20 +1,14 @@
 package kz.aksay.polygraph.entity;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import kz.aksay.polygraph.entity.EntitySupport;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name="produced_work")
@@ -45,10 +39,21 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	private Equipment equipment;
 	
 	@Column
-	private BigDecimal price = BigDecimal.ZERO;
+	private Format format;
 	
 	@Column
+	private BigDecimal price = BigDecimal.ZERO;
+	
+	@Min(value = 1, message="Количество должно быть больше нуля")
+	@Column
 	private Integer quantity = 0;
+	
+	@Min(value = 0, message="Количество должно быть больше или равно нулю")
+	@Column
+	private Integer wasted = 0;
+	
+	@Column(name="equipment_order_number")
+	private Integer equipmentOrderNumber;
 	
 	@Transient
 	private BigDecimal cost;
@@ -68,7 +73,20 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 	private void calcCost() {
 		if(price == null) price = BigDecimal.ZERO;
 		if(quantity == null) quantity = Integer.valueOf(0);
+		if(wasted == null) wasted = Integer.valueOf(0); 
 		cost = price.multiply(BigDecimal.valueOf(quantity));
+		BigDecimal wastedCost = price.multiply(BigDecimal.valueOf(wasted));
+		cost = cost.subtract(wastedCost);
+	}
+	
+	@Override
+	public int hashCode() {
+		if(id != null) {
+			return id.hashCode();
+		} else if(workType != null && workType.getName() != null){
+			return workType.getName().hashCode();
+		}
+		return -1;
 	}
 	
 	@Override
@@ -152,5 +170,29 @@ public class ProducedWork extends EntitySupport implements MaterialConsumer {
 
 	public void setEquipment(Equipment equipment) {
 		this.equipment = equipment;
+	}
+
+	public Integer getWasted() {
+		return wasted;
+	}
+
+	public void setWasted(Integer wasted) {
+		this.wasted = wasted;
+	}
+
+	public Integer getEquipmentOrderNumber() {
+		return equipmentOrderNumber;
+	}
+
+	public void setEquipmentOrderNumber(Integer equipmentOrderNumber) {
+		this.equipmentOrderNumber = equipmentOrderNumber;
+	}
+
+	public Format getFormat() {
+		return format;
+	}
+
+	public void setFormat(Format format) {
+		this.format = format;
 	}
 }

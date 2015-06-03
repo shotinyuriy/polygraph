@@ -37,7 +37,7 @@
 	<classpathentry kind="lib" path="/dependencies/jars/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/ecj-4.3.1.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/gson-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/dependencies/jars/hibernate-core-4.3.6.Final.jar"/>
+	<classpathentry kind="lib" path="/dependencies/jars/hibernate-core-4.3.6.Final.jar" sourcepath="D:/Projects/m2/org/hibernate/hibernate-core/4.3.6.Final/hibernate-core-4.3.6.Final-sources.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/hsqldb-2.3.2.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/itext-pdfa-5.5.0.jar"/>
 	<classpathentry kind="lib" path="/dependencies/jars/itextpdf-5.5.0.jar"/>

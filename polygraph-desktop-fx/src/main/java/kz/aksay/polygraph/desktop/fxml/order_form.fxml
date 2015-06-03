@@ -15,6 +15,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextField?>
 
 <AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
 	<children>
@@ -37,17 +38,19 @@
                   					      <Label alignment="CENTER_RIGHT" text="Заказчик" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   					      <Label alignment="CENTER_RIGHT" text="Описание" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   					      <Label alignment="CENTER_RIGHT" text="Исполнитель" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  					      
-                  					      <Label text="Плановая дата оконания:" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  					      <Label alignment="CENTER_RIGHT" text="Тираж" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  					      <Label alignment="CENTER_RIGHT" text="Статус" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  					      <Label text="Плановая дата окончания:" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  					      <Label text="Фактическая дата окончания:" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   					      
                   					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   					      <Label fx:id="vicariousPowerNumberField" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                   					      <TextArea fx:id="descriptionField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   					      <ComboBox fx:id="currentExecutorCombo" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                  					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                  					      
-                  	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                  					      <TextField fx:id="circulationField" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  					      <ComboBox fx:id="currentStatusCombo" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                  	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                  	           			  <DatePicker fx:id="dateEndReal" GridPane.columnIndex="2" GridPane.rowIndex="9" />
                   	           			  
                   						</children>
                                        <columnConstraints>
@@ -85,20 +88,23 @@
                                           <PropertyValueFactory property="executorName" />
                                        </cellValueFactory>
             			      		</TableColumn>
+									<TableColumn prefWidth="150.0" text="Количество">
+            			      			<cellValueFactory>
+                                          <PropertyValueFactory property="quantity" />
+                                       </cellValueFactory>
+            			      		</TableColumn>
             			      		<TableColumn prefWidth="150.0" text="Стоимость">
             			      			<cellValueFactory>
                                           <PropertyValueFactory property="cost" />
                                        </cellValueFactory>
             			      		</TableColumn>
+									<TableColumn prefWidth="150.0" text="в т.ч. брак">
+            			      			<cellValueFactory>
+                                          <PropertyValueFactory property="wasted" />
+                                       </cellValueFactory>
+            			      		</TableColumn>
             			      	</columns>
             			      </TableView>
-            		     
-            		     	  <HBox alignment="TOP_RIGHT">
-            			      	<children>
-            			      	<Label text="Итого" />
-            			      	<Label fx:id="totalCostLabel" prefWidth="100.0" />
-            			      	</children>
-            			      </HBox>
             		      
             			      <HBox alignment="TOP_CENTER">
             			      	<children>
@@ -111,11 +117,18 @@
             			      </HBox>
             			     
             			     <AnchorPane fx:id="materialConsumptionPane">
-			     </AnchorPane>
+			     			 </AnchorPane>
+			     
+			                 <HBox alignment="TOP_RIGHT">
+            			      	<children>
+            			      	<Label text="Итого: " />
+            			      	<Label fx:id="totalCostLabel" prefWidth="100.0" />
+            			      	</children>
+            			      </HBox>
             			     
             			     <Label fx:id="validationLabel" />
             			     
-            			     <HBox alignment="TOP_CENTER">
+            			     <HBox alignment="TOP_CENTER" spacing="10.0">
                <children>
                			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" text="Сохранить" />
                			      	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" text="Печать" />

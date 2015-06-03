@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -24,6 +25,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
@@ -34,14 +36,19 @@ import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
+import kz.aksay.polygraph.api.IPaperService;
+import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Equipment;
+import kz.aksay.polygraph.entity.Format;
+import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entityfx.EmployeeFX;
 import kz.aksay.polygraph.entityfx.EquipmentFX;
+import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.MaterialFX;
 import kz.aksay.polygraph.entityfx.ProducedWorkFX;
 import kz.aksay.polygraph.entityfx.StateFX;
@@ -72,7 +79,9 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private ComboBox<WorkTypeFX> workTypeCombo;
 	@FXML private ComboBox<MaterialFX> materialCombo;
 	@FXML private ComboBox<EquipmentFX> equipmentCombo;
+	@FXML private ComboBox<Format> formatCombo;
 	@FXML private TextField quantityField;
+	@FXML private TextField wastedField;
 	@FXML private TextField priceField;
 	@FXML private TextField coloredQuantityField;
 	@FXML private Label costField;
@@ -81,13 +90,15 @@ public class ProducedWorkFormController implements Initializable,
 	@FXML private Label validationLabel;
 	@FXML private Label amountLabel;
 	@FXML private Label coloredAmountLabel;
-	@FXML private Label equipmentLabel;
 	@FXML private Label errorLabel;
+	@FXML private HBox equipmentPanel;
+	@FXML private Label equipmentOrderNumber;
 	
 
 	private IEmployeeService employeeService;
 	private IWorkTypeService workTypeService;
 	private IMaterialService materialService;
+	private IPaperService paperService;
 	private IMaterialConsumptionService materialConsumptionService;
 	private IEquipmentService equipmentService;
 	private ProducedWorkFX producedWorkFX;
@@ -97,6 +108,7 @@ public class ProducedWorkFormController implements Initializable,
 		
 	private SimpleDoubleProperty price = new SimpleDoubleProperty();
 	private SimpleIntegerProperty quantity = new SimpleIntegerProperty(1);
+	private SimpleIntegerProperty wasted = new SimpleIntegerProperty(0);
 	private SimpleDoubleProperty cost = new SimpleDoubleProperty();
 	private boolean isPrinting = false;
 
@@ -148,6 +160,7 @@ public class ProducedWorkFormController implements Initializable,
 		Employee executor = null;
 		WorkType workType = null;
 		Equipment equipment = null;
+		Format format = formatCombo.getSelectionModel().getSelectedItem();
 		
 		if(executorFX != null) {
 			executor = executorFX.getEmployee();
@@ -163,6 +176,14 @@ public class ProducedWorkFormController implements Initializable,
 			throw new InternalLogicException("Для печати необходимо указать оборудование!");
 		}
 		
+		if(isPrinting && format == null) {
+			throw new InternalLogicException("Для печати необходимо указать оборудование!");
+		}
+		
+		if(quantity.get() < wasted.get()) {
+			throw new InternalLogicException("Количество брака не может быть больше общего количества!");
+		}
+		
 		if(producedWork == null) {
 			producedWork = new ProducedWork();
 			producedWork.setCreatedAt(new Date());
@@ -173,12 +194,20 @@ public class ProducedWorkFormController implements Initializable,
 			producedWork.setUpdatedBy(SessionUtil.retrieveUser(session));
 		}
 		
+		if(isPrinting) {
+			producedWork.setFormat(format);
+			producedWork.setEquipment(equipment);
+		}
+		
 		producedWork.setExecutor(executor);
 		producedWork.setWorkType(workType);
-		producedWork.setEquipment(equipment);
 		producedWork.setPrice(BigDecimal.valueOf(price.get()));
 		producedWork.setQuantity(quantity.get());
+		producedWork.setWasted(wasted.get());
+		producedWork.setMaterialConsumption(new HashSet<MaterialConsumption>());
 		
+		producedWork.getMaterialConsumption().addAll(
+				materialConsumptionForm.getMaterialConsumptionList());
 	}
 	
 	@Override
@@ -201,6 +230,7 @@ public class ProducedWorkFormController implements Initializable,
 		materialConsumptionService = StartingPane.getBean(
 				IMaterialConsumptionService.class);
 		equipmentService = StartingPane.getBean(IEquipmentService.class);
+		paperService = StartingPane.getBean(IPaperService.class);
 		
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employeeService.findAll());
@@ -209,6 +239,7 @@ public class ProducedWorkFormController implements Initializable,
 			= WorkTypeFX.convertListEntityToFX(workTypeService.findAll());
 		workTypeCombo.getItems().addAll(workTypesFX);
 		equipmentCombo.getItems().addAll(EquipmentFX.convertListEntityToFX(equipmentService.findAll()));
+		formatCombo.getItems().addAll(paperService.findAvailableFormats());
 		
 		Bindings.bindBidirectional(quantityField.textProperty(), 
                 quantity, 
@@ -218,8 +249,12 @@ public class ProducedWorkFormController implements Initializable,
                 price, 
                 new NumberStringConverter());
 		
+		Bindings.bindBidirectional(wastedField.textProperty(),
+				wasted,
+				new NumberStringConverter());
+		
 		costField.textProperty().bind(cost.asString());
-		cost.bind(price.multiply(quantity));
+		cost.bind(price.multiply(quantity).subtract(price.multiply(wasted)));
 		
 		workTypeCombo.getSelectionModel().selectedItemProperty().addListener( 
 				new ChangeListener<WorkTypeFX>() {
@@ -229,28 +264,47 @@ public class ProducedWorkFormController implements Initializable,
 					ObservableValue<? extends WorkTypeFX> observable,
 					WorkTypeFX oldValue, WorkTypeFX newValue) {
 				
-				if(newValue != null && 
-						( 
-								WorkType.PRINTING_BLACK_AND_WHITE.equals(newValue.getEntity()) || 
-								WorkType.PRINTING_COLORED.equals(newValue.getEntity())
-						)) {
+				if(workTypeService.isEquipmentRequired(newValue.getEntity())) {
 					
-					isPrinting = true;
-					equipmentLabel.setVisible(isPrinting);
-					equipmentCombo.setVisible(isPrinting);
+					isPrinting = true;					
 					amountLabel.setText("Количество прогонов");
 				} else {
 					
 					isPrinting = false;
-					equipmentLabel.setVisible(isPrinting);
-					equipmentCombo.setVisible(isPrinting);
 					amountLabel.setText("Количество");
 				}
 				
+				equipmentPanel.setVisible(isPrinting);
+				equipmentPanel.setManaged(isPrinting);
+				
 				if(materialConsumptionForm != null) {
+					Format format = formatCombo.getSelectionModel().getSelectedItem();
+					newValue.getEntity().setFormat(format);
 					materialConsumptionForm.loadMaterialsByWorkType(
 							newValue.getEntity());
 				}
+			}
+			
+		});
+		
+		formatCombo.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Format>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Format> observable,
+					Format oldValue, Format newValue) {
+				
+				WorkTypeFX workTypeFX = workTypeCombo.getSelectionModel()
+						.getSelectedItem();
+				
+				if(materialConsumptionForm != null) {
+					Format format = formatCombo.getSelectionModel()
+							.getSelectedItem();
+					workTypeFX.getEntity().setFormat(format);
+					materialConsumptionForm.loadMaterialsByWorkType(
+							workTypeFX.getEntity());
+				}
+				
 			}
 			
 		});
@@ -269,9 +323,10 @@ public class ProducedWorkFormController implements Initializable,
 				executorCombo.setValue( producedWorkFX.getExecutorFX() );
 				workTypeCombo.setValue( producedWorkFX.getWorkTypeFX() );
 				equipmentCombo.setValue( producedWorkFX.getEquipmentFX() );
-				
+				equipmentOrderNumber.setText(producedWorkFX.getEquipmentOrderNumberString());
 				quantity.set(producedWork.getQuantity());
 				price.set(producedWork.getPrice().doubleValue());
+				formatCombo.getSelectionModel().select(producedWork.getFormat());
 				
 			} else {
 				

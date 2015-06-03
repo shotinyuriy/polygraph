@@ -1,5 +1,7 @@
 package kz.aksay.polygraph.entityfx;
 
+import java.math.BigDecimal;
+
 import kz.aksay.polygraph.entity.Paper;
 
 public class PaperFX extends EntityFX<Paper> {
@@ -23,11 +25,25 @@ public class PaperFX extends EntityFX<Paper> {
 	}
 	
 	public String getTypeName() {
-		return entity.getType().getName();
+		if(entity.getType() != null) {
+			return entity.getType().getName();
+		}
+		return null;
 	}
 	
 	public String getDescription() {
 		return entity.getDescription();
+	}
+	
+	public BigDecimal getPrice() {
+		return entity.getPrice();
+	}
+	
+	public String getPriceString() {
+		if(entity.getPrice() != null) {
+			return entity.getPrice().toString();
+		}
+		return null;
 	}
 
 }

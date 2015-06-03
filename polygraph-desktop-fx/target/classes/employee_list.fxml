@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="kz.aksay.polygraph.desktop.EmployeeTableViewController">
+
+   <top>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="461.0" minWidth="10.0" prefWidth="461.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="139.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" text="Поиск" GridPane.columnIndex="1" />
+            <TextField fx:id="searchField"/>
+         </children>
+      </GridPane>
+   </top>
+   <center>
+      <TableView fx:id="employeeTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn prefWidth="450.0" text="ФИО">
+          	<cellValueFactory><PropertyValueFactory property="fullName" /></cellValueFactory>
+          </TableColumn>
+          <TableColumn prefWidth="100.0" text="Дата рождения">
+          	<cellValueFactory><PropertyValueFactory property="birthDateString" /></cellValueFactory>
+          </TableColumn>
+		  <TableColumn prefWidth="100.0" text="Тип сотрудника">
+          	<cellValueFactory><PropertyValueFactory property="typeName" /></cellValueFactory>
+          </TableColumn>
+        </columns>
+      </TableView>
+   </center>
+	<bottom>
+	<AnchorPane>
+		<Button onAction="#openEmployeeForm">Изменить</Button>
+	</AnchorPane>
+	</bottom>   
+</BorderPane>

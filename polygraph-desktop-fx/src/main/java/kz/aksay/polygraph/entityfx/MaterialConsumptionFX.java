@@ -1,13 +1,10 @@
 package kz.aksay.polygraph.entityfx;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.LinkedList;
 
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
-import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.util.FormatUtil;
 
 public class MaterialConsumptionFX extends EntityFX<MaterialConsumption> {
@@ -29,8 +26,16 @@ public class MaterialConsumptionFX extends EntityFX<MaterialConsumption> {
 		return null;
 	}
 	
-	public BigDecimal getQuantity() {
+	public Integer getQuantity() {
 		return entity.getQuantity();
+	}
+	
+	public Integer getWasted() {
+		return entity.getWasted();
+	}
+	
+	public BigDecimal getCost() {
+		return entity.getCost();
 	}
 	
 	public boolean isDirty() {
@@ -53,8 +58,13 @@ public class MaterialConsumptionFX extends EntityFX<MaterialConsumption> {
 		}
 	}
 	
-	public void setQuantity(BigDecimal quantity) {
+	public void setQuantity(Integer quantity) {
 		this.entity.setQuantity(quantity);
+	}
+	
+
+	public void setWasted(Integer wasted) {
+		this.entity.setWasted(wasted);
 	}
 	
 	public String getOrderCreatedAtString() {
@@ -66,4 +76,5 @@ public class MaterialConsumptionFX extends EntityFX<MaterialConsumption> {
 		}
 		return null;
 	}
+
 }

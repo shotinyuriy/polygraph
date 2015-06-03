@@ -13,10 +13,11 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml"
-	fx:controller="kz.aksay.polygraph.desktop.EquipmentTableViewController" 
-	alignment="CENTER" hgap="10.0" vgap="10.0">
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+	fx:controller="kz.aksay.polygraph.desktop.EquipmentTableViewController">
+<GridPane alignment="TOP_CENTER" hgap="10.0" vgap="10.0">
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 	</padding>
@@ -26,27 +27,31 @@
 	<TableView fx:id="tableView" GridPane.columnIndex="0"
 		GridPane.rowIndex="1" editable="true">
 		<columns>
-			<TableColumn fx:id="workTypeNameColumn" text="Вид работы" prefWidth="100" >
-				<cellValueFactory><PropertyValueFactory property="workTypeName"/></cellValueFactory>
-			</TableColumn>
 			<TableColumn fx:id="nameColumn" text="Название" prefWidth="100" 
-				editable="true" onEditCommit="#update">
+				editable="true" onEditCommit="#updateName">
 				<cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="monochromeUsageCountColumn" text="Ч/Б прогоны" prefWidth="100" 
-				editable="true" onEditCommit="#update">
-				<cellValueFactory><PropertyValueFactory property="monochromeUsageCount"/></cellValueFactory>
+			<TableColumn fx:id="monochromeUsageCountColumn" text="Ч/Б прогоны A3" prefWidth="100" 
+				editable="true" >
+				<cellValueFactory><PropertyValueFactory property="monochromeUsagesA3"/></cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="coloredUsageCountColumn" text="Цветные прогоны" prefWidth="100" 
-				editable="true" onEditCommit="#update">
-				<cellValueFactory><PropertyValueFactory property="coloredUsageCount"/></cellValueFactory>
+			<TableColumn fx:id="monochromeUsageCountColumn" text="Ч/Б прогоны A4" prefWidth="100" 
+				editable="true" >
+				<cellValueFactory><PropertyValueFactory property="monochromeUsagesA4"/></cellValueFactory>
 			</TableColumn>
-			<TableColumn text="Дата добавления" prefWidth="100">
-				<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
+			<TableColumn fx:id="coloredUsageCountColumn" text="Цветные прогоны А3" prefWidth="100" 
+				editable="true" >
+				<cellValueFactory><PropertyValueFactory property="coloredUsagesA3"/></cellValueFactory>
 			</TableColumn>
-			<TableColumn text="Кто добавил" prefWidth="200">
-				<cellValueFactory><PropertyValueFactory property="createdByLogin"/></cellValueFactory>
+			<TableColumn fx:id="coloredUsageCountColumn" text="Цветные прогоны А4" prefWidth="100" 
+				editable="true" >
+				<cellValueFactory><PropertyValueFactory property="coloredUsagesA4"/></cellValueFactory>
 			</TableColumn>
+			<TableColumn fx:id="ordersCountColumn" text="Счетчик заказов" prefWidth="100" 
+				editable="true" onEditCommit="#updateOrdersCount">
+				<cellValueFactory><PropertyValueFactory property="ordersCountString"/></cellValueFactory>
+			</TableColumn>
+			
 		</columns>
 		<items>
 			<FXCollections fx:factory="observableArrayList">
@@ -58,11 +63,10 @@
 	</TableView>
 	<HBox spacing="10" alignment="bottom_right" GridPane.columnIndex="0"
 		GridPane.rowIndex="2">
-		<ComboBox fx:id="workTypeBox" />
 		<TextField fx:id="nameField" promptText="Название" prefWidth="90"/>
 		<Button text="Добавить" onAction="#add"/>
 		<Label fx:id="validationLabel" text=""/>
 	</HBox>
 </GridPane>
-
+</AnchorPane>
 

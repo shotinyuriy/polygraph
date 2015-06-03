@@ -29,19 +29,43 @@
                   <PropertyValueFactory property="quantity" />
                </cellValueFactory>
    				</TableColumn>
+				<TableColumn prefWidth="150.0" text="Стоимость">
+   					<cellValueFactory>
+                  <PropertyValueFactory property="cost" />
+               </cellValueFactory>
+   				</TableColumn>
+				<TableColumn prefWidth="150.0" text="В т.ч. брак">
+   					<cellValueFactory>
+                  <PropertyValueFactory property="wasted" />
+               </cellValueFactory>
+   				</TableColumn>
    			</columns>
    		</TableView>
    		
-   		<HBox fx:id="controlPanel" alignment="TOP_CENTER" prefHeight="120.0" spacing="10.0">
-      <children>
-      			<Label text="Материал" />
-      			<ComboBox fx:id="materialCombo" editable="true" />
-      			<Label text="Количество" />
-      			<TextField fx:id="quantityField" />
-      			<Button onAction="#addConsumption" text="Добавить расход" />
-      			<Button onAction="#removeConsumption" text="Удалить расход" />
-      </children>
-   		</HBox>
+   		<VBox fx:id="controlPanel" spacing="0.0">
+	   		<HBox alignment="TOP_LEFT" spacing="0.0">
+		      <children>
+		      			<Label text="Материал" />
+		      			<ComboBox fx:id="materialCombo" editable="true" />
+		      			<Label text="Количество" />
+		      			<TextField fx:id="quantityField" />
+		      </children>
+	   		</HBox>
+	   		
+	   		<HBox alignment="TOP_LEFT" spacing="0.0">
+		      <children>
+		      			<Label text="Брак" />
+		      			<TextField fx:id="wastedField" />      			
+		      </children>
+	   		</HBox>
+	   		
+	   		<HBox alignment="TOP_LEFT" spacing="0.0">
+		      <children>
+		      			<Button onAction="#addConsumption" text="Добавить расход" />
+		      			<Button onAction="#removeConsumption" text="Удалить расход" />
+		      </children>
+	   		</HBox>
+   		</VBox>
    		
    		<Label fx:id="validationLabel" />
    </children>

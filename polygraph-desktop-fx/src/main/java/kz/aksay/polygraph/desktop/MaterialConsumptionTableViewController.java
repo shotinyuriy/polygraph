@@ -1,15 +1,13 @@
 package kz.aksay.polygraph.desktop;
 
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,12 +15,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.desktop.controls.AutoCompleteComboBoxListener;
-import kz.aksay.polygraph.entity.MaterialConsumer;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
@@ -32,8 +29,6 @@ import kz.aksay.polygraph.fxapi.MaterialConsumptionForm;
 import kz.aksay.polygraph.fxapi.MaterialConsumptionHolderFX;
 import kz.aksay.polygraph.fxapi.OrderForm;
 import kz.aksay.polygraph.fxapi.ProducedWorkForm;
-import kz.aksay.polygraph.service.MaterialConsumptionService;
-import kz.aksay.polygraph.service.MaterialService;
 import kz.aksay.polygraph.util.ParameterKeys;
 import kz.aksay.polygraph.util.ParametersAware;
 import kz.aksay.polygraph.util.ParametersUtil;
@@ -47,9 +42,10 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 
 	@FXML private ComboBox<MaterialFX> materialCombo;
 	@FXML private TextField quantityField;
+	@FXML private TextField wastedField;
 	@FXML private TableView<MaterialConsumptionFX> materialConsumptionsTableView;
 	@FXML private Label validationLabel;
-	@FXML private HBox controlPanel;
+	@FXML private VBox controlPanel;
 
 	private IMaterialService materialService;
 	private IMaterialConsumptionService materialConsumptionService;
@@ -59,6 +55,7 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 	
 	@FXML
 	public void addConsumption(ActionEvent actionEvent) {
+		validationLabel.setText(null);
 		try {
 			MaterialConsumption materialConsumption = new MaterialConsumption();
 			materialConsumption.setCreatedAt(new Date());
@@ -72,6 +69,10 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 			if(materialFX == null) throw new InternalLogicException("Необходимо указать материал");
 			materialConsumptionFX.setMaterialFX(materialFX);
 			materialConsumptionFX.setQuantity(retrieveQuantity());
+			materialConsumptionFX.setWasted(retrieveWasted());
+			if(materialConsumptionFX.getQuantity() < materialConsumptionFX.getWasted()) {
+				throw new InternalLogicException("Количество брака не может быть больше общего количества!");
+			}
 			materialConsumptionsTableView.getItems().add(materialConsumptionFX);
 			
 			clearForm();
@@ -87,6 +88,7 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 	private void clearForm() {
 		materialCombo.getSelectionModel().select(null);
 		quantityField.setText(null);
+		wastedField.setText(null);
 	}
 
 	@FXML
@@ -109,18 +111,32 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 		}
 	}
 	
-	private BigDecimal retrieveQuantity() throws Exception {
+	private Integer retrieveQuantity() throws Exception {
 		String quantityText = quantityField.getText();
 		if(quantityText != null) {
 			quantityText = quantityText.trim();
 			try {
-				return new BigDecimal(quantityText);
+				return Integer.valueOf(quantityText);
 			}
 			catch(NumberFormatException e) {
 				throw new NumberFormatException("Некорректно указано количество!");
 			}
 		}
-		return BigDecimal.ZERO; 
+		return Integer.valueOf(0); 
+	}
+	
+	private Integer retrieveWasted() throws Exception {
+		String quantityText = wastedField.getText();
+		if(quantityText != null && !quantityText.isEmpty()) {
+			quantityText = quantityText.trim();
+			try {
+				return Integer.valueOf(quantityText);
+			}
+			catch(NumberFormatException e) {
+				throw new NumberFormatException("Некорректно указано в т.ч. брак!");
+			}
+		}
+		return Integer.valueOf(0); 
 	}
 	
 	@Override
@@ -202,11 +218,21 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 		if(orderForm != null) {
 			orderForm.setMaterialConsumptionTableView(materialConsumptionsTableView);
 			controlPanel.setVisible(false);
+			controlPanel.setManaged(false);
 		}
 		
 		if(producedWorkForm != null) {
 			producedWorkForm.setMaterialConsumptionForm(this);
 		}
+	}
+
+	@Override
+	public List<MaterialConsumption> getMaterialConsumptionList() {
+		List<MaterialConsumption> materialConsumptions = new ArrayList<MaterialConsumption>();
+		for(MaterialConsumptionFX matConFX : materialConsumptionsTableView.getItems()) {
+			materialConsumptions.add(matConFX.getEntity());
+		}
+		return materialConsumptions;
 	}
 
 }

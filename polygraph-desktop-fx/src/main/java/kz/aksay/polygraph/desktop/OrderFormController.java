@@ -5,11 +5,13 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
@@ -27,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -35,6 +38,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.NumberStringConverter;
 import kz.aksay.polygraph.api.ICustomerService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
@@ -89,8 +93,10 @@ public class OrderFormController implements
 	@FXML private Label customerField;
 	@FXML private ComboBox<EmployeeFX> currentExecutorCombo;
 	@FXML private TextArea descriptionField;
+	@FXML private TextField circulationField;
 	@FXML private ComboBox<StateFX> currentStatusCombo;
 	@FXML private DatePicker dateEndPlan;
+	@FXML private DatePicker dateEndReal;
 	@FXML private Button showEmployeeWorkLoad;
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
@@ -104,7 +110,7 @@ public class OrderFormController implements
 	@FXML
 	public void save(ActionEvent actionEvent) {
 		try {
-			
+			validationLabel.setText(null);
 			if(isNewOrder) {
 				orderFX.getCreatedAtProperty().set(new Date());
 				orderFX.getCreatedByProperty().set(SessionUtil.retrieveUser(session));
@@ -115,15 +121,31 @@ public class OrderFormController implements
 				orderFX.getUpdatedByProperty().set(SessionUtil.retrieveUser(session));
 			}
 			
+			Order order = orderFX.getOrder();
+			
 			if(dateEndPlan.getValue() != null) {
-				orderFX.getOrder().setDateEndPlan(
+				order.setDateEndPlan(
 						FormatUtil.convertToDate(dateEndPlan.getValue())
 					);
 			} else {
-				orderFX.getOrder().setDateEndPlan(null);
+				order.setDateEndPlan(null);
 			}
 			
-			orderService.save(orderFX.getOrder());
+			if(dateEndReal.getValue() != null) {
+				order.setDateEndReal(
+						FormatUtil.convertToDate(dateEndReal.getValue())
+					);
+			} else {
+				order.setDateEndReal(new Date());
+			}
+			
+			
+			order.setProducedWorks(new HashSet<ProducedWork>());
+			for(ProducedWorkFX prodWorkFX : producedWorksTableView.getItems()) {
+				order.getProducedWorks().add(prodWorkFX.getEntity());
+			}
+			
+			orderService.save(order);
 			
 			if(!producedWorksToRemove.isEmpty() ) {
 				for(ProducedWork producedWork : producedWorksToRemove) {
@@ -249,15 +271,19 @@ public class OrderFormController implements
 				orderFX = new OrderFX(order);
 				
 				customerField.setText(orderFX.getCustomerFullName());
-				descriptionField.textProperty().bindBidirectional(orderFX.getDescriptionProperty());
+				
 				dateEndPlan.valueProperty().set(
-						FormatUtil.convertToLocalDate(orderFX.getDateEndPlanProperty().get()));
+						FormatUtil.convertToLocalDate(order.getDateEndPlan()));
+				dateEndReal.valueProperty().set(
+						FormatUtil.convertToLocalDate(order.getDateEndReal()));
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
 				
 				
 				if(orderFX.getStateProperty().get() != null) {
 				
-					currentStatusCombo.getSelectionModel().select(new StateFX(orderFX.getStateProperty().get(), orderFX.getStateProperty().get().getName()));
+					currentStatusCombo.getSelectionModel().select(
+							new StateFX(orderFX.getStateProperty().get(), 
+									orderFX.getStateProperty().get().getName()));
 				}
 				
 				if(orderFX.getVicariousPowerProperty().get() != null) {
@@ -287,16 +313,11 @@ public class OrderFormController implements
 				currentStatusCombo.getSelectionModel().select(new StateFX(Order.State.NEW, Order.State.NEW.getName()));
 			}
 			
-			currentStatusCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StateFX>() {
-				@Override
-				public void changed(
-						ObservableValue<? extends StateFX> observable,
-						StateFX oldValue, StateFX newValue) {
-					orderFX.getStateProperty().set(newValue.getState());
-				}
-			});
+			descriptionField.textProperty().bindBidirectional(orderFX.getDescriptionProperty());
 			orderFX.getCurrentExecutorProperty().bind(currentExecutorCombo.getSelectionModel().selectedItemProperty());
-			
+			Bindings.bindBidirectional(circulationField.textProperty(),
+					orderFX.getCirculationProperty(),
+					new NumberStringConverter());
 		}
 	}
 	
@@ -352,6 +373,22 @@ public class OrderFormController implements
 				});
 				
 				return tableRow;
+			}
+		});
+		
+		currentStatusCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<StateFX>() {
+			@Override
+			public void changed(
+					ObservableValue<? extends StateFX> observable,
+					StateFX oldValue, StateFX newValue) {
+				orderFX.getStateProperty().set(newValue.getState());
+				
+				dateEndReal.setDisable(true);
+				if(newValue.getState() != null) {
+					if(newValue.getState().equals(Order.State.FINISHED)) {
+						dateEndReal.setDisable(false);
+					}
+				}
 			}
 		});
 	}

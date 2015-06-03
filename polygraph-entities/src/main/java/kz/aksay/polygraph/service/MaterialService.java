@@ -15,6 +15,7 @@ import kz.aksay.polygraph.api.IPaperService;
 import kz.aksay.polygraph.api.IStickerService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Material;
+import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.WorkType;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -55,7 +56,14 @@ public class MaterialService extends AbstractGenericService<Material, Long>
 			for(IGenericService<?,?> genericService : services) {
 				for(Object object : genericService.findAll()) {
 					Material material = (Material) object;
-					materials.add(material);
+					if(workType.getFormat() != null && material instanceof Paper) {
+						Paper paper = (Paper) material;
+						if(workType.getFormat().equals(paper.getFormat())) {
+							materials.add(material);
+						}
+					} else {
+						materials.add(material);
+					}
 				}
 			}
 		}

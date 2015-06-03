@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -56,6 +57,9 @@ public class WorkType extends EntitySupport {
 	
 	@Column
 	private String code1c;
+	
+	@Transient
+	private Format format;
 	
 	static {
 		DEVELOPMENT.name = "РАЗРАБОТКА";
@@ -136,5 +140,13 @@ public class WorkType extends EntitySupport {
 
 	public void setCode1c(String code1c) {
 		this.code1c = code1c;
+	}
+
+	public Format getFormat() {
+		return format;
+	}
+
+	public void setFormat(Format format) {
+		this.format = format;
 	}
 }

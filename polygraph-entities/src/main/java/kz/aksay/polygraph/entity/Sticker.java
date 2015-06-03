@@ -1,20 +1,25 @@
 package kz.aksay.polygraph.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name="sticker_material")
 public class Sticker extends Material {
-	
+
 	@NotNull(message="Не указан формат наклейки")
 	@Enumerated(EnumType.ORDINAL)
 	private Format format;
 	
 	@NotNull(message="Не указан тип наклейки")
 	@Enumerated(EnumType.ORDINAL)
-	private Type type;
+	@Column(name="sticker_type")
+	private Type stickerType;
 	
 	@NotNull(message="Не указана плотность наклейки")
 	@Min(value=1, message="Минимальное значение плотности 1мк")
@@ -45,14 +50,6 @@ public class Sticker extends Material {
 		this.format = format;
 	}
 
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
-	}
-
 	public Integer getDensity() {
 		return density;
 	}
@@ -78,8 +75,8 @@ public class Sticker extends Material {
 		if(sb.length() > 0) {
 			sb.append(" ");
 		}
-		if(type != null) {
-			sb.append(type.getName());
+		if(stickerType != null) {
+			sb.append(stickerType.getName());
 		}
 		if(sb.length() > 0) {
 			sb.append(" ");
@@ -89,5 +86,13 @@ public class Sticker extends Material {
 		}
 		
 		return sb.toString();
+	}
+
+	public Type getStickerType() {
+		return stickerType;
+	}
+
+	public void setStickerType(Type type) {
+		this.stickerType = type;
 	}
 }

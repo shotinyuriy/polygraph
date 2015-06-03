@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.entityfx;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -11,11 +12,13 @@ import java.util.Set;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.WritableObjectValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kz.aksay.polygraph.entity.Subject;
@@ -43,9 +46,11 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	private ObjectProperty<Date> updatedAtProperty;
 	private ObjectProperty<User> updatedByProperty;
 	private ObjectProperty<Date> dateEndPlanProperty;
+	private ObjectProperty<Date> dateEndRealProperty;
 	private ObjectProperty<Order.State> stateProperty;
 	private ObjectProperty<VicariousPowerFX> vicariousPowerProperty;
 	private StringProperty descriptionProperty;
+	private SimpleIntegerProperty circulationProperty;
 	private ObservableList<ProducedWorkFX> producedWorkProperty;
 	private ObservableList<MaterialConsumptionFX> materialConsumptionProperty;
 	
@@ -64,9 +69,20 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 			updatedAtProperty = new SimpleObjectProperty<Date>(order.getUpdatedAt());
 			updatedByProperty = new SimpleObjectProperty<User>(order.getUpdatedBy());
 			setDateEndPlanProperty(new SimpleObjectProperty<Date>(order.getDateEndPlan()));
+			if(this.order.getDateEndReal() != null) {
+				dateEndRealProperty = new SimpleObjectProperty<Date>(order.getDateEndReal());
+			} else {
+				dateEndRealProperty = new SimpleObjectProperty<Date>();
+			}
 			stateProperty = new SimpleObjectProperty<Order.State>(order.getState());
 			descriptionProperty = new SimpleStringProperty(order.getDescription());
 			vicariousPowerProperty = new SimpleObjectProperty<VicariousPowerFX>(vicariousPowerFX);
+			
+			if(this.order.getCirculation() != null) {
+				circulationProperty = new SimpleIntegerProperty(this.order.getCirculation());
+			} else {
+				circulationProperty = new SimpleIntegerProperty();
+			}
 			
 			List<ProducedWorkFX> producedWorksFX = EntityFX.
 					convertListEntityToFX(order.getProducedWorks(), ProducedWorkFX.class);
@@ -95,6 +111,18 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 			 }
 		 }
 		 return ordersFX;
+	}
+	
+	public String getCustomerType() {
+		Subject customer = order.getCustomer();
+		if(customer != null) {
+			if(customer instanceof Organization) {
+				return "ЮЛ";
+			} else {
+				return "ФЛ";
+			}
+		}
+		return null; 
 	}
 	
 	public String getCreatedAtString() {
@@ -133,6 +161,10 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	
 	public String getDescription() {
 		return order.getDescription();
+	}
+	
+	public Integer getCirculation() {
+		return order.getCirculation();
 	}
 
 	public Long getCustomerId() {
@@ -189,15 +221,25 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 		}
 		
 		order.setProducedWorks(new HashSet<ProducedWork>());
+		
 		for(ProducedWorkFX producedWorkFX : producedWorkProperty) {
 			ProducedWork producedWork = producedWorkFX.getEntity();
 			producedWork.setOrder(order);
+			producedWork.setDirty(true);
+			
+			if(producedWork.getMaterialConsumption() != null) {
+				for(MaterialConsumption matCon : producedWork.getMaterialConsumption()) {
+					matCon.setProducedWork(producedWork);
+					matCon.setDirty(true);
+				}
+			}
 			order.getProducedWorks().add(producedWork);
 		}
 		
 		order.setState(stateProperty.get());
 		
 		order.setVicariousPower(vicariousPowerProperty.get().getEntity());
+		order.setCirculation(circulationProperty.get());
 	}
 
 	
@@ -226,13 +268,17 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	}
 	
 	public Integer delayFromPlan() {
-		if(order != null) {
+		if(order != null && order.getState() != null) {
 			switch(order.getState()) {
 				case PROCESSED:
 				case NEW:
-					return DateUtils.differenceInDays(new Date(), order.getDateEndPlan());
+					if(order.getDateEndPlan() != null)
+						return DateUtils.differenceInDays(new Date(), order.getDateEndPlan());
+					return null;
 				case FINISHED:
-					return  DateUtils.differenceInDays(order.getDateEndReal(), order.getDateEndPlan());
+					if(order.getDateEndReal() != null && order.getDateEndPlan() != null)
+						return  DateUtils.differenceInDays(order.getDateEndReal(), order.getDateEndPlan());
+					return null;
 			}
 		}
 		return null;
@@ -365,5 +411,21 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	@Override
 	public boolean isAllowedToEdit() {
 		return false;
+	}
+
+	public SimpleIntegerProperty getCirculationProperty() {
+		return circulationProperty;
+	}
+
+	public void setCirculationProperty(SimpleIntegerProperty circulationProperty) {
+		this.circulationProperty = circulationProperty;
+	}
+	
+	public BigDecimal getTotalCost() {
+		return this.order.getTotalCost();
+	}
+
+	public ObjectProperty<Date> getDateEndRealProperty() {
+		return null;
 	}
 }

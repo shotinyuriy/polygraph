@@ -1,6 +1,8 @@
 package kz.aksay.polygraph.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -11,13 +13,14 @@ import org.springframework.stereotype.Service;
 
 import kz.aksay.polygraph.api.IPaperService;
 import kz.aksay.polygraph.dao.GenericDao;
+import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.PaperType;
 
 @Service
 public class PaperService extends AbstractGenericService<Paper, Long> implements IPaperService {
 
-	private GenericDao<Paper, Long> paperDao;
+	private GenericDao<Paper, Long> paperDao; 
 	
 	@Override
 	protected GenericDao<Paper, Long> getDao() {
@@ -56,4 +59,16 @@ public class PaperService extends AbstractGenericService<Paper, Long> implements
 		return criteria.list();
 	}
 
+	@Override
+	public Set<Format> findAvailableFormats() {
+		Set<Format> formats = new HashSet<Format>();
+		
+		for(Paper paper : findAll()) {
+			formats.add(paper.getFormat());
+		}
+		
+		return formats;
+	}
+
+	
 }

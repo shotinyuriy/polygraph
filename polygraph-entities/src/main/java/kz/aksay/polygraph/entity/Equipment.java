@@ -15,15 +15,14 @@ public class Equipment extends EntitySupport {
 	@Column(unique=true)
 	private String name;
 	
-	@ManyToOne
-	@JoinColumn(name="work_type_id")
-	private WorkType workType;
-	
 	@Column(name="monochrome_usage_count")
 	private int monochromeUsageCount = 0;
 	
 	@Column(name="colored_usage_count")
 	private int coloredUsageCount = 0;
+	
+	@Column(name="orders_count")
+	private Integer ordersCount = 0;
 	
 	@Override
 	public int hashCode() {
@@ -54,14 +53,6 @@ public class Equipment extends EntitySupport {
 		this.name = name;
 	}
 
-	public WorkType getWorkType() {
-		return workType;
-	}
-
-	public void setWorkType(WorkType workType) {
-		this.workType = workType;
-	}
-
 	public int getMonochromeUsageCount() {
 		return monochromeUsageCount;
 	}
@@ -76,6 +67,14 @@ public class Equipment extends EntitySupport {
 
 	public void setColoredUsageCount(int coloredUsageCount) {
 		this.coloredUsageCount = coloredUsageCount;
+	}
+
+	public Integer getOrdersCount() {
+		return ordersCount;
+	}
+
+	public void setOrdersCount(Integer ordersCount) {
+		this.ordersCount = ordersCount;
 	}
 	
 	

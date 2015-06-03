@@ -60,6 +60,9 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	@JoinColumn(name="customer_id", nullable=false)
 	private Subject customer;
 	
+	@Column
+	private Integer circulation;
+	
 	@ManyToOne
 	@JoinColumn(name="vicarious_power_id")
 	private VicariousPower vicariousPower;
@@ -93,8 +96,18 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 				BigDecimal cost;
 				if((cost = producedWork.getCost()) != null)
 					totalCost = totalCost.add(cost);
+				
+				if(producedWork.getMaterialConsumption() != null) {
+					for(MaterialConsumption currentMatCon : producedWork.getMaterialConsumption()) {
+						BigDecimal costMC;
+						if((costMC = currentMatCon.getCost()) != null)
+							totalCost = totalCost.add(costMC);
+					}
+				}
 			}
 		}
+		
+		
 		return totalCost;
 	}
 	
@@ -177,5 +190,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	public void setDateEndReal(Date dateEndReal) {
 		this.dateEndReal = dateEndReal;
+	}
+
+	public Integer getCirculation() {
+		return circulation;
+	}
+
+	public void setCirculation(Integer circulation) {
+		this.circulation = circulation;
 	}
 }

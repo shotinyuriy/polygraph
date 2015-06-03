@@ -15,6 +15,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,6 +24,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -63,20 +66,24 @@ public class OrderTableViewController implements Initializable,
 	
 	private Map<String, Object> session;
 	
-	@FXML TableView<OrderFX> ordersTableView;
-	@FXML TextField searchField; 
-	@FXML ComboBox<StateFX> stateCombo;
-	@FXML ComboBox<EmployeeFX> executorCombo;
-	@FXML CheckBox onlyMy;
-	@FXML Label errorLabel;
-	@FXML DatePicker dateFromPicker;
-	@FXML DatePicker dateToPicker;
+	@FXML private TableView<OrderFX> ordersTableView;
+	@FXML private TextField searchField; 
+	@FXML private ComboBox<StateFX> stateCombo;
+	@FXML private ComboBox<EmployeeFX> executorCombo;
+	@FXML private CheckBox onlyMy;
+	@FXML private Label errorLabel;
+	@FXML private DatePicker dateFromPicker;
+	@FXML private DatePicker dateToPicker;
+	@FXML private Button printButton;
+	@FXML private Button exportButton;
 	
 	private List<Order> orders;
+	private MainMenu mainMenu;
 	
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
+		mainMenu = SessionUtil.retrieveMainMenu(session);
 	}
 	
 	@Override
@@ -160,50 +167,171 @@ public class OrderTableViewController implements Initializable,
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put(ParameterKeys.ORDER_ID, orderId);
 			
-			MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
 			mainMenu.loadFxmlAndOpenInTab(
 					StartingPane.FXML_ROOT+"order_form.fxml", "Заказ №"+orderId, parameters);
 		}
 	}
 	
 	@FXML
-	public void printOrders(ActionEvent actionEvent) {
-		try {
-			List<OrderFX> orders = new ArrayList<>(ordersTableView.getItems().size());
-			
-			for(OrderFX orderFX : ordersTableView.getItems()) {
-				OrderFX newOrderFX = new OrderFX( orderService.find( orderFX.getOrder().getId() ) );
-				orders.add(newOrderFX);
+	public void printOrders(final ActionEvent actionEvent) {
+		
+		mainMenu.setRightStatus("Формирование отчета");
+		
+		Task<Void> visibleProgressBar = new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				updateProgress(0, 0);
+				return null;
 			}
 			
-			List<JasperPrint> jasperPrintList = PrintFacade.generateOrderDetails(orders);
-			SwingNode jrViewerNode = new SwingNode();
-			PrintFacade.embedJRViewerIntoSwingNode(jrViewerNode, jasperPrintList);
-			StackPane stackPane = new StackPane();
-			stackPane.getChildren().add(jrViewerNode);
-			Stage stage = new Stage(); 
-			stage.setScene(new Scene(stackPane));
-			stage.setTitle("Предварительный просмотр");
-			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
-			stage.show();
-		} catch (JRException e) {
-			errorLabel.setText(e.getLocalizedMessage());
-		}
+			@Override
+			protected void updateProgress(long workDone, long max) {
+				printButton.setDisable(true);
+				mainMenu.setProgressBarVisible(true);
+			}
+			
+		};
+		Thread visibleProgressBarThread = new Thread(visibleProgressBar);
+		visibleProgressBarThread.start();
+		
+		final SwingNode jrViewerNode = new SwingNode();
+		
+		Task<Void> printOrdersTask = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateProgress(0, 0);
+				return null;
+			}
+			
+			@Override
+			protected void updateProgress(long workDone, long max) {
+				try {
+					List<OrderFX> orders = new ArrayList<>(ordersTableView.getItems().size());
+					
+					for(OrderFX orderFX : ordersTableView.getItems()) {
+						OrderFX newOrderFX = new OrderFX( orderService.find( orderFX.getOrder().getId() ) );
+						orders.add(newOrderFX);
+					}
+					
+					List<JasperPrint> jasperPrintList = PrintFacade.generateOrderDetails(orders);
+					PrintFacade.embedJRViewerIntoSwingNode(jrViewerNode, jasperPrintList);
+				} catch (JRException e) {
+					e.printStackTrace();
+				}
+			};
+		};
+		
+		printOrdersTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				printButton.setDisable(false);
+				mainMenu.setProgressBarVisible(false);
+				mainMenu.setRightStatus(null);
+			}
+			
+		});
+		
+		printOrdersTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				printButton.setDisable(false);
+				mainMenu.setProgressBarVisible(false);
+				mainMenu.setRightStatus(null);
+				
+				StackPane stackPane = new StackPane();
+				stackPane.getChildren().add(jrViewerNode);
+				Stage stage = new Stage(); 
+				stage.setScene(new Scene(stackPane));
+				stage.setTitle("Предварительный просмотр");
+				stage.initModality(Modality.WINDOW_MODAL);
+				stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
+				stage.show();
+			}
+			
+		});
+		
+		Thread expportToXMLThread = new Thread(printOrdersTask);
+		expportToXMLThread.start();
 	}
 	
 	@FXML
 	public void exportToXML(ActionEvent actionEvent) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Укажите файл для сохранения");
-		File file = fileChooser.showSaveDialog(StartingPane.getPrimaryStage());
+		final File file = fileChooser.showSaveDialog(StartingPane.getPrimaryStage());
 		if(file != null) {
-			try {
-				OrderToXMLExporter exporter = StartingPane.getBean(OrderToXMLExporter.class);
-				exporter.export(orders, file);
-			} catch (InternalLogicException e) {
-				errorLabel.setText(e.getLocalizedMessage());
-			}
+			
+			mainMenu.setRightStatus("Выгрузка в XML "+file.getName());
+			
+			Task<Void> visibleProgressBar = new Task<Void>() {
+
+				@Override
+				protected Void call() throws Exception {
+					updateProgress(0, 0);
+					return null;
+				}
+				
+				@Override
+				protected void updateProgress(long workDone, long max) {
+					exportButton.setDisable(true);
+					
+					mainMenu.setProgressBarVisible(true);
+				}
+				
+			};
+			
+			Thread visibleProgressBarThread = new Thread(visibleProgressBar);
+			visibleProgressBarThread.start();
+			
+			
+			Task<Void> exportToXMLTask = new Task<Void>() {
+
+				@Override
+				protected Void call() throws Exception {
+					
+					updateProgress(0, 0);
+					return null;
+				}
+				
+				@Override
+				protected void updateProgress(long workDone, long max) {
+					try {
+						OrderToXMLExporter exporter = StartingPane.getBean(OrderToXMLExporter.class);
+						exporter.export(orders, file);
+					} catch (InternalLogicException e) {
+						exportButton.setDisable(true);
+						errorLabel.setText(e.getLocalizedMessage());
+					}
+				};
+			};
+			
+			exportToXMLTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+				@Override
+				public void handle(WorkerStateEvent event) {
+					exportButton.setDisable(false);
+					mainMenu.setProgressBarVisible(false);
+					mainMenu.setRightStatus(null);
+				}
+				
+			});
+			
+			exportToXMLTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+				@Override
+				public void handle(WorkerStateEvent event) {
+					exportButton.setDisable(false);
+					mainMenu.setProgressBarVisible(false);
+					mainMenu.setRightStatus(null);
+				}
+				
+			});
+			
+			Thread expportToXMLThread = new Thread(exportToXMLTask);
+			expportToXMLThread.start();
 		}
 	}
 	
@@ -216,12 +344,13 @@ public class OrderTableViewController implements Initializable,
 		ordersTableView.setRowFactory(new Callback<TableView<OrderFX>, TableRow<OrderFX>>() {
 	        @Override
 	        public TableRow<OrderFX> call(TableView<OrderFX> tableView) {
+//	        	final TableRow<OrderFX> tableRow = new TableRow<OrderFX>();
 	            final TableRow<OrderFX> tableRow = new TableRow<OrderFX>() {
 	                @Override
 	                protected void updateItem(OrderFX orderFX, boolean empty){
-	                	if(orderFX != null) {
-		                    super.updateItem(orderFX, empty);
-		                    getStyleClass().removeAll(classes);
+	                	super.updateItem(orderFX, empty);
+	                	getStyleClass().removeAll(classes);
+	                	if(!empty && orderFX != null) {
 		                    Boolean inTime = orderFX.isInTime();
 		                    if (inTime != null) {
 		                    	if(inTime) {
@@ -234,6 +363,9 @@ public class OrderTableViewController implements Initializable,
 			                        }
 		                    	}
 		                    }
+		                } else {
+		                	setText(null);
+		                	setGraphic(null);
 		                }
 	                }
 	            };
@@ -255,17 +387,19 @@ public class OrderTableViewController implements Initializable,
 	                @Override
 	                public void onChanged(Change<? extends OrderFX> change) {
 	                    tableRow.getStyleClass().removeAll(classes);
-	                    Boolean inTime = tableRow.getItem().isInTime();
-	                    if (inTime != null) {
-	                    	if(inTime) {
-		                        if (! tableRow.getStyleClass().contains("orderInTimeRow")) {
-		                        	tableRow.getStyleClass().add("orderInTimeRow");
-		                        }
-	                    	} else {
-	                    		if (! tableRow.getStyleClass().contains("orderLateRow")) {
-	                    			tableRow.getStyleClass().add("orderLateRow");
-		                        }
-	                    	}
+	                    if( tableRow.getItem() != null ) {
+	                    	Boolean inTime = tableRow.getItem().isInTime();
+		                    if (inTime != null) {
+		                    	if(inTime) {
+			                        if (! tableRow.getStyleClass().contains("orderInTimeRow")) {
+			                        	tableRow.getStyleClass().add("orderInTimeRow");
+			                        }
+		                    	} else {
+		                    		if (! tableRow.getStyleClass().contains("orderLateRow")) {
+		                    			tableRow.getStyleClass().add("orderLateRow");
+			                        }
+		                    	}
+		                    }
 	                    }
 	                }
 	            });

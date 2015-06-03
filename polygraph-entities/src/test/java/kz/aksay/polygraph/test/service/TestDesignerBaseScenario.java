@@ -138,7 +138,7 @@ public class TestDesignerBaseScenario extends Assert {
 			testFindOrdersByStateAndCurrentExecutor();
 			testFindOrdersByStateAndCurrentExecutorAndString();
 			testMaterialConsumptionService();
-			
+			testCountOfEquipmentUsageByExample();
 			employeeService.findAllByUserRole(User.Role.DESIGNER);
 			
 			orderToXMLExporter.export(orderService.findAll(), new File("test.xml"));
@@ -154,6 +154,13 @@ public class TestDesignerBaseScenario extends Assert {
 
 	
 	
+	private void testCountOfEquipmentUsageByExample() {
+		ProducedWork producedWork = new ProducedWork();
+		producedWork.setEquipment(equipment);
+		producedWork.setFormat(Format.A4);
+		equipmentService.countOfUsagesByExample(producedWork);
+	}
+
 	private void createVicariousPower() throws Exception {
 		vicariousPower = new VicariousPower();
 		Calendar calendar = Calendar.getInstance();

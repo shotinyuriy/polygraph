@@ -8,6 +8,7 @@ public class OrgNameGenerator {
 		protected String fullName;
 		protected String shortName;
 		protected String number;
+		protected String kpp;
 
 		public String getFullName() {
 			return fullName;
@@ -27,6 +28,12 @@ public class OrgNameGenerator {
 		public void setNumber(String number) {
 			this.number = number;
 		}
+		public String getKpp() {
+			return kpp;
+		}
+		public void setKpp(String kpp) {
+			this.kpp = kpp;
+		}
 		
 	}
 	
@@ -43,13 +50,18 @@ public class OrgNameGenerator {
 		int nounIndex = r.nextInt(nouns.length);
 		
 		StringBuffer inn = new StringBuffer(); 
+		StringBuffer kpp = new StringBuffer();
 		
 		orgName.setFullName(orgTypes[orgTypeIndex][1]+" "+orgSphere[orgSphereIndex]+" "+nouns[nounIndex]);
 		orgName.setShortName(orgTypes[orgTypeIndex][0]+" "+orgSphere[orgSphereIndex]+" "+nouns[nounIndex]);
-		for(int i = 0; i < 9; i ++) {
+		for(int i = 0; i < 11; i ++) {
 			inn.append(r.nextInt(10));
 		}
 		orgName.setNumber(inn.toString());
+		for(int i = 0; i < 9; i ++) {
+			kpp.append(r.nextInt(10));
+		}
+		orgName.setKpp(kpp.toString());
 		
 		return orgName;
 	}

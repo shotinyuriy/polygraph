@@ -70,7 +70,16 @@ public class PersonNameGenerator {
 			nameBeginings = new String[]{"Анд","Бор","Влад","Григ","Дмит","Ег","Зах","Ив","Кон","Лев","Мак","Ник","Ол","Пет"};
 			firstNameEndings = new String[]{"рей","ис","имир","орий","рий","ор","ар","ан","драт","сим","олай","ег","р"};
 			lastNameEndings = new String[]{"ов","ев","ин","оев","аев","еин"};
-			middleNameEndings = new String[]{"евич","ович"};
+			middleNameEndings = new String[]{"евич","ович","ич"};
+		}
+	}
+	
+	public static class FemaleNameGenerator extends AbstractFullnameGenerator {
+		static {
+			nameBeginings = new String[]{"Антон","Бэл","Вален","Гал","Да","Ел","Зин","Ир","Ксе","Лар","Мар","Ната","Оль","Прас"};
+			firstNameEndings = new String[]{"ина","ла","тина","яна","рья","ена","аида","ния","риса","ия","лья","га","ковья"};
+			lastNameEndings = new String[]{"ова","ева","ина","оева","аева","еина"};
+			middleNameEndings = new String[]{"евна","овна","ична"};
 		}
 	}
 }

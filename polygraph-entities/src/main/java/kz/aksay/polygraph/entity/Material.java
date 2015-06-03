@@ -1,10 +1,13 @@
 package kz.aksay.polygraph.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "material")
@@ -15,6 +18,10 @@ public abstract class Material extends EntitySupport {
 
 	@Column
 	protected String description;
+	
+	@Min(value=0, message="Цена должна быть больше или равна нулю")
+	@Column
+	protected BigDecimal price;
 	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -39,5 +46,15 @@ public abstract class Material extends EntitySupport {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 }

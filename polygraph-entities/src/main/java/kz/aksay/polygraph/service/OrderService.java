@@ -1,6 +1,8 @@
 package kz.aksay.polygraph.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,6 +19,7 @@ import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entity.OrderProceedReport;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
@@ -236,6 +239,55 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	}
 	
 	@Override
+	public List<OrderProceedReport> generateProceedReport(Date dateFrom,
+			Date dateTo) {
+		
+		StringBuffer queryString = new StringBuffer();
+		
+		queryString.append(" SELECT new OrderProceedReport( str(year(o.createdAt)*100+month(o.createdAt)) as monthYear, ");
+		queryString.append(" o.dateEndReal, o.createdAt ) ");
+		queryString.append(" FROM Order o ");
+		queryString.append(" WHERE o.dateEndReal is not null AND ");
+		queryString.append(" o.createdAt between :dateFrom and :dateTo ");
+		
+		Query query = getDao().getSession().createQuery(queryString.toString())
+				.setParameter("dateFrom", dateFrom)
+				.setParameter("dateTo", dateTo);
+				
+		Map<String, Double[]> groupingMap = new HashMap<String, Double[]>();
+		
+		List<OrderProceedReport> orderProceedList = query.list();
+		
+		int COUNT_INDEX = 0, SUM_INDEX = 1;
+		
+		for(OrderProceedReport ordProcRep : orderProceedList) {
+			Double[] counts = groupingMap.get(ordProcRep.getMonthYear());
+			if(counts == null) {
+				counts = new Double[] {1.0, ordProcRep.getProcceedTime()};
+				groupingMap.put(ordProcRep.getMonthYear(), counts);
+			} else {
+				counts[COUNT_INDEX]+=1.0;
+				counts[SUM_INDEX]+=ordProcRep.getProcceedTime();
+				groupingMap.put(ordProcRep.getMonthYear(), counts);
+			}
+		}
+		
+		orderProceedList = new ArrayList<OrderProceedReport>(groupingMap.size());
+		
+		for(Map.Entry<String, Double[]> groupEntry : groupingMap.entrySet()) {
+			Double[] counts = groupEntry.getValue();
+			OrderProceedReport orderProceedReport = 
+					new OrderProceedReport(groupEntry.getKey(), 
+							counts[SUM_INDEX]/counts[COUNT_INDEX] );
+			orderProceedList.add(orderProceedReport);
+		}
+		
+		Collections.sort(orderProceedList);
+		
+		return orderProceedList;
+	}
+	
+	@Override
 	protected GenericDao<Order, Long> getDao() {
 		return orderDao;
 	}
@@ -266,3 +318,4 @@ public class OrderService extends AbstractGenericService<Order, Long>
 		this.equipmentService = equipmentService;
 	}
 }
+

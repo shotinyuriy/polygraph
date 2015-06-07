@@ -16,29 +16,32 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-	fx:controller="kz.aksay.polygraph.desktop.PaperTableViewController">
+	fx:controller="kz.aksay.polygraph.desktop.StickerTableViewController">
 	<VBox alignment="TOP_LEFT">
-	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Бумага" alignment="TOP_CENTER"/>
+	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Наклейки" alignment="TOP_CENTER"/>
 	
 	<TableView fx:id="tableView" editable="true" prefWidth="640.0">
 		<columns>
+		
 			<TableColumn fx:id="formatColumn" text="Формат" prefWidth="200" editable="true" onEditCommit="#updateFormat">
 				<cellValueFactory><PropertyValueFactory property="formatName"/></cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="materialTypeColumn" text="Тип" prefWidth="100" editable="true" onEditCommit="#updateType">
+			
+			<TableColumn fx:id="typeColumn" text="Тип" prefWidth="100" editable="true" onEditCommit="#updateType">
 				<cellValueFactory><PropertyValueFactory property="typeName"/></cellValueFactory>
 			</TableColumn>
+			
 			<TableColumn fx:id="densityColumn" text="Плотность" prefWidth="100" editable="true" onEditCommit="#updateDensity">
 				<cellValueFactory><PropertyValueFactory property="densityName"/></cellValueFactory>
 			</TableColumn>
+			
 			<TableColumn fx:id="priceColumn" text="Цена" prefWidth="100" editable="true" onEditCommit="#updatePrice">
 				<cellValueFactory><PropertyValueFactory property="priceString"/></cellValueFactory>
 			</TableColumn>
 			
-			<TableColumn fx:id="nameColumn" text="Примечание" prefWidth="200" editable="true" onEditCommit="#updateName">
+			<TableColumn fx:id="descriptionColumn" text="Примечание" prefWidth="200" editable="true" onEditCommit="#updateDescription">
 				<cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
 			</TableColumn>
-			
 			
 		</columns>
 		<items>
@@ -46,24 +49,24 @@
 			</FXCollections>
 		</items>
 		<sortOrder>
-			<fx:reference source="nameColumn"/>
+			<fx:reference source="descriptionColumn"/>
 		</sortOrder>
 	</TableView>
 	
 	<HBox spacing="10.0" alignment="TOP_CENTER" >
 		<children>
 			<ComboBox fx:id="formatBox" />
-			<ComboBox fx:id="paperTypeBox" />
+			<ComboBox fx:id="typeBox" />
 			<TextField fx:id="densityField" promptText="Плотность" prefWidth="90"/>
 			<TextField fx:id="priceField" promptText="Цена" prefWidth="90"/>
-			<TextField fx:id="nameField" promptText="Примечание" prefWidth="90"/>
+			<TextField fx:id="descriptionField" promptText="Примечание" prefWidth="90"/>
 		</children>
 	</HBox>
-	<HBox
+	<HBox>
 		<children>
 			<Button text="Добавить" onAction="#add"/>
 			<Button text="Удалить" onAction="#delete"/>
-		</children>>
+		</children>
 	</HBox>
 	<Label fx:id="validationLabel" text=""/>
 	</VBox>

@@ -32,5 +32,12 @@ public class StickerFX extends EntityFX<Sticker> {
 	public String getDescription() {
 		return entity.getDescription();
 	}
+	
+	public String getPriceString() {
+		if(entity.getPrice() != null) {
+			return entity.getPrice().toString();
+		}
+		return null;
+	}
 
 }

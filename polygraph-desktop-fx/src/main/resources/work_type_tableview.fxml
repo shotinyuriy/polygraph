@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.Scene?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.geometry.Insets?>
@@ -13,42 +17,48 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml"
-	fx:controller="kz.aksay.polygraph.desktop.WorkTypeTableViewController" 
-	alignment="CENTER" hgap="10.0" vgap="10.0">
-	<padding>
-		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-	</padding>
-	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Виды работ"
-		GridPane.columnIndex="0" GridPane.rowIndex="0">
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.WorkTypeTableViewController">
+   <children>
+      <GridPane alignment="CENTER" hgap="10.0" prefHeight="490.0" prefWidth="422.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      	<padding>
+      		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      	</padding>
+         <children>
+         	<Label style="-fx-font: NORMAL 20 Tahoma;" text="Виды работ" GridPane.columnIndex="0" GridPane.rowIndex="0">
 	</Label>
-	<TableView fx:id="tableView" GridPane.columnIndex="0"
-		GridPane.rowIndex="1" editable="true">
-		<columns>
-			<TableColumn fx:id="nameColumn" text="Название" prefWidth="100" editable="true" onEditCommit="#update">
-				<cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
-			</TableColumn>
-			<TableColumn text="Дата добавления" prefWidth="100">
-				<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
-			</TableColumn>
-			<TableColumn text="Кто добавил" prefWidth="200">
-				<cellValueFactory><PropertyValueFactory property="createdByLogin"/></cellValueFactory>
-			</TableColumn>
-		</columns>
-		<items>
-			<FXCollections fx:factory="observableArrayList">
+         	<TableView fx:id="tableView" editable="true" GridPane.columnIndex="0" GridPane.rowIndex="1">
+         		<columns>
+         			<TableColumn fx:id="nameColumn" editable="true" maxWidth="500.0" minWidth="100.0" onEditCommit="#update" prefWidth="300.0" text="Название">
+         				<cellValueFactory>
+                        <PropertyValueFactory property="name" />
+                     </cellValueFactory>
+         			</TableColumn>
+         		</columns>
+         		<items>
+         			<FXCollections fx:factory="observableArrayList">
 			</FXCollections>
-		</items>
-		<sortOrder>
-			<fx:reference source="nameColumn"/>
-		</sortOrder>
-	</TableView>
-	<HBox spacing="10" alignment="bottom_right" GridPane.columnIndex="0"
-		GridPane.rowIndex="2">
-		<TextField fx:id="nameField" promptText="Название" prefWidth="90"/>
-		<Button text="Добавить" onAction="#add"/>
-		<Label fx:id="validationLabel" text=""/>
-	</HBox>
-</GridPane>
-
-
+         		</items>
+         		<sortOrder>
+         			<fx:reference source="nameColumn" />
+         		</sortOrder>
+         	</TableView>
+         	<HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <children>
+            		<TextField fx:id="nameField" prefHeight="25.0" prefWidth="210.0" promptText="Название" />
+            		<Button onAction="#add" text="Добавить" />
+            		<Label fx:id="validationLabel" text="" />
+            </children>
+         	</HBox>
+         </children>
+         <columnConstraints>
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+      </GridPane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrderProceedGraphController" fx:id="root">
+
+   <children>
+      <ScrollPane prefHeight="480.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <content>
+           <LineChart fx:id="lineChart" prefHeight="480.0" prefWidth="640.0">
+             <xAxis>
+               <CategoryAxis fx:id="categoryAxis" side="BOTTOM" />
+             </xAxis>
+             <yAxis>
+               <NumberAxis fx:id="numberAxis" side="LEFT" />
+             </yAxis>
+           </LineChart>
+        </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

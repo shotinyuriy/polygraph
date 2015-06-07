@@ -27,14 +27,14 @@ public abstract class EntitySupport implements Serializable {
 	@GeneratedValue(strategy=GenerationType.TABLE)
 	protected Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "created_by", nullable = false)
 	protected User createdBy;
 
 	@Column(name = "created_at", nullable = false)
 	protected Date createdAt;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "updated_by")
 	protected User updatedBy;
 

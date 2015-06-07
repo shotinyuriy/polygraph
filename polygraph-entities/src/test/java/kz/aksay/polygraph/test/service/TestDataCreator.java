@@ -75,6 +75,7 @@ public class TestDataCreator {
 	
 	private Random dateEndRealRandom = new Random();
 	private Random formatRandom = new Random(System.currentTimeMillis());
+	private Random dateRandom = new Random();
 
 	public TestDataCreator(ApplicationContext context) {
 		this.context = context;
@@ -370,15 +371,18 @@ public class TestDataCreator {
 	public Order createOrder(User creator, Subject customer, 
 			Employee executorEmployee, VicariousPower vicariousPower, Order.State state) throws Exception {
 		Order firstOrder = new Order();
-		firstOrder.setCreatedAt(new Date());
+		Calendar calendar = Calendar.getInstance();
+		int randomDays = dateRandom.nextInt(365);
+		calendar.set(Calendar.DAY_OF_YEAR, -randomDays); 
+		firstOrder.setCreatedAt(calendar.getTime());
 		firstOrder.setCreatedBy(creator);
 		firstOrder.setCustomer(customer);
 		firstOrder.setCurrentExecutor(executorEmployee);
 		firstOrder.setDescription("Описание заказа на ксерокопию");
 		firstOrder.setState(state);
 		firstOrder.setVicariousPower(vicariousPower);
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DAY_OF_YEAR, 3);
+		randomDays = 1+dateRandom.nextInt(5);
+		calendar.add(Calendar.DAY_OF_YEAR, randomDays);
 		firstOrder.setDateEndPlan(calendar.getTime());
 		if(state.equals(Order.State.FINISHED)) {
 			int delay = dateEndRealRandom.nextInt(5) - 2;
@@ -406,7 +410,7 @@ public class TestDataCreator {
 
 	public ProducedWork createProducedWork(Order order, WorkType workType, Employee executorEmployee, Equipment equipment) throws Exception {
 		ProducedWork producedWork = new ProducedWork();
-		producedWork.setCreatedAt(new Date());
+		producedWork.setCreatedAt(order.getCreatedAt());
 		producedWork.setCreatedBy(User.TECH_USER);
 		producedWork.setOrder(order);
 		producedWork.setWorkType(workType);

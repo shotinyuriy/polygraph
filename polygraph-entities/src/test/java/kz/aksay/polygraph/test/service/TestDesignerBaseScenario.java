@@ -27,6 +27,7 @@ import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
+import kz.aksay.polygraph.entity.OrderProceedReport;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.PaperType;
@@ -140,6 +141,7 @@ public class TestDesignerBaseScenario extends Assert {
 			testMaterialConsumptionService();
 			testCountOfEquipmentUsageByExample();
 			employeeService.findAllByUserRole(User.Role.DESIGNER);
+			testOrderProceedReport();
 			
 			orderToXMLExporter.export(orderService.findAll(), new File("test.xml"));
 		}
@@ -151,9 +153,24 @@ public class TestDesignerBaseScenario extends Assert {
 			deleteAll();
 		}
 	}
+	
+	private void testOrderProceedReport() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -12);
+		Date dateFrom = calendar.getTime();
+		calendar.add(Calendar.MONTH, 12);
+		Date dateTo = calendar.getTime();
+		
+		List<OrderProceedReport> orderProceedReports = orderService.generateProceedReport(dateFrom, dateTo);
+		
+		assertTrue(orderProceedReports.size() > 0);
+		
+		for(OrderProceedReport orderProceedReport : orderProceedReports) {
+			System.out.println("monthYear "+orderProceedReport.getMonthYear()+" proceedTime "+orderProceedReport.getProcceedTime());
+		}
+				
+	}
 
-	
-	
 	private void testCountOfEquipmentUsageByExample() {
 		ProducedWork producedWork = new ProducedWork();
 		producedWork.setEquipment(equipment);
@@ -324,19 +341,6 @@ public class TestDesignerBaseScenario extends Assert {
 		
 		rowsAffected = orderFullTextIndexService.deleteAll();
 		rowsAffected = fullTextIndexService.deleteAll();
-		
-		/*materialConsumptionService.deleteAll();
-		producedWorkService.deleteAll();
-		materialService.deleteAll();
-		materialTypeService.deleteAll();
-		workTypeService.deleteAll();
-		orderService.deleteAll();
-		organizationService.deleteAll();
-		employeeService.deleteAll();
-		personService.deleteAll();
-		userService.deleteAll();*/
-		
-		int rowAffected = 0;
 		
 		if(copyMaterialConsumption != null && copyMaterialConsumption.getId() != null) materialConsumptionService.delete(copyMaterialConsumption);
 		if(producedWork != null && producedWork.getId() != null) {

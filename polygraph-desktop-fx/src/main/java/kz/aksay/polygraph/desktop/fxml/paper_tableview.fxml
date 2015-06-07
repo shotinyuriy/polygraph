@@ -35,7 +35,7 @@
 				<cellValueFactory><PropertyValueFactory property="priceString"/></cellValueFactory>
 			</TableColumn>
 			
-			<TableColumn fx:id="nameColumn" text="Примечание" prefWidth="100" editable="true" onEditCommit="#updateName">
+			<TableColumn fx:id="nameColumn" text="Примечание" prefWidth="200" editable="true" onEditCommit="#updateName">
 				<cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
 			</TableColumn>
 			
@@ -51,15 +51,21 @@
 	</TableView>
 	
 	<HBox spacing="10.0" alignment="TOP_CENTER" >
-		<ComboBox fx:id="formatBox" />
-		<ComboBox fx:id="paperTypeBox" />
-		<TextField fx:id="densityField" promptText="Плотность" prefWidth="90"/>
-		<TextField fx:id="priceField" promptText="Цена" prefWidth="90"/>
-		<TextField fx:id="nameField" promptText="Примечание" prefWidth="90"/>
-		<Button text="Добавить" onAction="#add"/>
-		<Button text="Удалить" onAction="#delete"/>
-		<Label fx:id="validationLabel" text=""/>
+		<children>
+			<ComboBox fx:id="formatBox" />
+			<ComboBox fx:id="paperTypeBox" />
+			<TextField fx:id="densityField" promptText="Плотность" prefWidth="90"/>
+			<TextField fx:id="priceField" promptText="Цена" prefWidth="90"/>
+			<TextField fx:id="nameField" promptText="Примечание" prefWidth="90"/>
+		</children>
 	</HBox>
+	<HBox
+		<children>
+			<Button text="Добавить" onAction="#add"/>
+			<Button text="Удалить" onAction="#delete"/>
+		</children>>
+	</HBox>
+	<Label fx:id="validationLabel" text=""/>
 	</VBox>
 </AnchorPane>
 

@@ -94,6 +94,16 @@ public class MainMenuController implements MainMenu, SessionAware, Initializable
 	}
 	
 	@FXML
+	public void openStickersList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"sticker_tableview.fxml", "Наклейки");
+	}
+	
+	@FXML
+	public void openLaminateList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"laminate_tableview.fxml", "Ламинат. пленки");
+	}
+	
+	@FXML
 	public void openNewEmployeeForm(ActionEvent actionEvent) {
 		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"employee_form.fxml", "Новый сотрудник");
 	}
@@ -121,6 +131,11 @@ public class MainMenuController implements MainMenu, SessionAware, Initializable
 	@FXML
 	public void openOrderConsumptionsList(ActionEvent actionEvent) {
 		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_consumption_list.fxml", "Расходы по заказам");
+	}
+	
+	@FXML
+	public void openOrderProceedReport(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_proceed_graph.fxml", "Среднее время выполнения заказа");
 	}
 	
 	public Node loadFxmlNode(String url) {

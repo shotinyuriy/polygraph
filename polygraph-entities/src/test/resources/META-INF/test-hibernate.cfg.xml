@@ -29,6 +29,7 @@
 		<mapping class="kz.aksay.polygraph.entity.Organization"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Order"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.OrderFullTextIndex"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.OrderProceedReport"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Paper"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.PaperType"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Person"></mapping>

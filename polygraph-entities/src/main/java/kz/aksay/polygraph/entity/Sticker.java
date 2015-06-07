@@ -40,6 +40,11 @@ public class Sticker extends Material {
 		private Type(String name) {
 			this.name = name;
 		}
+		
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 
 	public Format getFormat() {

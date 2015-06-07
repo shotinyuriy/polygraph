@@ -3,6 +3,7 @@ package kz.aksay.polygraph.service;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import kz.aksay.polygraph.api.IWorkTypeService;
@@ -16,6 +17,7 @@ public class WorkTypeService extends AbstractGenericService<WorkType, Long>
 
 	private GenericDao<WorkType, Long> workTypeDao;
 	
+	@Transactional(readOnly=true)
 	public WorkType findByName(String workTypeName) {
 		WorkType workType = null;
 		

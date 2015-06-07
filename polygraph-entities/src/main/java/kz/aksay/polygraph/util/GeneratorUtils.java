@@ -18,7 +18,7 @@ public class GeneratorUtils {
 	
 	public static FullName generateFullName() {
 		int choice = random.nextInt(10); 
-		if(choice%2 == 0) {
+		if(choice > 5) {
 			return maleNameGenerator.generate();
 		} else {
 			return femaleNameGenerator.generate();

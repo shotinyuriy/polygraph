@@ -23,8 +23,8 @@ import org.springframework.context.ApplicationContext;
 
 public class StartingPane extends Application {
 	
-//	public static String FXML_ROOT = ""; // for eclipse
-	public static String FXML_ROOT = "/"; // for maven
+	public static String FXML_ROOT = ""; // for eclipse
+//	public static String FXML_ROOT = "/"; // for maven
 	private static ApplicationContext applicationContext;
 	private static Stage primaryStage;
 	private static Stack<Scene> sceneStack;
@@ -35,8 +35,6 @@ public class StartingPane extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			File file = new File("tmp");
-			System.out.println("file "+file.getAbsolutePath());
 			
 			StartingPane.primaryStage = primaryStage;
 			primaryStage.setTitle("Управление задачами");

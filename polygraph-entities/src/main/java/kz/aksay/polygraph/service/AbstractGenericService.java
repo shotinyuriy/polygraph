@@ -16,16 +16,19 @@ public abstract class AbstractGenericService<T, PK extends Serializable>
 	protected abstract GenericDao<T, PK> getDao();
 	
 	@Override
+	@Transactional(readOnly=true)
 	public T find(PK id) {
 		return getDao().read(id);
 	}
 	
 	@Override
+	@Transactional(readOnly=true)
 	public List<T> findAll() {
 		return getDao().readAll();
 	}
 	
 	@Override
+	@Transactional(readOnly=true)
 	public List<T> findAll(int offset, int limit) {
 		return getDao().readAll(offset, limit);
 	}

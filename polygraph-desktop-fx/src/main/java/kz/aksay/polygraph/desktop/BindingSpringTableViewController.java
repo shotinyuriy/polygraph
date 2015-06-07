@@ -41,6 +41,7 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 	@FXML	private TextField descriptionField;
 	@FXML	private ComboBox<BindingSpring.Type> typeBox;
 	@FXML	private TextField diameterField;
+	@FXML   private TextField priceField;
 	
 	private Map<String, Object> session;
 	
@@ -167,6 +168,12 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 			throw new Exception("Плотность должна быть целым числом больше нуля");
 		}
 		
+		try {
+			mt.setPrice(new BigDecimal(priceField.getText()));
+		} catch(NumberFormatException nfe) {
+			throw new Exception("Цена должна быть числом большим или равным нуля");
+		}
+		
 		return mt;
 	}
 
@@ -193,7 +200,7 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 				TextFieldTableCell.<BindingSpringFX>forTableColumn());
 		descriptionColumn.setCellFactory(
 				TextFieldTableCell.<BindingSpringFX>forTableColumn());
-		diameterColumn.setCellFactory(
+		priceColumn.setCellFactory(
 				TextFieldTableCell.<BindingSpringFX>forTableColumn());
 		typeColumn.setCellFactory(
 				ComboBoxTableCell.<BindingSpringFX, BindingSpring.Type>forTableColumn(typeBox.getItems()));

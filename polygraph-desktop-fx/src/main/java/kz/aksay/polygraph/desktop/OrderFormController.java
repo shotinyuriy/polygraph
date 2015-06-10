@@ -39,12 +39,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.NumberStringConverter;
+import kz.aksay.polygraph.api.IComplexityService;
 import kz.aksay.polygraph.api.ICustomerService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.desktop.reports.PrintFacade;
+import kz.aksay.polygraph.entity.Complexity;
+import kz.aksay.polygraph.entity.DefaultData;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.ProducedWork;
@@ -74,6 +77,7 @@ public class OrderFormController implements
 	private IEmployeeService employeeService = StartingPane.getBean(IEmployeeService.class);
 	private ICustomerService customerService = StartingPane.getBean(ICustomerService.class);
 	private IProducedWorkService producedWorkService = StartingPane.getBean(IProducedWorkService.class);
+	private IComplexityService complexityService = StartingPane.getBean(IComplexityService.class);
 	
 	private Map<String, Object> parameters;
 	private Map<String, Object> session;
@@ -97,6 +101,7 @@ public class OrderFormController implements
 	@FXML private ComboBox<StateFX> currentStatusCombo;
 	@FXML private DatePicker dateEndPlan;
 	@FXML private DatePicker dateEndReal;
+	@FXML private ComboBox<Complexity> complexityCombo;
 	@FXML private Button showEmployeeWorkLoad;
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
@@ -277,7 +282,7 @@ public class OrderFormController implements
 				dateEndReal.valueProperty().set(
 						FormatUtil.convertToLocalDate(order.getDateEndReal()));
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
-				
+				complexityCombo.getSelectionModel().select(order.getComplexity());
 				
 				if(orderFX.getStateProperty().get() != null) {
 				
@@ -352,6 +357,8 @@ public class OrderFormController implements
 		Collection<EmployeeFX> employeesFX = EmployeeFX.contvertListEntityToFX(employees);
 		
 		currentExecutorCombo.getItems().setAll(employeesFX);
+		complexityCombo.getItems().setAll(DefaultData.COMPLEXITY_DEFAULTS);
+		
 		
 		producedWorksTableView.setRowFactory(new Callback<TableView<ProducedWorkFX>, TableRow<ProducedWorkFX>>() {
 			

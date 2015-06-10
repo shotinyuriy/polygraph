@@ -25,6 +25,7 @@ import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.api.IWorkTypeService;
+import kz.aksay.polygraph.entity.DefaultData;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
@@ -222,8 +223,8 @@ public class TestDataCreator {
 					for(WorkType workType : workTypes) {
 						Equipment equipment = null;
 						if(workTypeService.isEquipmentRequired(workType)) {
-							int index = formatRandom.nextInt(DefaultDataCreationService.PRINTER_NAMES.length);
-							equipment = equipmentService.findByName(DefaultDataCreationService.PRINTER_NAMES[index]);
+							int index = formatRandom.nextInt(DefaultData.PRINTER_NAMES.length);
+							equipment = equipmentService.findByName(DefaultData.PRINTER_NAMES[index]);
 						}
 						createProducedWork(order, workType, employee, equipment);
 					}

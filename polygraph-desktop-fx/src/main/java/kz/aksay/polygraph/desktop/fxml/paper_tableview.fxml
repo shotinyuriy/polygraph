@@ -59,11 +59,11 @@
 			<TextField fx:id="nameField" promptText="Примечание" prefWidth="90"/>
 		</children>
 	</HBox>
-	<HBox
+ 	<HBox>
 		<children>
 			<Button text="Добавить" onAction="#add"/>
 			<Button text="Удалить" onAction="#delete"/>
-		</children>>
+		</children>
 	</HBox>
 	<Label fx:id="validationLabel" text=""/>
 	</VBox>

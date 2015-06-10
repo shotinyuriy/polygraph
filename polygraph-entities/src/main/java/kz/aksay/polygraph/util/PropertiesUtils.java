@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.Properties;
 
 public class PropertiesUtils {
@@ -16,6 +15,8 @@ public class PropertiesUtils {
 	public static final String PASSWORD_KEY = "hibernate.connection.password"; 
 	public static final String URL_KEY = "hibernate.connection.url";
 	public static final String DIALECT_KEY = "hibernate.connection.dialect";
+	
+	public static final String EXT_PROPERTIES_DIR = "ext.properties.dir";
 	
 	public static Properties getCurrentDatabaseProperties(String fileName) {
 		
@@ -52,12 +53,28 @@ public class PropertiesUtils {
 	
 	public static void writeDateBaseProperties(Properties properties, String fileName) {
 		try {
-			URL url = PropertiesUtils.class.getResource("/"+fileName+".properties");
-			String path = url.toURI().getPath();
-			System.out.println("path "+path);
-	        File f = new File(path);
-	        OutputStream out = new FileOutputStream( f );
-	        properties.store(out, "This is an optional header comment string");
+			
+			String path = null;
+			OutputStream out = null;
+			
+			if(path == null) {
+				path = fileName+".properties";	
+			}
+	        
+			File f = new File(path);
+			
+			System.out.println("path "+f.getAbsolutePath());
+			
+			if(!f.exists()) {
+				File parentFile = f.getParentFile();
+				if(parentFile != null) {
+					parentFile.mkdirs();
+				}
+				f.createNewFile();
+			}
+			
+	        out = new FileOutputStream( f );
+	        properties.store(out, "Database properties");
 	    }
 	    catch (Exception e ) {
 	        e.printStackTrace();

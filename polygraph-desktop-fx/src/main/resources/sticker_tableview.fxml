@@ -28,7 +28,7 @@
 			</TableColumn>
 			
 			<TableColumn fx:id="typeColumn" text="Тип" prefWidth="100" editable="true" onEditCommit="#updateType">
-				<cellValueFactory><PropertyValueFactory property="stickerTypeName"/></cellValueFactory>
+				<cellValueFactory><PropertyValueFactory property="typeName"/></cellValueFactory>
 			</TableColumn>
 			
 			<TableColumn fx:id="densityColumn" text="Плотность" prefWidth="100" editable="true" onEditCommit="#updateDensity">

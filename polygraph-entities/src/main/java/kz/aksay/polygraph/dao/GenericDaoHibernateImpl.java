@@ -18,6 +18,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
@@ -129,6 +130,11 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	public <T> T readUniqueByCriteria(Criteria criteria) {
 		return (T) criteria.uniqueResult();
 	}
+	
+	@Override
+	public Criteria criteria() {
+		return getSession().createCriteria(clazz());
+	}
 
 	public Validator getValidator() {
 		return validator;
@@ -137,6 +143,13 @@ public class GenericDaoHibernateImpl<T, PK extends Serializable> implements
 	@Autowired
 	public void setValidator(Validator validator) {
 		this.validator = validator;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> readAllByExample(T example) {
+		return (List<T>) getSession().createCriteria(clazz())
+				.add(Example.create(example)).list();
 	}
 
 }

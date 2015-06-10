@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
 		final Task<Void> task = new Task<Void>() {
 	         @Override 
 	         protected Void call() throws Exception {
-	        	 	updateProgress(0, 0);
+	        	 	updateProgress(1, 1);
 					return null;
 	         }
 	         
@@ -85,6 +85,7 @@ public class LoginController implements Initializable {
 	        protected void updateProgress(double workDone, double max) {
 	        	writeDatabaseProperties();
 				loadContext();
+				userService = StartingPane.getBean(IUserService.class);
 	        }
 	     };
 	     
@@ -148,7 +149,8 @@ public class LoginController implements Initializable {
 		properties.setProperty(URL_KEY, urlField.getText());
 		properties.setProperty(USERNAME_KEY, dbUsernameField.getText());
 		properties.setProperty(PASSWORD_KEY, dbPasswordField.getText());
-		PropertiesUtils.writeDateBaseProperties(properties, "META-INF/properties/database");
+		String fileName = System.getProperty(PropertiesUtils.EXT_PROPERTIES_DIR) + "/database";
+		PropertiesUtils.writeDateBaseProperties(properties, fileName);
 	}
 
 	@Override

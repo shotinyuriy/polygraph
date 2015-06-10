@@ -1,5 +1,7 @@
 package kz.aksay.polygraph.service;
 
+import static kz.aksay.polygraph.entity.DefaultData.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import kz.aksay.polygraph.api.IBindingSpringService;
+import kz.aksay.polygraph.api.IComplexityService;
 import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.ILaminateService;
 import kz.aksay.polygraph.api.IOrganizationService;
@@ -17,6 +20,7 @@ import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IWorkTypeService;
 import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.BindingSpring;
+import kz.aksay.polygraph.entity.Complexity;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Laminate;
@@ -37,8 +41,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class DefaultDataCreationService {
 	
-	public static final String[] PRINTER_NAMES = new String[] {"DC-242", "WC-24", "DC-12", "WC-55"};
-	
 	private IUserService userService;
 	private IPaperTypeService paperTypeService;
 	private IWorkTypeService workTypeService;
@@ -48,12 +50,13 @@ public class DefaultDataCreationService {
 	private IBindingSpringService bindingSpringService;
 	private IStickerService stickerService;
 	private ILaminateService laminateService;
-	
+	private IComplexityService complexityService;
+
 	@Autowired
 	private PlatformTransactionManager  txManager;
 	
 	@PostConstruct
-	public void createTechUser() {
+	public void createDefaultData() {
 		TransactionTemplate tmpl = new TransactionTemplate(txManager);
 		tmpl.execute(new TransactionCallbackWithoutResult() {
 			@Override
@@ -93,6 +96,7 @@ public class DefaultDataCreationService {
 						 
 					 }
 					 
+					 createDefaultComplexity();
 					 createDefaultPaperTypes();
 					 createDefaultBindingSprings();
 					 createDefaultLaminates();
@@ -106,7 +110,28 @@ public class DefaultDataCreationService {
 			}
 
 			
+
+			
 		});
+	}
+	
+	private void createDefaultComplexity() throws Exception {
+		for(Complexity complexity : COMPLEXITY_DEFAULTS) {
+			Complexity example = new Complexity();
+			example.setName(complexity.getName());
+			List<Complexity> foundExamples = complexityService.findByExample(example);
+			if(!foundExamples.isEmpty()) {
+				example = foundExamples.iterator().next();
+				complexity.setId(example.getId());
+				complexity.setCreatedAt(example.getCreatedAt());
+				complexity.setCreatedBy(example.getCreatedBy());
+			} else {
+				complexity.setCreatedAt(new Date());
+				complexity.setCreatedBy(User.TECH_USER);
+				complexityService.save(complexity);
+			}
+		}
+		
 	}
 	
 	private void createDefaultBindingSprings() throws Exception { 
@@ -329,5 +354,10 @@ public class DefaultDataCreationService {
 	@Autowired
 	public void setLaminateService(ILaminateService laminateService) {
 		this.laminateService = laminateService;
+	}
+	
+	@Autowired
+	public void setComplexityService(IComplexityService complexityService) {
+		this.complexityService = complexityService;
 	}
 }

@@ -22,6 +22,8 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import kz.aksay.polygraph.service.DefaultDataCreationService;
+
 @Entity
 @Table(name="\"order\"")
 public class Order extends OrderRootSupport implements MaterialConsumer {
@@ -35,6 +37,7 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 		NEW("Новый"),
 		PROCESSED("В работе"),
 		PAUSED("Приостановлен"),
+		READY("Готов"),
 		FINISHED("Завершен"),
 		CANCELLED("Отклонен");
 		
@@ -87,6 +90,11 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private State state;
+	
+	@ManyToOne
+	@JoinColumn(name="cmplex")
+	@NotNull(message="Не указана сложность")
+	private Complexity complexity = Complexity.MEDIUM;
 
 	@Transient
 	public BigDecimal getTotalCost() {
@@ -198,5 +206,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	public void setCirculation(Integer circulation) {
 		this.circulation = circulation;
+	}
+
+	public Complexity getComplexity() {
+		return complexity;
+	}
+
+	public void setComplexity(Complexity complexity) {
+		this.complexity = complexity;
 	}
 }

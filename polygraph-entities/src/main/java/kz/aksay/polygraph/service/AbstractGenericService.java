@@ -55,10 +55,8 @@ public abstract class AbstractGenericService<T, PK extends Serializable>
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	@Transactional(propagation=Propagation.REQUIRED)
 	public List<T> findByExample(T example) {
-		return (List<T>) getDao().getSession().createCriteria(getDao().clazz())
-				.add(Example.create(example)).list();
+		return getDao().readAllByExample(example); 
 	}
 }

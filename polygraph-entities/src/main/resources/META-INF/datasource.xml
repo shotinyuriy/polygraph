@@ -30,7 +30,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 	
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		p:location="classpath:/META-INF/properties/database.properties" />
+		p:location="${ext.properties.dir:classpath:}/database.properties" />
 		
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"

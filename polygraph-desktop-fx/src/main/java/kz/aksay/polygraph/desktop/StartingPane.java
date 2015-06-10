@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.desktop;
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.Stack;
 
 import javafx.application.Application;
@@ -17,25 +18,31 @@ import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.test.service.TestDataCreator;
 import kz.aksay.polygraph.util.ContextUtils;
+import kz.aksay.polygraph.util.PropertiesUtils;
 
 import org.springframework.context.ApplicationContext;
 
 
 public class StartingPane extends Application {
 	
-	public static String FXML_ROOT = ""; // for eclipse
-//	public static String FXML_ROOT = "/"; // for maven
+//	public static String FXML_ROOT = ""; // for eclipse
+	public static String FXML_ROOT = "/"; // for maven
 	private static ApplicationContext applicationContext;
 	private static Stage primaryStage;
 	private static Stack<Scene> sceneStack;
 	private static Pane contentPane;
-	private static Pane pane;
 	private static User currentUser;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			
+			String jarPath = StartingPane.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+			File jarFile = new File(jarPath);
+			System.out.println("JAR PATH = "+jarFile.getParent());
+			
+			System.setProperty(PropertiesUtils.EXT_PROPERTIES_DIR, jarFile.getParent());
 			StartingPane.primaryStage = primaryStage;
 			primaryStage.setTitle("Управление задачами");
 			TabPane pane = (TabPane)FXMLLoader.load(packageInfo.class.getResource(
@@ -74,6 +81,7 @@ public class StartingPane extends Application {
 		launch(args);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<?> clazz) {
 		return (T)applicationContext.getBean(clazz);
 	}

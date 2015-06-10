@@ -28,9 +28,13 @@ public interface GenericDao <T, PK extends Serializable> {
 	
 	public List<T> readAll(int offset, int limit);
 	
+	public List<T> readAllByExample(T example);
+	
 	public List<T> readByCriteria(Criteria criteria);
 	
 	public <T> T readUniqueByCriteria(Criteria criteria);
 	
 	public Session getSession();
+
+	Criteria criteria();
 }

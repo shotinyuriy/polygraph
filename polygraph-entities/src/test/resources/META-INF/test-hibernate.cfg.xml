@@ -15,10 +15,11 @@
 		<property name="hibernate.connection.charSet">${hibernate.connection.charSet}</property>
 
 		
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">create</property>
 		
 		<mapping package="kz.aksay.polygraph.entity"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.BindingSpring"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.Complexity"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Contract"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Employee"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Equipment"></mapping>

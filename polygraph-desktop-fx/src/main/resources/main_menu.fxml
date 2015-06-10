@@ -94,7 +94,8 @@
                                           <AnchorButton fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Роли сотрудников" />
                                           <AnchorButton fx:id="paperListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Бумага" />
                                           <AnchorButton fx:id="bindingSpringListButton" mnemonicParsing="false" onAction="#openBindingSpringList" text="Пружины" />
-                                          <AnchorButton fx:id="bindingSpringListButton" mnemonicParsing="false" onAction="#openStickersList" text="Наклейки" />
+                                          <AnchorButton fx:id="stickerListButton" mnemonicParsing="false" onAction="#openStickersList" text="Наклейки" />
+                                          <AnchorButton fx:id="laminateListButton" mnemonicParsing="false" onAction="#openLaminateList" text="Ламинат. пленки" />
                                           <AnchorButton fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" />
                                           <AnchorButton fx:id="equipmentListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Оборудование" />
                                        </children>

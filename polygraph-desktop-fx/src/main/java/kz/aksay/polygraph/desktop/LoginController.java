@@ -70,7 +70,34 @@ public class LoginController implements Initializable {
 	}
 	
 	public void login() throws IOException {
+		loginAsync();
+	}
+	
+	private void loginSync() {
+		writeDatabaseProperties();
+		loadContext();
+		userService = StartingPane.getBean(IUserService.class);
+		User user = userService.findByLoginAndPassword(
+				loginField.getText(), passwordField.getText());
 		
+		if(user == null) {
+			errorLabel.setText("Вы ввели неправильные логин и пароль");
+		}
+		else {
+			Map<String, Object> session = new HashMap<>();
+			session.put(SessionUtil.USER_KEY, user);
+			
+			Node node = SessionUtil.loadFxmlNodeWithSession(
+					packageInfo.class, StartingPane.FXML_ROOT+"main_menu.fxml", session, null);
+			
+			if(node instanceof Parent) {
+				Scene scene = new Scene((Parent)node);
+				StartingPane.getPrimaryStage().setScene(scene);
+			}
+		}
+	}
+	
+	private void loginAsync() {
 		final Thread progressThread = new Thread(ipm);
 		progressThread.start();
 		
@@ -85,7 +112,6 @@ public class LoginController implements Initializable {
 	        protected void updateProgress(double workDone, double max) {
 	        	writeDatabaseProperties();
 				loadContext();
-				userService = StartingPane.getBean(IUserService.class);
 	        }
 	     };
 	     
@@ -151,6 +177,9 @@ public class LoginController implements Initializable {
 		properties.setProperty(PASSWORD_KEY, dbPasswordField.getText());
 		String fileName = System.getProperty(PropertiesUtils.EXT_PROPERTIES_DIR) + "/database";
 		PropertiesUtils.writeDateBaseProperties(properties, fileName);
+		for(Map.Entry<Object, Object> entry : properties.entrySet()) {
+			System.setProperty(entry.getValue().toString(), entry.getKey().toString());
+		}
 	}
 
 	@Override

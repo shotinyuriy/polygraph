@@ -270,7 +270,7 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 	public Integer delayFromPlan() {
 		if(order != null && order.getState() != null) {
 			switch(order.getState()) {
-				case PROCESSED:
+				case PROCESSING:
 				case NEW:
 					if(order.getDateEndPlan() != null)
 						return DateUtils.differenceInDays(new Date(), order.getDateEndPlan());

@@ -29,7 +29,6 @@
 		<mapping class="kz.aksay.polygraph.entity.Organization"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Order"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.OrderFullTextIndex"></mapping>
-		<mapping class="kz.aksay.polygraph.entity.OrderProceedReport"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Paper"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.PaperType"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.Person"></mapping>
@@ -39,6 +38,9 @@
 		<mapping class="kz.aksay.polygraph.entity.User"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.VicariousPower"></mapping>
 		<mapping class="kz.aksay.polygraph.entity.WorkType"></mapping>
+		
+		<mapping class="kz.aksay.polygraph.entity.report.OrderProceedReport"></mapping>
+		<mapping class="kz.aksay.polygraph.entity.report.EmployeeWorkloadReport"></mapping>
 		
 	</session-factory>
 </hibernate-configuration>

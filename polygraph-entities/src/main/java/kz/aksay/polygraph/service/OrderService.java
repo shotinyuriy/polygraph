@@ -19,11 +19,11 @@ import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
-import kz.aksay.polygraph.entity.OrderProceedReport;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.Subject;
 import kz.aksay.polygraph.entity.WorkType;
+import kz.aksay.polygraph.entity.report.OrderProceedReport;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;

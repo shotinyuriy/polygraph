@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import kz.aksay.polygraph.entity.Order;
-import kz.aksay.polygraph.entity.OrderProceedReport;
+import kz.aksay.polygraph.entity.report.OrderProceedReport;
 
 public interface IOrderService extends IGenericService<Order, Long> {
 

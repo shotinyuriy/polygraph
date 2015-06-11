@@ -1,6 +1,7 @@
 kz\aksay\polygraph\desktop\OrderFormController$1.class
 kz\aksay\polygraph\entityfx\PaperFX.class
 kz\aksay\polygraph\desktop\OrderTableViewController$10$1.class
+kz\aksay\polygraph\desktop\LaminateTableViewController.class
 kz\aksay\polygraph\desktop\FormattedTableCellFactory$1.class
 kz\aksay\polygraph\desktop\ProducedWorkFormController$1.class
 kz\aksay\polygraph\desktop\OrderTableViewController$8.class
@@ -17,6 +18,7 @@ kz\aksay\polygraph\desktop\OrderTableViewController$3.class
 kz\aksay\polygraph\desktop\controls\AnchorButton.class
 kz\aksay\polygraph\entityfx\EntityFX.class
 kz\aksay\polygraph\fxapi\OrganizationForm.class
+kz\aksay\polygraph\desktop\OrderProceedGraphController.class
 kz\aksay\polygraph\entityfx\BindingSpringFX.class
 kz\aksay\polygraph\desktop\BindingSpringTableViewController.class
 kz\aksay\polygraph\entityfx\PersonFX.class
@@ -48,6 +50,7 @@ kz\aksay\polygraph\desktop\OrganizationTableViewController$1.class
 kz\aksay\polygraph\desktop\EmployeeFormController.class
 kz\aksay\polygraph\desktop\reports\OrderDetails.class
 kz\aksay\polygraph\util\ParametersAware.class
+kz\aksay\polygraph\desktop\StickerTableViewController.class
 kz\aksay\polygraph\desktop\EmployeeWorkLoadViewController.class
 kz\aksay\polygraph\desktop\OrganizationTableViewController$1$1.class
 kz\aksay\polygraph\entityfx\ProducedWorkFX.class

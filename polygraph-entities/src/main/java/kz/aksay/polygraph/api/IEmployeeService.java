@@ -1,11 +1,11 @@
 package kz.aksay.polygraph.api;
 
 import java.util.List;
+import java.util.Map;
 
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.User;
-
-import org.springframework.stereotype.Service;
+import kz.aksay.polygraph.entity.report.EmployeeWorkloadReport;
 
 public interface IEmployeeService extends IGenericService<Employee, Long> {
 	
@@ -15,4 +15,6 @@ public interface IEmployeeService extends IGenericService<Employee, Long> {
 	public void checkPersonAndUserAndSave(User user) throws Exception;
 	
 	public List<Employee> findAllByUserRole(User.Role role);
+	
+	public Map<Employee, EmployeeWorkloadReport> getEmployeesWorkload();
 }

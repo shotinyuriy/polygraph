@@ -13,7 +13,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.AnchorPane;
 import kz.aksay.polygraph.api.IOrderService;
-import kz.aksay.polygraph.entity.OrderProceedReport;
+import kz.aksay.polygraph.entity.report.OrderProceedReport;
 import kz.aksay.polygraph.util.SessionAware;
 
 public class OrderProceedGraphController implements Initializable, SessionAware {

@@ -24,12 +24,12 @@ public class Complexity extends EntitySupport {
 		DIFFICULT.setMax(10);
 		
 		MEDIUM.setName("Средне");
-		MEDIUM.setMin(7);
-		MEDIUM.setMax(4);
+		MEDIUM.setMin(4);
+		MEDIUM.setMax(7);
 		
 		EASY.setName("Легко");
-		EASY.setMin(3);
-		EASY.setMax(1);
+		EASY.setMin(1);
+		EASY.setMax(3);
 	}
 	
 	/**

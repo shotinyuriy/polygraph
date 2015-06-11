@@ -1,6 +1,7 @@
 package kz.aksay.polygraph.desktop;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -34,6 +35,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -102,6 +104,7 @@ public class OrderFormController implements
 	@FXML private DatePicker dateEndPlan;
 	@FXML private DatePicker dateEndReal;
 	@FXML private ComboBox<Complexity> complexityCombo;
+	@FXML private TextField projectPathField;
 	@FXML private Button showEmployeeWorkLoad;
 	
 	@FXML private TableView<ProducedWorkFX> producedWorksTableView;
@@ -251,6 +254,24 @@ public class OrderFormController implements
 		producedWorksTableView.getItems().removeAll(producedWorksFXToRemove);
 	}
 	
+	@FXML
+	public void choosePath(ActionEvent actionEvent) {
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Выберите папку с файлами проекта");
+		File file = directoryChooser.showDialog(((Node)actionEvent.getSource()).getScene().getWindow());
+		if(file != null) {
+			if(file.isDirectory()) {
+				try {
+					String projectPath = file.getCanonicalPath();
+					orderFX.getOrder().setProjectPath(projectPath);
+					projectPathField.setText(projectPath);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	private void showWorkload() {
 		AnchorPane employeeWorkloadView = (AnchorPane)SessionUtil.loadFxmlNodeWithSession(packageInfo.class, 
 				StartingPane.FXML_ROOT+"employee_workload_view.fxml", session, parameters);
@@ -283,6 +304,7 @@ public class OrderFormController implements
 						FormatUtil.convertToLocalDate(order.getDateEndReal()));
 				currentExecutorCombo.getSelectionModel().select(orderFX.getCurrentExecutorFX());
 				complexityCombo.getSelectionModel().select(order.getComplexity());
+				projectPathField.setText(order.getProjectPath());
 				
 				if(orderFX.getStateProperty().get() != null) {
 				

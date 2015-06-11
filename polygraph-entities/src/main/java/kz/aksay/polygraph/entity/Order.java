@@ -35,7 +35,7 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 	
 	public static enum State {
 		NEW("Новый"),
-		PROCESSED("В работе"),
+		PROCESSING("В работе"),
 		PAUSED("Приостановлен"),
 		READY("Готов"),
 		FINISHED("Завершен"),
@@ -86,6 +86,9 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	@Column
 	private String description;
+	
+	@Column
+	private String projectPath;
 	
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -214,5 +217,13 @@ public class Order extends OrderRootSupport implements MaterialConsumer {
 
 	public void setComplexity(Complexity complexity) {
 		this.complexity = complexity;
+	}
+
+	public String getProjectPath() {
+		return projectPath;
+	}
+
+	public void setProjectPath(String projectPath) {
+		this.projectPath = projectPath;
 	}
 }

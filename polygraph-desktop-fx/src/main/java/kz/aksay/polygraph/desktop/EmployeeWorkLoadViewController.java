@@ -5,23 +5,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 import org.omg.PortableServer.POAManagerPackage.State;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Series;
+import javafx.scene.text.Text;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entity.report.EmployeeWorkloadReport;
 import kz.aksay.polygraph.util.SessionAware;
 
 public class EmployeeWorkLoadViewController implements Initializable, SessionAware {
@@ -29,14 +41,14 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 	private IEmployeeService employeeService = StartingPane.getBean(IEmployeeService.class);
 	private IOrderService orderService = StartingPane.getBean(IOrderService.class);
 	
-	List<Employee> employees;
-	List<Order> orders;
-	ObservableList<String> employeeNames;
-	Map<Order.State, Map<Employee, Integer>> employeeWorkloadAll = new HashMap<Order.State, Map<Employee, Integer>>();
+	private List<Employee> employees;
+	private List<Order> orders;
+	private ObservableList<String> employeeNames;
+	private Map<Employee, EmployeeWorkloadReport> empWorkLoadRep;
 	
 	private Map<String, Object> session;
 	
-	@FXML private BarChart<String, Integer> barChart;
+	@FXML private StackedBarChart<String, Number> barChart;
 	@FXML private CategoryAxis xAxis;
 
 	@Override
@@ -47,62 +59,47 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
+		empWorkLoadRep = employeeService.getEmployeesWorkload();
 		employeeNames = FXCollections.observableArrayList();
-		orders = orderService.findAll();
 		
-		for(Order.State state : Order.State.values()) {
-			if(state.equals(Order.State.PROCESSED) || state.equals(Order.State.NEW) || state.equals(Order.State.PAUSED)) {
-				Map<Employee, Integer> employeeWorkload = new HashMap<Employee, Integer>();
-				for(Employee employee : employees) {
-					String categoryName = createCategoryName(employee, state);
-					if(!employeeNames.contains(categoryName)) {
-						employeeNames.add(categoryName);
-					}
-					employeeWorkload.put(employee,  0);
-				}
-				employeeWorkloadAll.put(state, employeeWorkload);
-			}
-		}
-		
-		for(Order order : orders) {
-			Employee employee = order.getCurrentExecutor();
-			Order.State state = order.getState();
-			if(state != null) {
-				
-				Map<Employee, Integer> employeeWorkload = employeeWorkloadAll.get(state);
-				if(employeeWorkload != null && employee != null) {
-					Integer count = employeeWorkload.get(employee);
-					employeeWorkload.put(employee, count+1);
-				}
-				
-			}
-		}
-		
-		for(Map.Entry<Order.State, Map<Employee, Integer>> employeeWorkloadEntry : employeeWorkloadAll.entrySet()) {
+		Series<String, Number> minSeries = new Series<String, Number>();
+		Series<String, Number> maxSeries = new Series<String, Number>();
+		minSeries.setName("Минимальная загруженность");
+		maxSeries.setName("Максимальная загруженность");
+		for(Entry<Employee, EmployeeWorkloadReport> entry : empWorkLoadRep.entrySet()) {
+			Employee employee = entry.getKey();
+			EmployeeWorkloadReport employeeWorkloadReport = entry.getValue();
+			String categoryName = createCategoryName(employee);
+			employeeNames.add(categoryName);
+			Double workloadDiff = employeeWorkloadReport.getWorkLoadMax() - employeeWorkloadReport.getWorkLoadMin();
+			final Data<String, Number> minData = new Data<String, Number>(categoryName, employeeWorkloadReport.getWorkLoadMin()); 
+			final Data<String, Number> maxData = new Data<String, Number>(categoryName, workloadDiff);
+			minSeries.getData().add(minData);
+			maxSeries.getData().add(maxData);
+			addLabelListener(minData, employeeWorkloadReport.getWorkLoadMin());
+			addLabelListener(maxData, employeeWorkloadReport.getWorkLoadMax());
 			
-			Order.State state = employeeWorkloadEntry.getKey();
-			
-			XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
-			series.setName(state.getName());
-			
-			Map<Employee, Integer> workloads = employeeWorkloadEntry.getValue();
-			
-			for(Map.Entry<Employee,Integer> employeeWorkoad : workloads.entrySet()) {
-				
-				Employee employee = employeeWorkoad.getKey();
-				String categoryName = createCategoryName(employee, state);
-				Integer count = employeeWorkoad.getValue();
-				series.getData().add(new XYChart.Data<String, Integer>(categoryName, count));
-			}
-			
-			barChart.getData().add(series);
+			System.out.println(employee.getId()+ " min "+employeeWorkloadReport.getWorkLoadMin()+
+					" max "+employeeWorkloadReport.getWorkLoadMax());
 		}
 		
 		xAxis.setCategories(employeeNames);
+		
+		barChart.getData().addAll(minSeries, maxSeries);
 	}
 	
-	private static String createCategoryName(Employee employee, Order.State state) {
+	private void addLabelListener(final Data<String, Number> data, final Number number) {
+		data.nodeProperty().addListener(new ChangeListener<Node>() {
+	        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+	          if (node != null) {
+	            //setNodeStyle(data);
+	            displayLabelForData(data, number);
+	          } 
+	        }
+	      });
+	}
+	
+	private static String createCategoryName(Employee employee) {
 		
 		StringBuffer sb = new StringBuffer();
 		
@@ -123,13 +120,46 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 			}
 		}
 		
-//		if(state != null) {
-//			if(sb.length() > 0) sb.append("\n");
-//			sb.append(state.getName());
-//		}
-		
 		return sb.toString();
 	}
+	
+	  /** Change color of bar if value of i is <5 then red, if >5 then green if i>8 then blue */
+	  private void setNodeStyle(XYChart.Data<String, Number> data) {
+	    Node node = data.getNode();
+	    if (data.getYValue().intValue() > 8) {
+	      node.setStyle("-fx-bar-fill: -fx-exceeded;");
+	    } else if (data.getYValue().intValue() > 5) {
+	      node.setStyle("-fx-bar-fill: -fx-achieved;");
+	    } else {
+	      node.setStyle("-fx-bar-fill: -fx-not-achieved;");
+	    }
+	  }
 
+	/** places a text label with a bar's value above a bar node for a given XYChart.Data */
+	  private void displayLabelForData(XYChart.Data<String, Number> data, final Number number) {
+	    final Node node = data.getNode();
+	    final Text dataText = new Text(number + "");
+	    node.parentProperty().addListener(new ChangeListener<Parent>() {
+	      @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
+	        Group parentGroup = (Group) parent;
+	        parentGroup.getChildren().add(dataText);
+	      }
+	    });
+	 
+	    node.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
+	      @Override public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+	        dataText.setLayoutX(
+	          Math.round(
+	            bounds.getMinX() + bounds.getWidth() / 2 - dataText.prefWidth(-1) / 2
+	          )
+	        );
+	        dataText.setLayoutY(
+	          Math.round(
+	            bounds.getMinY() + dataText.prefHeight(-1) * 1.0
+	          )
+	        );
+	      }
+	    });
+	  }
 	
 }

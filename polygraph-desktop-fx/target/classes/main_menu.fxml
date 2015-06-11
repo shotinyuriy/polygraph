@@ -34,6 +34,7 @@
          <items>
             <AnchorPane maxWidth="200.0" prefHeight="600.0" prefWidth="200.0">
                <children>
+               	  <TreeView fx:id="treeViewMenu" prefHeight="546.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" visible="false" managed="false"/>	
                   <Accordion maxHeight="1.7976931348623157E308" maxWidth="200.0" prefHeight="556.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <panes>
                       <TitledPane animated="false" prefHeight="298.0" prefWidth="202.0" text="Клиенты" fx:id="clientsMenu">
@@ -43,8 +44,8 @@
                                  	<VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                     	
-                                       <AnchorButton onAction="#openNewPersonForm" text="Новое физ. лицо" />
-                                       <AnchorButton onAction="#openNewOrganizaitonForm" text="Новое юр. лицо" />
+                                       <AnchorButton onAction="#openNewPersonForm" text="Новое физ. лицо" visible="false" managed="false"/>
+                                       <AnchorButton onAction="#openNewOrganizaitonForm" text="Новое юр. лицо"  visible="false" managed="false"/>
                                        <AnchorButton onAction="#openPersonsList" text="Список физ. лиц" />
                                        <AnchorButton onAction="#openOrganizationList" text="Список юр. лиц" />
                                        
@@ -62,6 +63,7 @@
                                        <children>
                                        	<AnchorButton fx:id="orderListButton" onAction="#openOrderList" text="Список заказов" />
                                        	<AnchorButton fx:id="orderConsumptionsButton" onAction="#openOrderConsumptionsList" text="Расходы по заказам" />
+                                       	<AnchorButton fx:id="orderProceedReportButton" onAction="#openOrderProceedReport" text="Среднее выполнение заказов" />
                                        </children>
                                     </VBox>
                                  </children></AnchorPane>
@@ -92,6 +94,8 @@
                                           <AnchorButton fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Роли сотрудников" />
                                           <AnchorButton fx:id="paperListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Бумага" />
                                           <AnchorButton fx:id="bindingSpringListButton" mnemonicParsing="false" onAction="#openBindingSpringList" text="Пружины" />
+                                          <AnchorButton fx:id="stickerListButton" mnemonicParsing="false" onAction="#openStickersList" text="Наклейки" />
+                                          <AnchorButton fx:id="laminateListButton" mnemonicParsing="false" onAction="#openLaminateList" text="Ламинат. пленки" />
                                           <AnchorButton fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" />
                                           <AnchorButton fx:id="equipmentListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Оборудование" />
                                        </children>

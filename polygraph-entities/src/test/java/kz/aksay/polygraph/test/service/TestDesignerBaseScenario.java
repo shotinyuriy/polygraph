@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IEmployeeService;
@@ -27,7 +28,6 @@ import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
-import kz.aksay.polygraph.entity.OrderProceedReport;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.PaperType;
@@ -35,6 +35,8 @@ import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.ProducedWork;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
+import kz.aksay.polygraph.entity.report.EmployeeWorkloadReport;
+import kz.aksay.polygraph.entity.report.OrderProceedReport;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
 import kz.aksay.polygraph.integration1c.OrderToXMLExporter;
@@ -141,7 +143,9 @@ public class TestDesignerBaseScenario extends Assert {
 			testMaterialConsumptionService();
 			testCountOfEquipmentUsageByExample();
 			employeeService.findAllByUserRole(User.Role.DESIGNER);
+			
 			testOrderProceedReport();
+			testEmployeeWorkloadReport();
 			
 			orderToXMLExporter.export(orderService.findAll(), new File("test.xml"));
 		}
@@ -169,6 +173,18 @@ public class TestDesignerBaseScenario extends Assert {
 			System.out.println("monthYear "+orderProceedReport.getMonthYear()+" proceedTime "+orderProceedReport.getProcceedTime());
 		}
 				
+	}
+	
+	private void testEmployeeWorkloadReport() {
+		Map<Employee, EmployeeWorkloadReport> report = employeeService.getEmployeesWorkload();
+		for(Map.Entry<Employee, EmployeeWorkloadReport> reportEntry : report.entrySet()) {
+			Employee employee = reportEntry.getKey();
+			EmployeeWorkloadReport empWLRep = reportEntry.getValue();
+			System.out.println(" Employee "+employee.getPerson().getFullName());
+			System.out.println(" WorkLoad "+empWLRep.getWorkLoadMin()+" "
+					+empWLRep.getWorkLoadMax()+" "
+					+empWLRep.getAverageWorkLoad());
+		}
 	}
 
 	private void testCountOfEquipmentUsageByExample() {
@@ -291,7 +307,7 @@ public class TestDesignerBaseScenario extends Assert {
 		order = new Order();
 		
 		order.setCurrentExecutor(new Employee());
-		order.setState(Order.State.PROCESSED);
+		order.setState(Order.State.PROCESSING);
 		
 		orders = orderService.findByExample(order);
 		

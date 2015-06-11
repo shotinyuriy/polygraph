@@ -1,19 +1,24 @@
 package kz.aksay.polygraph.service;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IPersonService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Employee;
+import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Person;
 import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
+import kz.aksay.polygraph.entity.report.EmployeeWorkloadReport;
 
-import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +61,47 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 			userService.save(user);
 		}
 	}
+	
+
+	@Override
+	@Transactional(readOnly=true)
+	public Map<Employee, EmployeeWorkloadReport> getEmployeesWorkload() {
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append(" SELECT new EmployeeWorkloadReport(");
+		sb.append(" o.id, e , o.complexity , o.dateEndPlan, o.state ) ");
+		sb.append(" FROM Order o ");
+		sb.append(" RIGHT OUTER JOIN o.currentExecutor as e ");
+		sb.append(" WHERE o.state in (:states) ");
+		sb.append(" AND e.user.role = :userRole ");
+		
+		Set<Order.State> states = new HashSet<Order.State>();
+		states.add(Order.State.NEW);
+		states.add(Order.State.PROCESSING);
+		
+		Query query = getDao().getSession().createQuery(sb.toString());
+		query.setParameterList("states", states);
+		query.setParameter("userRole", User.Role.DESIGNER);
+		
+		Date date = new Date();
+		
+		Map<Employee, EmployeeWorkloadReport> report = 
+				new HashMap<Employee, EmployeeWorkloadReport>();
+		
+		List<EmployeeWorkloadReport> employees = query.list();
+		for(EmployeeWorkloadReport empWlRep : employees) {
+			empWlRep.calcWorkload(date);
+			EmployeeWorkloadReport existentEWLR = report.get(empWlRep.getEmployee());
+			if(existentEWLR != null) {
+				existentEWLR.add(empWlRep);
+			}
+			else {
+				report.put(empWlRep.getEmployee(), empWlRep);
+			}
+		}
+		
+		return report;
+	}
 
 	public IPersonService getPersonService() {
 		return personService;
@@ -83,5 +129,6 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 				
 		return query.list();
 	}
+
 	 
 }

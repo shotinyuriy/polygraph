@@ -39,7 +39,7 @@ public class Organization extends Subject {
 	@Column
 	private String directorName;
 	
-	@NotNull(message="Не указан адрес организации")
+	@NotNull(message="Не указан юридический адрес организации")
 	@Embedded
 	private Address address;
 	

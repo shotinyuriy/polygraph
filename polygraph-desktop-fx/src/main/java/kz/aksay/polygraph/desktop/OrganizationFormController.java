@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IOrganizationService;
 import kz.aksay.polygraph.api.IVicariousPowerService;
+import kz.aksay.polygraph.desktop.controls.AddressPane;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.Contract;
@@ -60,15 +61,14 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	@FXML private TextField mobileField;
 	@FXML private TextField phoneField;
 	@FXML private TextField directorNameField;
-	@FXML private TextField cityField;
-	@FXML private TextField streetField;
-	@FXML private TextField houseField;
-	@FXML private TextField apartmentField;
 	@FXML private Button newOrderButton;
 	@FXML private TableView<ContractFX> contractsTableView;
 	@FXML private TableView<VicariousPowerFX> vicariousPowerTableView;
 	@FXML private HBox contractControls;
 	@FXML private HBox vicPowerControls;
+	@FXML private AddressPane legalAddressPane;
+	@FXML private AddressPane physicalAddressPane;
+	@FXML private AddressPane mailAddressPane;
 
 	private Map<String, Object> session;
 	private Map<String, Object> parameters;
@@ -115,7 +115,9 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		organization.setEmail(emailField.getText());
 		organization.setMobile(mobileField.getText());
 		organization.setPhone(phoneField.getText());
-		organization.setAddress(createAddress());
+		organization.setLegalAddress(legalAddressPane.getAddress());
+		organization.setPhysicalAddress(physicalAddressPane.getAddress());
+		organization.setMailAddress(mailAddressPane.getAddress());
 		
 		try {
 			organization = organizationService.save(organization);
@@ -132,15 +134,6 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private Address createAddress() {
-		Address address = new Address();
-		address.setCity(cityField.getText());
-		address.setStreet(streetField.getText());
-		address.setHouse(houseField.getText());
-		address.setApartment(apartmentField.getText());
-		return address;
 	}
 
 	@FXML
@@ -299,13 +292,10 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			mobileField.setText(organization.getMobile());
 			phoneField.setText(organization.getPhone());
 			
-			if(organization.getAddress() != null) {
-				Address address = organization.getAddress();
-				cityField.setText(address.getCity());
-				streetField.setText(address.getStreet());
-				houseField.setText(address.getHouse());
-				apartmentField.setText(address.getApartment());
-			}
+			legalAddressPane.setAddress(organization.getLegalAddress());
+			physicalAddressPane.setAddress(organization.getPhysicalAddress());
+			mailAddressPane.setAddress(organization.getMailAddress());
+			
 			newOrderButton.setVisible(true);
 			vicPowerControls.setManaged(true);
 			vicPowerControls.setVisible(true);

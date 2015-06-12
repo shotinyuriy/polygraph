@@ -3,6 +3,7 @@ package kz.aksay.polygraph.desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -122,7 +125,6 @@ public class OrderFormController implements
 			if(isNewOrder) {
 				orderFX.getCreatedAtProperty().set(new Date());
 				orderFX.getCreatedByProperty().set(SessionUtil.retrieveUser(session));
-				
 			}
 			else {
 				orderFX.getUpdatedAtProperty().set(new Date());
@@ -146,7 +148,6 @@ public class OrderFormController implements
 			} else {
 				order.setDateEndReal(new Date());
 			}
-			
 			
 			order.setProducedWorks(new HashSet<ProducedWork>());
 			for(ProducedWorkFX prodWorkFX : producedWorksTableView.getItems()) {
@@ -270,6 +271,12 @@ public class OrderFormController implements
 				}
 			}
 		}
+	}
+	
+	@FXML
+	public void showPath(ActionEvent actionEvent) {
+		File file = new File(projectPathField.getText()); 
+		StartingPane.getApplication().getHostServices().showDocument(file.toURI().toString());
 	}
 	
 	private void showWorkload() {

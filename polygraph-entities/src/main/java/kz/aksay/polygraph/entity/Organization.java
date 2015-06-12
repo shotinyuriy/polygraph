@@ -1,8 +1,11 @@
 package kz.aksay.polygraph.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -40,8 +43,19 @@ public class Organization extends Subject {
 	private String directorName;
 	
 	@NotNull(message="Не указан юридический адрес организации")
-	@Embedded
-	private Address address;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="legal_address_id")
+	private Address legalAddress;
+	
+	@NotNull(message="Не указан физический адрес организации")
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="physical_address_id")
+	private Address physicalAddress;
+	
+	@NotNull(message="Не указан почтовый адрес организации")
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="mail_address_id")
+	private Address mailAddress;
 	
 	public String getFullname() {
 		return fullname;
@@ -108,11 +122,28 @@ public class Organization extends Subject {
 		this.code1c = code1c;
 	}
 
-	public Address getAddress() {
-		return address;
+	public Address getLegalAddress() {
+		return legalAddress;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setLegalAddress(Address legalAddress) {
+		this.legalAddress = legalAddress;
 	}
+
+	public Address getPhysicalAddress() {
+		return physicalAddress;
+	}
+
+	public void setPhysicalAddress(Address physicalAddress) {
+		this.physicalAddress = physicalAddress;
+	}
+
+	public Address getMailAddress() {
+		return mailAddress;
+	}
+
+	public void setMailAddress(Address mailAddress) {
+		this.mailAddress = mailAddress;
+	}
+	
 }

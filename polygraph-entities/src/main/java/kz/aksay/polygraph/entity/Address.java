@@ -1,10 +1,14 @@
 package kz.aksay.polygraph.entity;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-@Embeddable
-public class Address {
+@Entity
+@Table(name="address")
+public class Address extends EntitySupport {
 
+	private static final long serialVersionUID = 605856462137721952L;
+	
 	private String city;
 	private String street;
 	private String house;

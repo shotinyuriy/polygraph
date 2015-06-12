@@ -25,6 +25,7 @@ import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.api.IUserService;
 import kz.aksay.polygraph.api.IVicariousPowerService;
 import kz.aksay.polygraph.api.IWorkTypeService;
+import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.DefaultData;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Equipment;
@@ -320,7 +321,18 @@ public class TestDataCreator {
 				organizationCustomer.setShortname(orgName.getShortName());
 				organizationCustomer.setInn(orgName.getNumber());
 				organizationCustomer.setKpp(orgName.getKpp());
-				organizationCustomer.setAddress(AddressGenerator.generateAddress());
+				Address address = AddressGenerator.generateAddress();
+				organizationCustomer.setLegalAddress(address);
+				if(formatRandom.nextBoolean()) {
+					organizationCustomer.setPhysicalAddress(address);
+				} else {
+					organizationCustomer.setPhysicalAddress(AddressGenerator.generateAddress());
+				}
+				if(formatRandom.nextBoolean()) {
+					organizationCustomer.setMailAddress(address);
+				} else {
+					organizationCustomer.setMailAddress(AddressGenerator.generateAddress());
+				}
 				organizationService.save(organizationCustomer);
 				isCreated = true;
 				return organizationCustomer;

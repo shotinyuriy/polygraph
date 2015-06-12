@@ -76,7 +76,7 @@
 			                    <resource>
 			                        <directory>${basedir}/src/main/java/kz/aksay/polygraph/desktop/fxml</directory>
 			                        <includes>
-			                            <include>*.*</include>
+			                            <include>**/*.*</include>
 			                        </includes>
 			                    </resource>
 			                </resources>

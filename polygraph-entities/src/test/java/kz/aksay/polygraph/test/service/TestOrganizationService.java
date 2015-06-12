@@ -36,7 +36,9 @@ public class TestOrganizationService extends Assert {
 		organization.setShortname("Тестовая Организация");
 		organization.setInn("0123456789");
 		organization.setKpp("0123456789");
-		organization.setAddress(AddressGenerator.generateAddress());
+		organization.setLegalAddress(AddressGenerator.generateAddress());
+		organization.setPhysicalAddress(AddressGenerator.generateAddress());
+		organization.setMailAddress(AddressGenerator.generateAddress());
 		
 		organizationService.save(organization);
 		

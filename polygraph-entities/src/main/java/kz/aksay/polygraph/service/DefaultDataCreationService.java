@@ -292,7 +292,9 @@ public class DefaultDataCreationService {
 			address.setCity("г. Уральск");
 			address.setStreet("ул.Курмангазы");
 			address.setHouse("162");
-			organization.setAddress(address);
+			organization.setLegalAddress(address);
+			organization.setPhysicalAddress(address);
+			organization.setMailAddress(address);
 			
 			organizationService.save(organization);
 		} else {

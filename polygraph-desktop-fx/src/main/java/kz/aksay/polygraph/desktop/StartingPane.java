@@ -29,6 +29,7 @@ public class StartingPane extends Application {
 //	public static String FXML_ROOT = "/"; // for maven
 	private static ApplicationContext applicationContext;
 	private static Stage primaryStage;
+	private static Application application;
 	private static Stack<Scene> sceneStack;
 	private static Pane contentPane;
 	private static User currentUser;
@@ -36,11 +37,11 @@ public class StartingPane extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
+			application = this;
 			
 			String jarPath = StartingPane.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
 			jarPath = URLDecoder.decode(jarPath, "UTF-8");
 			File jarFile = new File(jarPath);
-			System.out.println("JAR PATH = "+jarFile.getParent());
 			
 			System.setProperty(PropertiesUtils.EXT_PROPERTIES_DIR, jarFile.getParent());
 			StartingPane.primaryStage = primaryStage;
@@ -138,5 +139,9 @@ public class StartingPane extends Application {
 	public static void generateAllEntities() {
 		TestDataCreator testDataCreator = new TestDataCreator(applicationContext);
 		testDataCreator.createAllEntities();
+	}
+
+	public static Application getApplication() {
+		return application;
 	}
 }

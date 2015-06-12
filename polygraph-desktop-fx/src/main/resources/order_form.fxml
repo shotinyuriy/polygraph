@@ -43,6 +43,7 @@
                   					      <Label text="Плановая дата окончания:" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                   					      <Label text="Фактическая дата окончания:" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   					      <Label text="Сложность" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+                  					      <Label text="Расположение файлов" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
                   					      
                   					      <Label fx:id="customerField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   					      <Label fx:id="vicariousPowerNumberField" alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
@@ -53,6 +54,12 @@
                   	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="8" />
                   	           			  <DatePicker fx:id="dateEndReal" GridPane.columnIndex="2" GridPane.rowIndex="9" />
                   	           			  <ComboBox fx:id="complexityCombo" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                  	           			  <HBox GridPane.columnIndex="2" GridPane.rowIndex="11">
+                  	           			  	<TextField fx:id="projectPathField" editable="false"></TextField>
+                  	           			  	<Button fx:id="choosePathButton" onAction="#choosePath" text="Выбрать" />
+                  	           			  	<Button fx:id="showPathButton" onAction="#showPath" text="Показать" />
+                  	           			  </HBox>
+                  	           			  
                   	           			  
                   						</children>
                                        <columnConstraints>

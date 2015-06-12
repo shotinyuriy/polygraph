@@ -98,10 +98,10 @@ public class OrderToXMLExporter {
 		xmlOrganization.setInn(organization.getInn());
 		
 		XMLAddress xmlAddress = new XMLAddress();
-		xmlAddress.setCity(organization.getAddress().getCity());
-		xmlAddress.setStreet(organization.getAddress().getStreet());
-		xmlAddress.setHouse(organization.getAddress().getHouse());
-		xmlAddress.setStreet(organization.getAddress().getStreet());
+		xmlAddress.setCity(organization.getLegalAddress().getCity());
+		xmlAddress.setStreet(organization.getLegalAddress().getStreet());
+		xmlAddress.setHouse(organization.getLegalAddress().getHouse());
+		xmlAddress.setStreet(organization.getLegalAddress().getStreet());
 		xmlOrganization.setAddress(xmlAddress);
 		
 		return xmlOrganization;

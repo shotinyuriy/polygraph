@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import kz.aksay.polygraph.desktop.StartingPane;
@@ -66,6 +67,18 @@ public class AnchorButton extends AnchorPane {
 	
 	public BooleanProperty mnemonicParsingProperty() {
 		return button.mnemonicParsingProperty();
+	}
+	
+	public ObjectProperty<Node> getImageViewProperty() {
+		return button.graphicProperty();
+	}
+	
+	public Node getGraphic() {
+		return button.getGraphic();
+	}
+	
+	public void setGraphic(Node graphic) {
+		button.setGraphic(graphic);
 	}
 
 }

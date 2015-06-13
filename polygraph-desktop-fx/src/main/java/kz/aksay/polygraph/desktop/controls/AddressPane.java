@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import kz.aksay.polygraph.desktop.StartingPane;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Address;
+import kz.aksay.polygraph.entityfx.AddressFX;
 
 public class AddressPane extends AnchorPane {
 
@@ -20,7 +21,7 @@ public class AddressPane extends AnchorPane {
 	@FXML private TextField apartmentField; 
 	@FXML private Label titleLabel; 
 	
-	private Address address; 
+	private AddressFX addressFX; 
 	
 	public AddressPane() {
 		super();
@@ -35,28 +36,31 @@ public class AddressPane extends AnchorPane {
 		}
 	}
 	
-	public Address getAddress() {
-		
-		address.setCity(cityField.getText());
-		address.setStreet(streetField.getText());
-		address.setHouse(houseField.getText());
-		address.setApartment(apartmentField.getText());
-		return address;
+	public AddressFX getAddressFX() {
+		return addressFX;
 	}
 	
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setAddressFX(AddressFX address) {
 		
-		if(address == null) {
+		if(this.addressFX != null) {
+			cityField.textProperty().unbindBidirectional(this.addressFX.getCityProperty());
+			streetField.textProperty().unbindBidirectional(this.addressFX.getStreetProperty());
+			houseField.textProperty().unbindBidirectional(this.addressFX.getHouseProperty());
+			apartmentField.textProperty().unbindBidirectional(this.addressFX.getApartmentProperty());
+		}
+		
+		this.addressFX = address;
+		
+		if(address == null || address.getEntity() == null) {
 			cityField.clear();
 			streetField.clear();
 			houseField.clear();
 			apartmentField.clear();
 		} else {
-			cityField.setText(address.getCity());
-			streetField.setText(address.getStreet());
-			houseField.setText(address.getHouse());
-			apartmentField.setText(address.getApartment());
+			cityField.textProperty().bindBidirectional(address.getCityProperty());
+			streetField.textProperty().bindBidirectional(address.getStreetProperty());
+			houseField.textProperty().bindBidirectional(address.getHouseProperty());
+			apartmentField.textProperty().bindBidirectional(address.getApartmentProperty());
 		}
 	}
 	

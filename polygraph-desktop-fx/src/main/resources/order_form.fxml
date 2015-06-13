@@ -16,17 +16,35 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.*?>
 
-<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrderFormController">
 	<children>
-		<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-   <content>
+		<VBox prefHeight="480.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<HBox alignment="TOP_CENTER" spacing="10.0">
+			<children>
+		     	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" text="Сохранить" >
+		     		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Big_Diskette_64.png"></Image></ImageView></graphic>
+		     	</Button>
+		     	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" text="Печать" >
+		     		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Printer_tool_64.png"></Image></ImageView></graphic>
+		     	</Button>
+		     	<Button fx:id="exportToDocxButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#exportToDocx" text="Экспорт в DOCX" >
+		     		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/DOCX_file_format_symbol_64.png"></Image></ImageView></graphic>
+		     	</Button>
+			</children>
+		</HBox>
+		
+		<Label fx:id="errorLabel" alignment="TOP_CENTER"/>
+		
+		<ScrollPane>
+   		<content>
             <HBox>
                <children>
          		<VBox maxWidth="800">
-            <children>
+            		<children>
             			<VBox alignment="TOP_CENTER" VBox.vgrow="SOMETIMES">
-               <children>
+               			<children>
                				<AnchorPane>
                					<children>
                						<GridPane fx:id="orderContainer" alignment="TOP_CENTER" hgap="10.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -54,10 +72,14 @@
                   	           			  <DatePicker fx:id="dateEndPlan" GridPane.columnIndex="2" GridPane.rowIndex="8" />
                   	           			  <DatePicker fx:id="dateEndReal" GridPane.columnIndex="2" GridPane.rowIndex="9" />
                   	           			  <ComboBox fx:id="complexityCombo" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-                  	           			  <HBox GridPane.columnIndex="2" GridPane.rowIndex="11">
+                  	           			  <HBox GridPane.columnIndex="2" GridPane.rowIndex="11" spacing="10.0">
                   	           			  	<TextField fx:id="projectPathField" editable="false"></TextField>
-                  	           			  	<Button fx:id="choosePathButton" onAction="#choosePath" text="Выбрать" />
-                  	           			  	<Button fx:id="showPathButton" onAction="#showPath" text="Показать" />
+                  	           			  	<Button fx:id="choosePathButton" onAction="#choosePath" text="Выбрать" >
+                  	           			  		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Folder_with_Document_64.png"></Image></ImageView></graphic>
+                  	           			  	</Button>
+                  	           			  	<Button fx:id="showPathButton" onAction="#showPath" text="Показать" >
+                  	           			  		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Screen_with_a_presentation_64.png"></Image></ImageView></graphic>
+                  	           			  	</Button>
                   	           			  </HBox>
                   	           			  
                   	           			  
@@ -80,7 +102,7 @@
                						 </GridPane>
                					 </children>
                				 </AnchorPane>
-               </children>
+               				</children>
             			 </VBox>
             		  
             			  <VBox alignment="TOP_CENTER" VBox.vgrow="SOMETIMES">
@@ -115,13 +137,19 @@
             			      	</columns>
             			      </TableView>
             		      
-            			      <HBox alignment="TOP_CENTER">
+            			      <HBox alignment="TOP_CENTER" spacing="10.0">
             			      	<children>
-            				      	<Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" text="Добавить" />
+            				      	<Button fx:id="addProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addProducedWork" text="Добавить" >
+            				      		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Add_web_page_64.png"></Image></ImageView></graphic>
+            				      	</Button>
             				      	
-            					  	<Button fx:id="editProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editProducedWork" text="Изменить" />
+            					  	<Button fx:id="editProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editProducedWork" text="Изменить" >
+            					  		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Edit_list_64.png"></Image></ImageView></graphic>
+            					  	</Button>
             				      	
-            						<Button fx:id="deleteProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteProducedWork" text="Удалить" />
+            						<Button fx:id="deleteProducedWorkButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteProducedWork" text="Удалить" >
+            							<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Delete_list_64.png"></Image></ImageView></graphic>
+            						</Button>
             				     </children>
             			      </HBox>
             			     
@@ -135,27 +163,16 @@
             			      	</children>
             			      </HBox>
             			     
-            			     <Label fx:id="validationLabel" />
-            			     
-            			     <HBox alignment="TOP_CENTER" spacing="10.0">
-               <children>
-               			      	<Button fx:id="saveButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#save" text="Сохранить" />
-               			      	<Button fx:id="printButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#print" text="Печать" />
-               			      	<Button fx:id="exportToDocxButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#exportToDocx" text="Экспорт в DOCX" />
-               </children>
-            			    </HBox>
-            			    
-            			    <Label fx:id="errorLabel" />
             				</children>	      	
             			  </VBox>
-            </children>
+            			</children>
          		  
          		  </VBox>
                <AnchorPane fx:id="employeeWorkloadPane"/>
                </children>
             </HBox>
-   </content>
-		  
+   			</content>
 		  </ScrollPane>
-	  </children>
+	  	</VBox>
+   </children>
 </AnchorPane>

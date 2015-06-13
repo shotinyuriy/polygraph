@@ -110,8 +110,12 @@ public class LoginController implements Initializable {
 	         
 	        @Override
 	        protected void updateProgress(double workDone, double max) {
-	        	writeDatabaseProperties();
-				loadContext();
+	        	try {
+		        	writeDatabaseProperties();
+					loadContext();
+	        	} catch(Exception e) {
+	        		e.printStackTrace();
+	        	}
 	        }
 	     };
 	     

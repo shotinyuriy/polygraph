@@ -55,7 +55,7 @@ public class Organization extends Subject {
 	@NotNull(message="Не указан почтовый адрес организации")
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="mail_address_id")
-	private Address mailAddress;
+	private Address mailAddress;  
 	
 	public String getFullname() {
 		return fullname;

@@ -94,7 +94,6 @@ public class OrderFormController implements
 	@FXML private GridPane orderContainer;
 	@FXML private Label orderIdLabel;
 	@FXML private Label customerIdLabel;
-	@FXML private Label validationLabel;
 	@FXML private Label totalCostLabel;
 	@FXML private Label errorLabel;
 	
@@ -121,7 +120,7 @@ public class OrderFormController implements
 	@FXML
 	public void save(ActionEvent actionEvent) {
 		try {
-			validationLabel.setText(null);
+			errorLabel.setText(null);
 			if(isNewOrder) {
 				orderFX.getCreatedAtProperty().set(new Date());
 				orderFX.getCreatedByProperty().set(SessionUtil.retrieveUser(session));
@@ -162,12 +161,12 @@ public class OrderFormController implements
 				}
 			}
 			
-			validationLabel.setText("Сохранение успешно");
+			errorLabel.setText("Сохранение успешно");
 			showWorkload();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			validationLabel.setText(e.getMessage());
+			errorLabel.setText(e.getMessage());
 		}
 	}
 	

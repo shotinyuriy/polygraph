@@ -16,35 +16,49 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
 <?import kz.aksay.polygraph.desktop.controls.AddressPane?>
-
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.image.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrganizationFormController">
    <children>
-      <ScrollPane prefHeight="100.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   	  <VBox prefHeight="480.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+  	        <HBox alignment="TOP_CENTER" spacing="10.0" fx:id="controlPane">
+        		<children>
+        			<Button onAction="#save" text="Сохранить" >
+        				<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Big_Diskette_64.png"></Image></ImageView></graphic>
+        			</Button>
+        			<Button fx:id="newOrderButton" onAction="#openNewOrder" text="Новый заказ" visible="false">
+        				<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Add_New_document_64.png"></Image></ImageView></graphic>
+        			</Button>
+        		</children>
+        	</HBox>
+        	
+        	<Label fx:id="validationLabel" text=""/>
+         <ScrollPane >
          <content>
-            <VBox alignment="TOP_CENTER">
+            <VBox alignment="TOP_CENTER" fx:id="contentPane">
             <children>
             	<GridPane alignment="TOP_CENTER" hgap="10" vgap="10">
-               <children>
-               		<Label text="Код в 1С" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-               		<Label text="Полное наименование" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               		<Label text="Краткое наименование" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-               		<Label text="Фио директора" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-               		<Label text="ИИН/БИН" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-               		<Label text="ИИК" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-               		<Label text="E-mail" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-               		<Label text="Моб." GridPane.columnIndex="1" GridPane.rowIndex="7" />
-               		<Label text="Тел." GridPane.columnIndex="1" GridPane.rowIndex="8" />
-               		<TextField fx:id="code1cField" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-               		<TextArea fx:id="fullNameField" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-               		<TextField fx:id="shortNameField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-               		<TextField fx:id="directorNameField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-               		<TextField fx:id="innField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-               		<TextField fx:id="kppField" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-               		<TextField fx:id="emailField" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-               		<TextField fx:id="mobileField" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-               		<TextField fx:id="phoneField" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-               </children>
+               		<children>
+	               		<Label text="Код в 1С" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+	               		<Label text="Полное наименование" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+	               		<Label text="Краткое наименование" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+	               		<Label text="Фио директора" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+	               		<Label text="ИИН/БИН" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+	               		<Label text="ИИК" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+	               		<Label text="E-mail" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+	               		<Label text="Моб." GridPane.columnIndex="1" GridPane.rowIndex="7" />
+	               		<Label text="Тел." GridPane.columnIndex="1" GridPane.rowIndex="8" />
+	               		<TextField fx:id="code1cField" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+	               		<TextArea fx:id="fullNameField" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+	               		<TextField fx:id="shortNameField" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+	               		<TextField fx:id="directorNameField" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+	               		<TextField fx:id="innField" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+	               		<TextField fx:id="kppField" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+	               		<TextField fx:id="emailField" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+	               		<TextField fx:id="mobileField" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+	               		<TextField fx:id="phoneField" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+               		</children>
                      <columnConstraints>
                         <ColumnConstraints />
                         <ColumnConstraints />
@@ -63,28 +77,41 @@
                      </rowConstraints>
             	</GridPane>
             	
-            	<TabPane >
+            	<Label text="Адреса" alignment="TOP_CENTER" />
+            	<TabPane>
             		<tabs>
-            			<Tab>
+            			<Tab text="Юридический">
             				<content>
             					<AddressPane fx:id="legalAddressPane"/>
             				</content>
             			</Tab>
-            			<Tab>
+            			<Tab text="Фактический">
             				<content>
+            					<VBox >
+            					<HBox >
+	            					<Label text="Совпадает с юридическим"/>
+	            					<CheckBox fx:id="physicalAddressSameAsLegal" />
+            					</HBox>
             					<AddressPane fx:id="physicalAddressPane"/>
+            					</VBox>
             				</content>
             			</Tab>
-            			<Tab>
+            			<Tab text="Почтовый">
             				<content>
+            					<VBox >
+            					<HBox >
+	            					<Label text="Совпадает с юридическим"/>
+	            					<CheckBox fx:id="mailAddressSameAsLegal" />
+            					</HBox>
             					<AddressPane fx:id="mailAddressPane"/>
+            					</VBox>
             				</content>
             			</Tab>
             		</tabs>
             	</TabPane>
             	
             	<VBox prefWidth="640.0">
-               <children>
+               		<children>
                		<Label alignment="BASELINE_CENTER" text="Договоры" />
                		
                		<TableView fx:id="contractsTableView" prefHeight="200.0">
@@ -109,18 +136,24 @@
                		
                		<HBox alignment="BASELINE_CENTER" spacing="10.0" fx:id="contractControls" visible="false" managed="false">
                			<children>
-               				<Button fx:id="addContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addContract" text="Добавить" />
+               				<Button fx:id="addContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addContract" text="Добавить" >
+               					<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Add_New_document_64.png"></Image></ImageView></graphic>
+               				</Button>
                			    	
-               				<Button fx:id="editContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editContract" text="Изменить" />
+               				<Button fx:id="editContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editContract" text="Изменить" >
+               					<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Write_64.png"></Image></ImageView></graphic>
+               				</Button>
                			    	
-               				<Button fx:id="deleteContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteContract" text="Удалить" />
+               				<Button fx:id="deleteContractButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteContract" text="Удалить" >
+               					<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Rubbish_bin_64.png"></Image></ImageView></graphic>
+               				</Button>
                			</children>
                		</HBox>
-               </children>
+               		</children>
             	</VBox>
             	
             	<VBox prefWidth="640.0">
-               <children>
+               		<children>
                		<Label alignment="BASELINE_CENTER" text="Доверенности" />
                		
                		<TableView fx:id="vicariousPowerTableView" prefHeight="200.0">
@@ -150,27 +183,27 @@
                		
                		<HBox alignment="BASELINE_CENTER"  spacing="10.0" fx:id="vicPowerControls" visible="false" managed="false">
                			<children>
-               				<Button fx:id="addVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addVicariousPower" text="Добавить" />
+               				<Button fx:id="addVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addVicariousPower" text="Добавить" >
+               					<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Add_New_document_64.png"></Image></ImageView></graphic>
+               				</Button>
                			    	
-               				<Button fx:id="editVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editVicariousPower" text="Изменить" />
+               				<Button fx:id="editVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#editVicariousPower" text="Изменить" >
+               					<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Write_64.png"></Image></ImageView></graphic>
+               				</Button>
                			    	
-               				<Button fx:id="deleteVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteVicariousPower" text="Удалить" />
+               				<Button fx:id="deleteVicariousPowerButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#deleteVicariousPower" text="Удалить" >
+               					<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Rubbish_bin_64.png"></Image></ImageView></graphic>
+               				</Button>
                			</children>
                		</HBox>
-               </children>
+               		</children>
             	</VBox>
             	
-            	<HBox alignment="BASELINE_CENTER" spacing="10.0">
-            		<children>
-            		<Button onAction="#save" text="Сохранить" />
-            		<Button fx:id="newOrderButton" onAction="#openNewOrder" text="Новый заказ" visible="false" />
-            		</children>
-            	</HBox>
-            	
-            	<Label fx:id="validationLabel" text="" />
+
             </children>
             </VBox>
          </content>
       </ScrollPane>
+	</VBox>
    </children>
 </AnchorPane>

@@ -15,13 +15,14 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.image.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.OrderTableViewController">
 	<children>
 	
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
    		<top>
-	   		<FlowPane BorderPane.alignment="CENTER" >
+	   		<FlowPane BorderPane.alignment="CENTER" vgap="10.0" hgap="10.0">
 	   			<children>
 	   				<Label text="Искать:" />
 		   			<TextField fx:id="searchField" prefWidth="300.0" />
@@ -33,7 +34,9 @@
 		            <DatePicker fx:id="dateFromPicker" />
 		            <Label text="По:" />
 	     		    <DatePicker fx:id="dateToPicker" />
-		            <Button mnemonicParsing="false" onAction="#findOrders" text="Поиск" />
+		            <Button mnemonicParsing="false" onAction="#findOrders" text="Поиск">
+		            	<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Magnifying_glass_64.png"></Image></ImageView></graphic>
+		            </Button>
 	            </children>
 	   		</FlowPane>
 	    </top>

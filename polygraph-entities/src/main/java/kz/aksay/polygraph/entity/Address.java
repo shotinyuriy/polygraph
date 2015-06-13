@@ -14,6 +14,20 @@ public class Address extends EntitySupport {
 	private String house;
 	private String apartment;
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) return false;
+		if(obj == this) return true;
+		if(obj instanceof Address == false) return false;
+		Address other = (Address) obj;
+		if(this.id == null) {
+			if(other.getId() == null) return true;
+			return false;
+		}
+		if(other.getId() == null) return false;
+		return this.id.equals(other.getId());
+	}
+	
 	public String getCity() {
 		return city;
 	}

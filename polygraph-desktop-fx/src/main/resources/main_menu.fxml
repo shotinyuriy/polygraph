@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import kz.aksay.polygraph.desktop.controls.AnchorButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.*?>
 
 <VBox minHeight="200.0" minWidth="200.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.MainMenuController">
   <children>
@@ -46,8 +47,12 @@
                                     	
                                        <AnchorButton onAction="#openNewPersonForm" text="Новое физ. лицо" visible="false" managed="false"/>
                                        <AnchorButton onAction="#openNewOrganizaitonForm" text="Новое юр. лицо"  visible="false" managed="false"/>
-                                       <AnchorButton onAction="#openPersonsList" text="Список физ. лиц" />
-                                       <AnchorButton onAction="#openOrganizationList" text="Список юр. лиц" />
+                                       <AnchorButton onAction="#openPersonsList" text="Список физ. лиц" >
+                                       		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/User_silhouette_64.png"></Image></ImageView></graphic>
+                                       </AnchorButton>
+                                       <AnchorButton onAction="#openOrganizationList" text="Список юр. лиц" >
+                                       		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Hierarchical_structure_64.png"></Image></ImageView></graphic>
+                                       </AnchorButton>
                                        
                                     </children>
                                     </VBox>
@@ -61,7 +66,9 @@
                                  <children>
                                     <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                       	<AnchorButton fx:id="orderListButton" onAction="#openOrderList" text="Список заказов" />
+                                       	<AnchorButton fx:id="orderListButton" onAction="#openOrderList" text="Список заказов" >
+                                       		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Documents_symbol_64.png"></Image></ImageView></graphic>
+                                       	</AnchorButton>
                                        	<AnchorButton fx:id="orderConsumptionsButton" onAction="#openOrderConsumptionsList" text="Расходы по заказам" />
                                        	<AnchorButton fx:id="orderProceedReportButton" onAction="#openOrderProceedReport" text="Среднее выполнение заказов" />
                                        </children>

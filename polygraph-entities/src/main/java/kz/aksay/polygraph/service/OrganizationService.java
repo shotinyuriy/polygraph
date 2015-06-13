@@ -40,4 +40,26 @@ public class OrganizationService extends AbstractGenericService<Organization, Lo
 	protected GenericDao<Organization, Long> getDao() {
 		return organizationDao;
 	}
+
+	@Override
+	public boolean physicalAddressSameAsLegal(Organization organization) {
+		if(organization != null) {
+			if(organization.getLegalAddress() != null)  {
+				return organization.getLegalAddress().equals(
+						organization.getPhysicalAddress());
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mailAddressSameAsLegalAddress(Organization organization) {
+		if(organization != null) {
+			if(organization.getLegalAddress() != null)  {
+				return organization.getLegalAddress().equals(
+						organization.getMailAddress());
+			}
+		}
+		return false;
+	}
 }

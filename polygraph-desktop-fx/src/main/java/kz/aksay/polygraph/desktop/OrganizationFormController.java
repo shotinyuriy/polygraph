@@ -9,6 +9,9 @@ import java.util.ResourceBundle;
 
 import javax.validation.ValidationException;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,11 +19,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kz.aksay.polygraph.api.IContractService;
@@ -32,6 +38,7 @@ import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.VicariousPower;
+import kz.aksay.polygraph.entityfx.AddressFX;
 import kz.aksay.polygraph.entityfx.ContractFX;
 import kz.aksay.polygraph.entityfx.EntityFX;
 import kz.aksay.polygraph.entityfx.VicariousPowerFX;
@@ -51,6 +58,8 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	private IContractService contractService = StartingPane.getBean(IContractService.class);
 	private IVicariousPowerService vicariousPowerService = StartingPane.getBean(IVicariousPowerService.class);
 	
+	@FXML private HBox controlPane;
+	@FXML private VBox contentPane;
 	@FXML private TextField code1cField;
 	@FXML private TextField innField;
 	@FXML private TextField kppField;
@@ -69,14 +78,17 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	@FXML private AddressPane legalAddressPane;
 	@FXML private AddressPane physicalAddressPane;
 	@FXML private AddressPane mailAddressPane;
+	@FXML private CheckBox physicalAddressSameAsLegal;
+	@FXML private CheckBox mailAddressSameAsLegal;
 
 	private Map<String, Object> session;
 	private Map<String, Object> parameters;
 	private Long organizationId;
+	private Organization organization;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) { 
-		
+		Bindings.equal( controlPane.maxWidthProperty(), contentPane.widthProperty() );
 		initializeByParameters();
 	}
 	
@@ -88,17 +100,46 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			if(organizationId != null) {
 				fillForm(organizationId);
 			}
+			if(organization == null) {
+				organization = new Organization();
+			}
 		}
+		physicalAddressSameAsLegal.selectedProperty().addListener(new ChangeListener<Boolean>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable,
+					Boolean oldValue, Boolean newValue) {
+				if(newValue != null && newValue) {
+					physicalAddressPane.setAddressFX( legalAddressPane.getAddressFX() );
+				} else {
+					physicalAddressPane.setAddressFX( new AddressFX( organization.getPhysicalAddress() ));
+				}
+			}			
+		});
+		mailAddressSameAsLegal.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable,
+					Boolean oldValue, Boolean newValue) {
+				if(newValue != null && newValue) {
+					mailAddressPane.setAddressFX( legalAddressPane.getAddressFX() );
+				} else {
+					mailAddressPane.setAddressFX( new AddressFX( organization.getMailAddress() ));
+				}
+			}
+		});
 	}
 
 	@FXML
 	public void save(ActionEvent actionEvent) {
-		Organization organization = null;
+		
 		if(organizationId != null) {
 			organization = organizationService.find(organizationId);
 		}
-		if (organization == null) {
+		if(organization == null) {
 			organization = new Organization();
+		}
+		if (organization.getCreatedAt() == null) {
 			organization.setCreatedAt(new Date());
 			organization.setCreatedBy(SessionUtil.retrieveUser(session));
 		}
@@ -115,9 +156,9 @@ public class OrganizationFormController implements Initializable, SessionAware,
 		organization.setEmail(emailField.getText());
 		organization.setMobile(mobileField.getText());
 		organization.setPhone(phoneField.getText());
-		organization.setLegalAddress(legalAddressPane.getAddress());
-		organization.setPhysicalAddress(physicalAddressPane.getAddress());
-		organization.setMailAddress(mailAddressPane.getAddress());
+		organization.setLegalAddress(legalAddressPane.getAddressFX().getEntity());
+		organization.setPhysicalAddress(physicalAddressPane.getAddressFX().getEntity());
+		organization.setMailAddress(mailAddressPane.getAddressFX().getEntity());
 		
 		try {
 			organization = organizationService.save(organization);
@@ -143,7 +184,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	
 	@FXML
 	public void addContract(ActionEvent actionEvent) {
-		Organization organization = organizationService.find(organizationId);
+		organization = organizationService.find(organizationId);
 		Contract contract = new Contract();
 		contract.setParty1(Organization.FIRMA_SERVER_PLUS);
 		contract.setParty2(organization);
@@ -197,7 +238,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	
 	@FXML
 	public void addVicariousPower(ActionEvent actionEvent) {
-		Organization organization = organizationService.find(organizationId);
+		organization = organizationService.find(organizationId);
 		VicariousPower vicariousPower = new VicariousPower();
 		vicariousPower.setOrganization(organization);
 		
@@ -279,7 +320,7 @@ public class OrganizationFormController implements Initializable, SessionAware,
 	}
 	
 	public void fillForm(Long id) {
-		Organization organization = organizationService.find(id);
+		organization = organizationService.find(id);
 		if(organization != null) {
 			organizationId = id;
 			directorNameField.setText(organization.getDirectorName());
@@ -291,10 +332,25 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			emailField.setText(organization.getEmail());
 			mobileField.setText(organization.getMobile());
 			phoneField.setText(organization.getPhone());
+			AddressFX legalAddressFX = new AddressFX(organization.getLegalAddress());
+			legalAddressPane.setAddressFX(legalAddressFX);
 			
-			legalAddressPane.setAddress(organization.getLegalAddress());
-			physicalAddressPane.setAddress(organization.getPhysicalAddress());
-			mailAddressPane.setAddress(organization.getMailAddress());
+			if(organizationService.physicalAddressSameAsLegal(organization)) {
+				physicalAddressPane.setAddressFX(legalAddressFX);
+				physicalAddressSameAsLegal.selectedProperty().set(true);
+			} else {
+				physicalAddressPane.setAddressFX(new AddressFX(organization.getPhysicalAddress()));
+				physicalAddressSameAsLegal.selectedProperty().set(false);
+			}
+			
+			if(organizationService.mailAddressSameAsLegalAddress(organization)) {
+				mailAddressPane.setAddressFX(legalAddressFX);
+				mailAddressSameAsLegal.selectedProperty().set(true);
+			} else {
+				mailAddressPane.setAddressFX(new AddressFX(organization.getMailAddress()));
+				mailAddressSameAsLegal.selectedProperty().set(false);
+			}
+			
 			
 			newOrderButton.setVisible(true);
 			vicPowerControls.setManaged(true);

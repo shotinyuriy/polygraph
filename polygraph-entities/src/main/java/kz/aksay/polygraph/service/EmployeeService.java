@@ -18,7 +18,9 @@ import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.User.Role;
 import kz.aksay.polygraph.entity.report.EmployeeWorkloadReport;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +31,6 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 	private GenericDao<Employee, Long> employeeDao;
 	private IPersonService personService;
 	private IUserService userService;
-
-	@Autowired
-	public void setEmployeeDao(GenericDao<Employee, Long> employeeDao) {
-		this.employeeDao = employeeDao;
-	}
 
 	@Override
 	protected GenericDao<Employee, Long> getDao() {
@@ -56,12 +53,12 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 	
 	@Transactional
 	public void checkPersonAndUserAndSave(User user) throws Exception {
+		
 		Employee employee = checkPersonAndSave(user.getEmployee());
 		if(employee != null) {
 			userService.save(user);
 		}
 	}
-	
 
 	@Override
 	@Transactional(readOnly=true)
@@ -89,6 +86,7 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 				new HashMap<Employee, EmployeeWorkloadReport>();
 		
 		List<EmployeeWorkloadReport> employees = query.list();
+		
 		for(EmployeeWorkloadReport empWlRep : employees) {
 			empWlRep.calcWorkload(date);
 			EmployeeWorkloadReport existentEWLR = report.get(empWlRep.getEmployee());
@@ -103,26 +101,9 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 		return report;
 	}
 
-	public IPersonService getPersonService() {
-		return personService;
-	}
-
-	@Autowired
-	public void setPersonService(IPersonService personService) {
-		this.personService = personService;
-	}
-
-	public IUserService getUserService() {
-		return userService;
-	}
-
-	@Autowired
-	public void setUserService(IUserService userService) {
-		this.userService = userService;
-	}
-
 	@Override
 	public List<Employee> findAllByUserRole(Role role) {
+		
 		Query query = getDao().getSession().createQuery(
 				"SELECT emp FROM Employee emp WHERE emp.user.role = :userRole")
 				.setParameter("userRole", role);
@@ -130,5 +111,39 @@ public class EmployeeService extends AbstractGenericService<Employee, Long> impl
 		return query.list();
 	}
 
-	 
+	@Override
+	public List<Employee> findAllByName(String name) {
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append(" SELECT e FROM Employee e ");
+		
+		if(name != null) {
+			sb.append(" INNER JOIN e.person p ");
+			sb.append(" WHERE lower(concat(p.lastName, ' ', p.firstName, ' ', p.middleName)) ");
+			sb.append(" like :name ");
+		}
+		
+		Query query = getDao().getSession().createQuery(sb.toString());
+		
+		if(name != null) {
+			query.setParameter("name", '%'+name.toLowerCase()+'%');
+		}
+		
+		return query.list();
+	}
+	
+	@Autowired
+	public void setEmployeeDao(GenericDao<Employee, Long> employeeDao) {
+		this.employeeDao = employeeDao;
+	}
+
+	@Autowired
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
+	}
+	
+	@Autowired
+	public void setPersonService(IPersonService personService) {
+		this.personService = personService;
+	}
 }

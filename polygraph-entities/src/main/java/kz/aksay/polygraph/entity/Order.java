@@ -23,14 +23,16 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import kz.aksay.polygraph.service.DefaultDataCreationService;
+import kz.aksay.polygraph.validation.Comparison;
+import kz.aksay.polygraph.validation.DateEquation;
 
 @Entity
 @Table(name="\"order\"")
+@DateEquation(comparison=Comparison.GREATER_THAN_OR_EQUALS, date1Name="dateEndPlan", date2Name="createdAt", 
+	message="Плановая дата окончания не может быть меньше даты создания заказа")
+//@DateEquation(comparison=Comparison.GREATER_THAN_OR_EQUALS, date1Name="dateEndReal", date2Name="createdAt")
 public class Order extends OrderRootSupport implements MaterialConsumer {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -6315648934763901488L;
 	
 	public static enum State {

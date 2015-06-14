@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import kz.aksay.polygraph.api.IEmployeeService;
@@ -28,6 +29,8 @@ import kz.aksay.polygraph.util.SessionUtil;
 public class EmployeeTableViewController implements Initializable,
 		SessionAware {
 	
+	@FXML private TextField searchField;
+	
 	private IEmployeeService employeeService;
 	
 	@FXML private TableView<EmployeeFX> employeeTable;
@@ -40,17 +43,19 @@ public class EmployeeTableViewController implements Initializable,
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		employeeService = StartingPane.getBean(IEmployeeService.class);
 		List<Employee> employees = employeeService.findAll();
 		Collection<EmployeeFX> employeesFX 
 			= EmployeeFX.contvertListEntityToFX(employees);
-		employeeTable.getItems().addAll(employeesFX);
 		
+		employeeTable.getItems().addAll(employeesFX);
+
 		employeeTable.setRowFactory(new Callback<TableView<EmployeeFX>, TableRow<EmployeeFX>>() {
 			
 			@Override
 			public TableRow<EmployeeFX> call(TableView<EmployeeFX> param) {
-				// TODO Auto-generated method stub
+				
 				TableRow<EmployeeFX> tableRow = new TableRow<>();
 				tableRow.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -71,12 +76,23 @@ public class EmployeeTableViewController implements Initializable,
 	}
 	
 	@FXML
+	public void search(ActionEvent actionEvent) {
+		
+		List<Employee> employees = employeeService.findAllByName(searchField.getText());
+		Collection<EmployeeFX> employeesFX = EmployeeFX.contvertListEntityToFX(employees);
+		employeeTable.getItems().clear();
+		employeeTable.getItems().addAll(employeesFX);
+	}
+	
+	@FXML
 	public void openEmployeeForm(ActionEvent actionEvent) {
+		
 		EmployeeFX employeeFX 
 			= employeeTable.getSelectionModel().getSelectedItem();
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		parameters.put(ParameterKeys.EMPLOYEE_ID, employeeFX.getId());
 		MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+		
 		if(mainMenu != null) {
 			mainMenu.loadFxmlAndOpenInTab(
 					StartingPane.FXML_ROOT+"employee_form.fxml", employeeFX.getFullName(), parameters);

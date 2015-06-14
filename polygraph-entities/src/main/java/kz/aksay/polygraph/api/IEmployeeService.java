@@ -17,4 +17,6 @@ public interface IEmployeeService extends IGenericService<Employee, Long> {
 	public List<Employee> findAllByUserRole(User.Role role);
 	
 	public Map<Employee, EmployeeWorkloadReport> getEmployeesWorkload();
+	
+	public List<Employee> findAllByName(String name);
 }

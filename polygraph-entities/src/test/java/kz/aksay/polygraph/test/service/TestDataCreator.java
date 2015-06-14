@@ -220,7 +220,7 @@ public class TestDataCreator {
 						vicariousPower = createVicariousPower((Organization)customer);
 					}
 					Order.State state = Order.State.values()[r.nextInt(Order.State.values().length)];
-					Order order = createOrder(creator, customer, employee, vicariousPower, state);
+					Order order = createOrder(null, creator, customer, employee, vicariousPower, state);
 					for(WorkType workType : workTypes) {
 						Equipment equipment = null;
 						if(workTypeService.isEquipmentRequired(workType)) {
@@ -381,12 +381,18 @@ public class TestDataCreator {
 		return paperA4;
 	}
 	
-	public Order createOrder(User creator, Subject customer, 
+	public Order createOrder(Date createdAt, User creator, Subject customer, 
 			Employee executorEmployee, VicariousPower vicariousPower, Order.State state) throws Exception {
 		Order firstOrder = new Order();
 		Calendar calendar = Calendar.getInstance();
-		int randomDays = dateRandom.nextInt(365);
-		calendar.set(Calendar.DAY_OF_YEAR, -randomDays); 
+		int randomDays = 0;
+		if(createdAt == null) {
+			randomDays = dateRandom.nextInt(365);
+			if(randomDays > 20) state = Order.State.FINISHED;
+			calendar.set(Calendar.DAY_OF_YEAR, -randomDays);
+		} else {
+			calendar.setTime(createdAt);
+		}
 		firstOrder.setCreatedAt(calendar.getTime());
 		firstOrder.setCreatedBy(creator);
 		firstOrder.setCustomer(customer);
@@ -398,7 +404,8 @@ public class TestDataCreator {
 		calendar.add(Calendar.DAY_OF_YEAR, randomDays);
 		firstOrder.setDateEndPlan(calendar.getTime());
 		if(state.equals(Order.State.FINISHED)) {
-			int delay = dateEndRealRandom.nextInt(5) - 2;
+			calendar.setTime(firstOrder.getCreatedAt());
+			int delay = dateEndRealRandom.nextInt(5);
 			calendar.add(Calendar.DAY_OF_YEAR, delay);
 			firstOrder.setDateEndReal(calendar.getTime());
 		}

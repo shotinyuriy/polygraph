@@ -6,6 +6,7 @@ import kz.aksay.polygraph.api.IComplexityService;
 import kz.aksay.polygraph.dao.GenericDao;
 import kz.aksay.polygraph.entity.Complexity;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,14 @@ public class ComplexityService extends AbstractGenericService<Complexity, Long> 
 	public List<Complexity> findByExample(Complexity example) {
 		return findAll();
 	}
+	
+
+	@Override
+	public Complexity findByName(String name) {
+		Criteria criteria = getDao().criteria();
+		criteria.add(Restrictions.eq("name", name));
+		return getDao().readUniqueByCriteria(criteria);
+	}
 
 	@Override
 	protected GenericDao<Complexity, Long> getDao() {
@@ -35,5 +44,6 @@ public class ComplexityService extends AbstractGenericService<Complexity, Long> 
 	public void setComplexityDao(GenericDao<Complexity, Long> complexityDao) {
 		this.complexityDao = complexityDao;
 	}
+
 	
 }

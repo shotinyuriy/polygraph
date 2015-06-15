@@ -5,11 +5,15 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
@@ -18,6 +22,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Employee;
 import kz.aksay.polygraph.entity.Person;
@@ -29,6 +34,7 @@ import kz.aksay.polygraph.util.SessionUtil;
 
 public class MainMenuController implements MainMenu, SessionAware, Initializable {
 	
+	@FXML private VBox menuAccordion;
 	@FXML private Pane contentPane;
 	@FXML private TabPane tabPane;
 	@FXML private TreeView<String> treeViewMenu;
@@ -101,6 +107,11 @@ public class MainMenuController implements MainMenu, SessionAware, Initializable
 	@FXML
 	public void openLaminateList(ActionEvent actionEvent) {
 		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"laminate_tableview.fxml", "Ламинат. пленки");
+	}
+	
+	@FXML
+	public void openComplexityTypeList(ActionEvent actionEvent) {
+		loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"complexity_tableview.fxml", "Сложность");
 	}
 	
 	@FXML
@@ -236,6 +247,11 @@ public class MainMenuController implements MainMenu, SessionAware, Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setRightStatus(null);
+		
+		if(menuAccordion != null) {
+		}
+		
+		
 		if(treeViewMenu != null) {
 			TreeItem<String> rootItem = new TreeItem<String>("Меню");
 			treeViewMenu.setRoot(rootItem);
@@ -271,13 +287,11 @@ public class MainMenuController implements MainMenu, SessionAware, Initializable
 			dictionaries.getChildren().add(bindingSprings);
 			dictionaries.getChildren().add(workTypes);
 			dictionaries.getChildren().add(equipment);
-			
-			
+						
 			rootItem.getChildren().add(clients);
 			rootItem.getChildren().add(orders);
 			rootItem.getChildren().add(employees);
 			rootItem.getChildren().add(dictionaries);
-			
 		}
 		
 		

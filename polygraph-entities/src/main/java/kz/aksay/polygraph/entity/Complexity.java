@@ -61,21 +61,20 @@ public class Complexity extends EntitySupport {
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) return false;
+		if(obj == this) return true;
 		if(obj instanceof Complexity == false) return false;
 		Complexity other = (Complexity)obj;
-		if(id == null) {
+		if(this.id == null) {
 			if(other.getId() != null) return false;
 			return true;
 		}
 		if(other.getId() == null) return false;
-		return id.equals(other.getId());
+		return name.equals(other.getId());
 	}
 	
 	@Override
 	public int hashCode() {
-		if(id != null) {
-			return id.hashCode();
-		} else if(name != null) {
+		if(name != null) {
 			return name.hashCode();
 		}
 		return -1;

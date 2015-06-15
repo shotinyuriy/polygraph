@@ -116,12 +116,12 @@ public class DefaultDataCreationService {
 	}
 	
 	private void createDefaultComplexity() throws Exception {
+		
 		for(Complexity complexity : COMPLEXITY_DEFAULTS) {
-			Complexity example = new Complexity();
-			example.setName(complexity.getName());
-			List<Complexity> foundExamples = complexityService.findByExample(example);
-			if(!foundExamples.isEmpty()) {
-				example = foundExamples.iterator().next();
+			
+			Complexity example = complexityService.findByName(complexity.getName());
+			
+			if(example  != null) {
 				complexity.setId(example.getId());
 				complexity.setCreatedAt(example.getCreatedAt());
 				complexity.setCreatedBy(example.getCreatedBy());

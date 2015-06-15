@@ -152,6 +152,7 @@ public class OrderFormController implements
 			for(ProducedWorkFX prodWorkFX : producedWorksTableView.getItems()) {
 				order.getProducedWorks().add(prodWorkFX.getEntity());
 			}
+			order.setComplexity(complexityCombo.getValue());
 			
 			orderService.save(order);
 			

@@ -98,7 +98,7 @@ public class EmployeeWorkloadReport {
 		return workLoadMax;
 	}
 	
-	public Double getAverageWorkLoad() {
+	public Double getWorkLoadAvg() {
 		return (workLoadMin + workLoadMax) / 2.0;
 	}
 

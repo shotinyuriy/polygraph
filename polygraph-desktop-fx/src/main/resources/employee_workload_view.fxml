@@ -4,6 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -26,5 +27,7 @@
          </children>
    	</VBox>
    </children>
-	
+   <stylesheets>
+    	<URL value="@./workload.css" />
+   </stylesheets>
 </AnchorPane>

@@ -13,6 +13,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.*?>
 
 <VBox alignment="TOP_CENTER" maxHeight="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="kz.aksay.polygraph.desktop.MaterialConsumptionTableViewController">
    <children>
@@ -43,7 +44,7 @@
    		</TableView>
    		
    		<VBox fx:id="controlPanel" spacing="0.0">
-	   		<HBox alignment="TOP_LEFT" spacing="0.0">
+	   		<HBox alignment="TOP_LEFT" spacing="10.0">
 		      <children>
 		      			<Label text="Материал" />
 		      			<ComboBox fx:id="materialCombo" editable="true" />
@@ -59,10 +60,14 @@
 		      </children>
 	   		</HBox>
 	   		
-	   		<HBox alignment="TOP_LEFT" spacing="0.0">
+	   		<HBox alignment="TOP_LEFT" spacing="10.0">
 		      <children>
-		      			<Button onAction="#addConsumption" text="Добавить расход" />
-		      			<Button onAction="#removeConsumption" text="Удалить расход" />
+		      			<Button onAction="#addConsumption" text="Добавить расход" >
+		      				<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Add_web_page_64.png"></Image></ImageView></graphic>
+		      			</Button>
+		      			<Button onAction="#removeConsumption" text="Удалить расход" >
+		      				<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Delete_list_64.png"></Image></ImageView></graphic>
+		      			</Button>
 		      </children>
 	   		</HBox>
    		</VBox>

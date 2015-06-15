@@ -29,12 +29,6 @@
 				editable="true" onEditCommit="#update">
 				<cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
 			</TableColumn>
-			<TableColumn text="Дата добавления" prefWidth="100">
-				<cellValueFactory><PropertyValueFactory property="createdAtString"/></cellValueFactory>
-			</TableColumn>
-			<TableColumn text="Кто добавил" prefWidth="200">
-				<cellValueFactory><PropertyValueFactory property="createdByLogin"/></cellValueFactory>
-			</TableColumn>
 		</columns>
 		<items>
 			<FXCollections fx:factory="observableArrayList">

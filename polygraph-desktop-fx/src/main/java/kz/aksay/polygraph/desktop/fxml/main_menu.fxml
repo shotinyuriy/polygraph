@@ -14,6 +14,7 @@
 <?import kz.aksay.polygraph.desktop.controls.AnchorButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.image.*?>
+<?import javafx.scene.control.ScrollPane?>
 
 <VBox minHeight="200.0" minWidth="200.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kz.aksay.polygraph.desktop.MainMenuController">
   <children>
@@ -35,22 +36,23 @@
          <items>
             <AnchorPane maxWidth="200.0" prefHeight="600.0" prefWidth="200.0">
                <children>
-               	  <TreeView fx:id="treeViewMenu" prefHeight="546.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" visible="false" managed="false"/>	
-                  <Accordion maxHeight="1.7976931348623157E308" maxWidth="200.0" prefHeight="556.0" prefWidth="202.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <panes>
-                      <TitledPane animated="false" prefHeight="298.0" prefWidth="202.0" text="Клиенты" fx:id="clientsMenu">
+               	<ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<!--                	  <TreeView fx:id="treeViewMenu" prefHeight="546.0" prefWidth="200.0" visible="false" managed="false"/>	 -->
+                  <VBox fx:id="menuAccordion" maxHeight="1.7976931348623157E308" maxWidth="200.0">
+                    <children>
+                      <TitledPane animated="false" text="Клиенты" fx:id="clientsMenu" VBox.vgrow="ALWAYS">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0">
                                  <children>
-                                 	<VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 	<VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                     	
-                                       <AnchorButton onAction="#openNewPersonForm" text="Новое физ. лицо" visible="false" managed="false"/>
-                                       <AnchorButton onAction="#openNewOrganizaitonForm" text="Новое юр. лицо"  visible="false" managed="false"/>
-                                       <AnchorButton onAction="#openPersonsList" text="Список физ. лиц" >
+                                       <AnchorButton onAction="#openNewPersonForm" text="Новое физ. лицо" visible="false" managed="false" VBox.vgrow="ALWAYS"/>
+                                       <AnchorButton onAction="#openNewOrganizaitonForm" text="Новое юр. лицо"  visible="false" managed="false" VBox.vgrow="ALWAYS"/>
+                                       <AnchorButton onAction="#openPersonsList" text="Список физ. лиц" VBox.vgrow="ALWAYS">
                                        		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/User_silhouette_64.png"></Image></ImageView></graphic>
                                        </AnchorButton>
-                                       <AnchorButton onAction="#openOrganizationList" text="Список юр. лиц" >
+                                       <AnchorButton onAction="#openOrganizationList" text="Список юр. лиц" VBox.vgrow="ALWAYS">
                                        		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Hierarchical_structure_64.png"></Image></ImageView></graphic>
                                        </AnchorButton>
                                        
@@ -60,59 +62,65 @@
                               </AnchorPane>
                         </content>
                       </TitledPane>
-                      <TitledPane animated="false" prefHeight="460.0" prefWidth="900.0" text="Заказы" fx:id="ordersMenu">
+                      <TitledPane animated="false" text="Заказы" fx:id="ordersMenu" VBox.vgrow="ALWAYS">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0">
                                  <children>
-                                    <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                       	<AnchorButton fx:id="orderListButton" onAction="#openOrderList" text="Список заказов" >
+                                       	<AnchorButton fx:id="orderListButton" onAction="#openOrderList" text="Список заказов" VBox.vgrow="ALWAYS">
                                        		<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Documents_symbol_64.png"></Image></ImageView></graphic>
                                        	</AnchorButton>
-                                       	<AnchorButton fx:id="orderConsumptionsButton" onAction="#openOrderConsumptionsList" text="Расходы по заказам" />
-                                       	<AnchorButton fx:id="orderProceedReportButton" onAction="#openOrderProceedReport" text="Среднее выполнение заказов" />
+                                       	<AnchorButton fx:id="orderConsumptionsButton" onAction="#openOrderConsumptionsList" text="Расходы по заказам" VBox.vgrow="ALWAYS"/>
+                                       	<AnchorButton fx:id="orderProceedReportButton" onAction="#openOrderProceedReport" text="Среднее выполнение заказов" VBox.vgrow="ALWAYS"/>
                                        </children>
                                     </VBox>
                                  </children></AnchorPane>
                         </content>
                       </TitledPane>
-                        <TitledPane animated="false" text="Сотрудники"  fx:id="employeesMenu">
+                        <TitledPane animated="false" text="Сотрудники"  fx:id="employeesMenu" VBox.vgrow="ALWAYS">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0">
                                  <children>
-                                    <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <AnchorButton mnemonicParsing="false" onAction="#openNewEmployeeForm" text="Новый сотрудник" />
-                                          <AnchorButton mnemonicParsing="false" onAction="#openEmployeeList" text="Список сотрудников" />
-                                          <AnchorButton mnemonicParsing="false" onAction="#openEmployeeWorkload" text="Загруженность" />
+                                          <AnchorButton mnemonicParsing="false" onAction="#openNewEmployeeForm" text="Новый сотрудник" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton mnemonicParsing="false" onAction="#openEmployeeList" text="Список сотрудников" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton mnemonicParsing="false" onAction="#openEmployeeWorkload" text="Загруженность" VBox.vgrow="ALWAYS"/>
                                        </children>
                                     </VBox>
                                  </children>
                               </AnchorPane>
                           </content>
                         </TitledPane>
-                      <TitledPane animated="false" text="Справочники"  fx:id="dictionariesMenu">
+                      <TitledPane animated="false" text="Справочники"  fx:id="dictionariesMenu" VBox.vgrow="ALWAYS">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0">
                                  <children>
-                                    <VBox prefHeight="445.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <AnchorButton fx:id="paperTypeListButton" mnemonicParsing="false" onAction="#openMaterialTypeList" text="Типы бумаги" />
-                                          <AnchorButton fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Роли сотрудников" />
-                                          <AnchorButton fx:id="paperListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Бумага" />
-                                          <AnchorButton fx:id="bindingSpringListButton" mnemonicParsing="false" onAction="#openBindingSpringList" text="Пружины" />
-                                          <AnchorButton fx:id="stickerListButton" mnemonicParsing="false" onAction="#openStickersList" text="Наклейки" />
-                                          <AnchorButton fx:id="laminateListButton" mnemonicParsing="false" onAction="#openLaminateList" text="Ламинат. пленки" />
-                                          <AnchorButton fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" />
-                                          <AnchorButton fx:id="equipmentListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Оборудование" />
+                                          <AnchorButton fx:id="paperTypeListButton" mnemonicParsing="false" onAction="#openMaterialTypeList" text="Типы бумаги" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="employeeTypeListBotton" mnemonicParsing="false" onAction="#openEmployeeTypeList" text="Роли сотрудников" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="paperListButton" mnemonicParsing="false" onAction="#openMaterialList" text="Бумага" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="bindingSpringListButton" mnemonicParsing="false" onAction="#openBindingSpringList" text="Пружины" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="stickerListButton" mnemonicParsing="false" onAction="#openStickersList" text="Наклейки" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="laminateListButton" mnemonicParsing="false" onAction="#openLaminateList" text="Ламинат. пленки" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="workTypeListButton" mnemonicParsing="false" onAction="#openWorkTypeList" text="Виды работ" VBox.vgrow="ALWAYS"/>
+                                          <AnchorButton fx:id="equipmentListButton" mnemonicParsing="false" onAction="#openEquipmentTypeList" text="Оборудование" VBox.vgrow="ALWAYS">
+                                          	<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Printer_side_view_64.png"></Image></ImageView></graphic>
+                                          </AnchorButton>
+                                          <AnchorButton fx:id="complexityListButton" mnemonicParsing="false" onAction="#openComplexityTypeList" text="Сложность" VBox.vgrow="ALWAYS">
+                                          	<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Clock_and_calendar_64.png"></Image></ImageView></graphic>
+                                          </AnchorButton>
                                        </children>
                                     </VBox>
                                  </children>
                               </AnchorPane>
                         </content>
                       </TitledPane>
-                    </panes>
-                  </Accordion>
+                    </children>
+                  </VBox>
+                  </ScrollPane>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="contentPane" minHeight="200.0" minWidth="200.0">

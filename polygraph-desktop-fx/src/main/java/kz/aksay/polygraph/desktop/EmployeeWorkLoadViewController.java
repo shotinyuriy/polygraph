@@ -1,5 +1,7 @@
 package kz.aksay.polygraph.desktop;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +40,12 @@ import kz.aksay.polygraph.util.SessionAware;
 
 public class EmployeeWorkLoadViewController implements Initializable, SessionAware {
 
+	private static enum BarType {
+		AVG_WORKLOAD,
+		FREE_WORKLOAD
+	}
+	
+	private static final Integer WORKLOAD_DAY_LIMIT = 8;
 	private IEmployeeService employeeService = StartingPane.getBean(IEmployeeService.class);
 	private IOrderService orderService = StartingPane.getBean(IOrderService.class);
 	
@@ -62,37 +70,48 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 		empWorkLoadRep = employeeService.getEmployeesWorkload();
 		employeeNames = FXCollections.observableArrayList();
 		
-		Series<String, Number> minSeries = new Series<String, Number>();
-		Series<String, Number> maxSeries = new Series<String, Number>();
-		minSeries.setName("Минимальная загруженность");
-		maxSeries.setName("Максимальная загруженность");
+		Series<String, Number> lowSeries = new Series<String, Number>();
+		Series<String, Number> medSeries = new Series<String, Number>();
+		Series<String, Number> highSeries = new Series<String, Number>();
+		Series<String, Number> freeSeries = new Series<String, Number>();
+		
+		lowSeries.setName("Низкая загруженность");
+		medSeries.setName("Средняя загруженность");
+		highSeries.setName("Высокая загруженность");
+		freeSeries.setName("Свободное рабочее время");
+		
 		for(Entry<Employee, EmployeeWorkloadReport> entry : empWorkLoadRep.entrySet()) {
 			Employee employee = entry.getKey();
 			EmployeeWorkloadReport employeeWorkloadReport = entry.getValue();
 			String categoryName = createCategoryName(employee);
 			employeeNames.add(categoryName);
-			Double workloadDiff = employeeWorkloadReport.getWorkLoadMax() - employeeWorkloadReport.getWorkLoadMin();
-			final Data<String, Number> minData = new Data<String, Number>(categoryName, employeeWorkloadReport.getWorkLoadMin()); 
+			Double busyWorkload = employeeWorkloadReport.getWorkLoadAvg();
+			Double workloadDiff = WORKLOAD_DAY_LIMIT - busyWorkload;
+			final Data<String, Number> minData = new Data<String, Number>(categoryName, busyWorkload); 
 			final Data<String, Number> maxData = new Data<String, Number>(categoryName, workloadDiff);
-			minSeries.getData().add(minData);
-			maxSeries.getData().add(maxData);
-			addLabelListener(minData, employeeWorkloadReport.getWorkLoadMin());
-			addLabelListener(maxData, employeeWorkloadReport.getWorkLoadMax());
 			
-			System.out.println(employee.getId()+ " min "+employeeWorkloadReport.getWorkLoadMin()+
-					" max "+employeeWorkloadReport.getWorkLoadMax());
+			if(busyWorkload < 4) {
+				lowSeries.getData().add(minData);
+			} else if( busyWorkload < 6 ) {
+				medSeries.getData().add(minData);
+			} else {
+				highSeries.getData().add(minData);
+			}
+			
+			freeSeries.getData().add(maxData);
+			addLabelListener(minData, busyWorkload, BarType.AVG_WORKLOAD);
+			addLabelListener(maxData, workloadDiff, BarType.FREE_WORKLOAD);
 		}
 		
 		xAxis.setCategories(employeeNames);
 		
-		barChart.getData().addAll(minSeries, maxSeries);
+		barChart.getData().addAll(lowSeries, medSeries, highSeries, freeSeries);
 	}
 	
-	private void addLabelListener(final Data<String, Number> data, final Number number) {
+	private void addLabelListener(final Data<String, Number> data, final Number number, final BarType barType) {
 		data.nodeProperty().addListener(new ChangeListener<Node>() {
 	        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
 	          if (node != null) {
-	            //setNodeStyle(data);
 	            displayLabelForData(data, number);
 	          } 
 	        }
@@ -122,23 +141,12 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 		
 		return sb.toString();
 	}
-	
-	  /** Change color of bar if value of i is <5 then red, if >5 then green if i>8 then blue */
-	  private void setNodeStyle(XYChart.Data<String, Number> data) {
-	    Node node = data.getNode();
-	    if (data.getYValue().intValue() > 8) {
-	      node.setStyle("-fx-bar-fill: -fx-exceeded;");
-	    } else if (data.getYValue().intValue() > 5) {
-	      node.setStyle("-fx-bar-fill: -fx-achieved;");
-	    } else {
-	      node.setStyle("-fx-bar-fill: -fx-not-achieved;");
-	    }
-	  }
 
 	/** places a text label with a bar's value above a bar node for a given XYChart.Data */
 	  private void displayLabelForData(XYChart.Data<String, Number> data, final Number number) {
 	    final Node node = data.getNode();
-	    final Text dataText = new Text(number + "");
+	    final Text dataText = new Text(new BigDecimal(number.toString())
+	    	.setScale(2, RoundingMode.HALF_UP) + "ч.");
 	    node.parentProperty().addListener(new ChangeListener<Parent>() {
 	      @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
 	        Group parentGroup = (Group) parent;

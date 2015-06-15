@@ -15,7 +15,7 @@ public class StickerFX extends EntityFX<Sticker> {
 		return null;
 	}
 	
-	public String getDensityName() {
+	public String getDensityString() {
 		if(entity.getDensity() != null) {
 			return entity.getDensity().toString();
 		}

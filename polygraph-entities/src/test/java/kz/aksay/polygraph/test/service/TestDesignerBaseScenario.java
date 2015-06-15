@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import kz.aksay.polygraph.api.IComplexityService;
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IEmployeeService;
 import kz.aksay.polygraph.api.IEquipmentService;
@@ -66,6 +67,7 @@ public class TestDesignerBaseScenario extends Assert {
 	private IFullTextIndexService fullTextIndexService;
 	private IContractService contractService;
 	private IVicariousPowerService vicariousPowerService;
+	private IComplexityService complexityService;
 	private OrderToXMLExporter orderToXMLExporter;
 	
 	private final String executorLogin = "executorLogin";
@@ -113,6 +115,7 @@ public class TestDesignerBaseScenario extends Assert {
 		vicariousPowerService = context.getBean(IVicariousPowerService.class);
 		equipmentService = context.getBean(IEquipmentService.class);
 		testDataCreator = new TestDataCreator(this.context);
+		complexityService = context.getBean(IComplexityService.class);
 		orderToXMLExporter = context.getBean(OrderToXMLExporter.class);
 	}
 	
@@ -146,6 +149,7 @@ public class TestDesignerBaseScenario extends Assert {
 			
 			testOrderProceedReport();
 			testEmployeeWorkloadReport();
+			testDefaultComplexity();
 			
 			orderToXMLExporter.export(orderService.findAll(), new File("test.xml"));
 		}
@@ -158,6 +162,11 @@ public class TestDesignerBaseScenario extends Assert {
 		}
 	}
 	
+	private void testDefaultComplexity() {
+		int complexityCount = complexityService.findAll().size();
+		assertEquals(complexityCount, 3);
+	}
+
 	private void testOrderProceedReport() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MONTH, -12);
@@ -183,7 +192,7 @@ public class TestDesignerBaseScenario extends Assert {
 			System.out.println(" Employee "+employee.getPerson().getFullName());
 			System.out.println(" WorkLoad "+empWLRep.getWorkLoadMin()+" "
 					+empWLRep.getWorkLoadMax()+" "
-					+empWLRep.getAverageWorkLoad());
+					+empWLRep.getWorkLoadAvg());
 		}
 	}
 

@@ -4,10 +4,11 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
 
@@ -15,16 +16,18 @@
    <children> 
    	<VBox prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <BarChart fx:id="barChart" alternativeColumnFillVisible="true" legendSide="LEFT" title="Загруженность дизайнеров" VBox.vgrow="ALWAYS">
+            <StackedBarChart fx:id="barChart" alternativeColumnFillVisible="true" legendSide="BOTTOM" title="Загруженность дизайнеров" VBox.vgrow="ALWAYS">
               <xAxis>
               	<CategoryAxis side="LEFT" fx:id="xAxis" />
               </xAxis>
               <yAxis>
               	<NumberAxis prefHeight="249.0" prefWidth="33.0" />
               </yAxis>
-            </BarChart>
+            </StackedBarChart>
          </children>
    	</VBox>
    </children>
-	
+   <stylesheets>
+    	<URL value="@./workload.css" />
+   </stylesheets>
 </AnchorPane>

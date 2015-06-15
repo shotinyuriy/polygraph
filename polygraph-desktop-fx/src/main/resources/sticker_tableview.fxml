@@ -32,7 +32,7 @@
 			</TableColumn>
 			
 			<TableColumn fx:id="densityColumn" text="Плотность" prefWidth="100" editable="true" onEditCommit="#updateDensity">
-				<cellValueFactory><PropertyValueFactory property="densityName"/></cellValueFactory>
+				<cellValueFactory><PropertyValueFactory property="densityString"/></cellValueFactory>
 			</TableColumn>
 			
 			<TableColumn fx:id="priceColumn" text="Цена" prefWidth="100" editable="true" onEditCommit="#updatePrice">

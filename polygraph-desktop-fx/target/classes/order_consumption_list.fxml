@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.image.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
 	fx:controller="kz.aksay.polygraph.desktop.OrderConsumptionTableViewController">
@@ -31,7 +32,9 @@
 	            <DatePicker fx:id="fromDate" />
 	            <Label text="по :"/>
 	            <DatePicker fx:id="toDate" />
-	            <Button mnemonicParsing="false" text="Поиск" onAction="#findMaterialConsumptions"/>
+	            <Button mnemonicParsing="false" text="Поиск" onAction="#findMaterialConsumptions">
+	            	<graphic><ImageView fitHeight="16.0" fitWidth="16.0"><Image url="@icons/Magnifying_glass_64.png"></Image></ImageView></graphic>
+	            </Button>
 	        </children>
 	      </FlowPane>
 	    </top>

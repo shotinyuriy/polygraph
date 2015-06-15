@@ -22,6 +22,13 @@ public class LaminateFX extends EntityFX<Laminate> {
 		return null;
 	}
 	
+	public String getPriceString() {
+		if(entity.getPrice() != null) {
+			return entity.getPrice().toString();
+		}
+		return null;
+	}
+	
 	public String getDescription() {
 		return entity.getDescription();
 	}

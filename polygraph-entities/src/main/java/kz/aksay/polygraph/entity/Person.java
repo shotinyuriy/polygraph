@@ -7,6 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+
+import kz.aksay.polygraph.util.DateUtils;
 
 @Entity
 @Table(name = "person")
@@ -28,6 +31,14 @@ public class Person extends Subject {
 
 	@Column(name = "birth_date")
 	private Date birthDate;
+	
+	@Min(value=18, message="Возраст должен быть от 18 лет")
+	public Integer getAge() {
+		if(birthDate != null) {
+			return DateUtils.differenceInYears(new Date(), birthDate);
+		}
+		return null;
+	}
 	
 	@Override
 	public String getFullName() {

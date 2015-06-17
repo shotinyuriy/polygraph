@@ -263,7 +263,10 @@ public class TestDataCreator {
 		executorPerson.setLastName(fullName.getLastName());
 		executorPerson.setFirstName(fullName.getFirstName());
 		executorPerson.setMiddleName(fullName.getMiddleName());
-		executorPerson.setBirthDate(new Date());
+		Calendar calendar = Calendar.getInstance();
+		int age = 18+dateRandom.nextInt(20);
+		calendar.add(Calendar.YEAR, -age);
+		executorPerson.setBirthDate(calendar.getTime());
 		executorPerson = personService.save(executorPerson);
 		return executorPerson;
 	}
@@ -276,7 +279,9 @@ public class TestDataCreator {
 		customerPerson.setLastName(fullName.getLastName());
 		customerPerson.setFirstName(fullName.getFirstName());
 		customerPerson.setMiddleName(fullName.getMiddleName());
-		customerPerson.setBirthDate(new Date());
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.YEAR, -18);
+		customerPerson.setBirthDate(calendar.getTime());
 		customerPerson= personService.save(customerPerson);
 		return customerPerson;
 	}

@@ -18,4 +18,14 @@ public class TestDateUtils extends Assert {
 		int difference = DateUtils.differenceInDays(first, second);
 		assertEquals(difference, -3);
 	}
+	
+	@Test
+	public void testDifferenceInYears() {
+		Calendar calendar = Calendar.getInstance();
+		Date first = calendar.getTime();
+		calendar.add(Calendar.YEAR, -18);
+		Date second = calendar.getTime();
+		int difference = DateUtils.differenceInYears(first, second);
+		assertEquals(difference, 18);
+	}
 }

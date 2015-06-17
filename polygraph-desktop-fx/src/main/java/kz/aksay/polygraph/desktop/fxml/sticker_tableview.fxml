@@ -62,7 +62,7 @@
 			<TextField fx:id="descriptionField" promptText="Примечание" prefWidth="90"/>
 		</children>
 	</HBox>
-	<HBox>
+	<HBox spacing="10.0">
 		<children>
 			<Button text="Добавить" onAction="#add"/>
 			<Button text="Удалить" onAction="#delete"/>

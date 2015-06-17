@@ -1,5 +1,6 @@
 package kz.aksay.polygraph.test.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,9 @@ public class TestPersonService extends Assert {
 		person.setFirstName("Тест");
 		person.setLastName("Тест");
 		person.setMiddleName("Тест");
-		person.setBirthDate(now);
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.YEAR, -18);
+		person.setBirthDate(calendar.getTime());
 		personService.save(person);
 		return person;
 	}

@@ -26,4 +26,33 @@ public class DateUtils {
 		
 		return diffDays;
 	}
+
+	/**
+	 * 
+	 * @param first
+	 * @param second
+	 * @return first - second (in full years)
+	 */
+	public static int differenceInYears(Date first, Date second) {
+		
+		Calendar firstCal = Calendar.getInstance();
+		firstCal.setTime(first);
+		
+		Calendar secondCal = Calendar.getInstance();
+		secondCal.setTime(second);
+		
+		int year1 = firstCal.get(Calendar.YEAR);
+		int year2 = secondCal.get(Calendar.YEAR);
+		int month1 = firstCal.get(Calendar.MONTH);
+		int month2 = secondCal.get(Calendar.MONTH);
+		int day1 = firstCal.get(Calendar.DAY_OF_MONTH);
+		int day2 = secondCal.get(Calendar.DAY_OF_MONTH);
+		
+		int diffYears = year1 - year2;
+		if(month1 < month2 || 
+				month1 == month2 && day1 < day2) {
+			diffYears--;
+		}
+		return diffYears;
+	}
 }

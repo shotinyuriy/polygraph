@@ -52,6 +52,12 @@
                            </cellValueFactory>
                			</TableColumn>
                			
+						<TableColumn fx:id="code1cColumn" editable="true" onEditCommit="#updateCode1c" prefWidth="200" text="Код в 1С">
+               				<cellValueFactory>
+                              <PropertyValueFactory property="code1c" />
+                           </cellValueFactory>
+               			</TableColumn>
+               			
                		</columns>
                		<items>
                			<FXCollections fx:factory="observableArrayList"/>
@@ -66,6 +72,7 @@
                   		<TextField fx:id="diameterField" prefWidth="90" promptText="Диаметер" />
                   		<TextField fx:id="priceField" promptText="Цена" prefWidth="90"/>
                   		<TextField fx:id="descriptionField" prefWidth="90" promptText="Примечание" />
+                  		<TextField fx:id="code1cField" prefWidth="90" promptText="Код в 1С" />
                   </children>
                	</HBox>
                	<HBox >

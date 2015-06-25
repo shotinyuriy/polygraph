@@ -8,6 +8,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "material")
@@ -22,6 +23,9 @@ public abstract class Material extends EntitySupport {
 	@Min(value=0, message="Цена должна быть больше или равна нулю")
 	@Column
 	protected BigDecimal price;
+	
+	@Size(min=1, message="Длина кода в 1С дожна составлять хотя бы 1 символ")
+	protected String code1c;
 	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -56,5 +60,15 @@ public abstract class Material extends EntitySupport {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+
+	public String getCode1c() {
+		return code1c;
+	}
+
+
+	public void setCode1c(String code1c) {
+		this.code1c = code1c;
 	}
 }

@@ -40,25 +40,25 @@ public class EntityFX<T extends EntitySupport> {
 	}
 	
 	public String getCreatedAtString() {
-		if(entity != null)
+		if(entity != null && entity.getCreatedAt() != null)
 			return FormatUtil.dateFormatter.format(entity.getCreatedAt());
 		return null;
 	}
 	
 	public String getUpdatedAtByString() {
-		if(entity != null)
+		if(entity != null && entity.getUpdatedAt() != null)
 			return FormatUtil.dateFormatter.format(entity.getUpdatedAt());
 		return null;
 	}
 	
 	public String getCreatedByLogin() {
-		if(entity != null)
+		if(entity != null && entity.getCreatedBy() != null)
 			return entity.getCreatedBy().getLogin();
 		return null;
 	}
 	
 	public String getUpdatedByLogin() {
-		if(entity != null)
+		if(entity != null && entity.getUpdatedBy() != null)
 			return entity.getUpdatedBy().getLogin();
 		return null;
 	}

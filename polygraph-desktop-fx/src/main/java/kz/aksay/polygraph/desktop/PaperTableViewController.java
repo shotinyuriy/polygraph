@@ -29,11 +29,13 @@ import javafx.util.converter.DefaultStringConverter;
 import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.api.IPaperService;
 import kz.aksay.polygraph.api.IPaperTypeService;
+import kz.aksay.polygraph.entity.BindingSpring;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Material;
 import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.PaperType;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entityfx.BindingSpringFX;
 import kz.aksay.polygraph.entityfx.EntityFX;
 import kz.aksay.polygraph.entityfx.PaperFX;
 import kz.aksay.polygraph.entityfx.PaperTypeFX;
@@ -52,6 +54,9 @@ public class PaperTableViewController implements Initializable, SessionAware {
 	@FXML	private TableColumn<PaperFX, PaperTypeFX> materialTypeColumn;
 	@FXML 	private TableColumn<PaperFX, String> densityColumn;
 	@FXML 	private TableColumn<PaperFX, String> priceColumn;
+	@FXML	private TableColumn<PaperFX, String> code1cColumn;
+	
+	@FXML	private TextField code1cField;
 	@FXML	private TextField nameField;
 	@FXML 	private ComboBox<Format> formatBox;
 	@FXML	private ComboBox<PaperTypeFX> paperTypeBox;
@@ -76,6 +81,13 @@ public class PaperTableViewController implements Initializable, SessionAware {
 			PaperType paperType = materialTypeFx.getPaperType();
 			Paper material = createMaterial(nameField.getText(), paperType);
 			material.setFormat(formatBox.getValue());
+			
+			String code1c = code1cField.getText();
+			if(code1c != null && !code1c.isEmpty()) {
+				material.setCode1c(code1cField.getText());
+			} else {
+				material.setCode1c(null);
+			}
 			
 			try {
 				material.setDensity(Integer.valueOf( densityField.getText() ));
@@ -186,6 +198,23 @@ public class PaperTableViewController implements Initializable, SessionAware {
 		}
 	}
 	
+	@FXML
+	public void updateCode1c(TableColumn.CellEditEvent<PaperFX, String> cellEditEvent) {
+		PaperFX paperFX = cellEditEvent.getRowValue();
+		Paper paper = paperFX.getEntity();
+		String code1c = cellEditEvent.getNewValue();
+		if(code1c != null && !code1c.isEmpty()) {
+			paper.setCode1c(code1cField.getText());
+		} else {
+			paper.setCode1c(null);
+		}
+		paper.setUpdatedAt(new Date());
+		paper.setUpdatedBy(SessionUtil.retrieveUser(session));
+		
+		save(paper);
+	}
+	
+	
 	protected void save(Paper paper) {
 		try {
 			paperService.save(paper);
@@ -237,7 +266,8 @@ public class PaperTableViewController implements Initializable, SessionAware {
 				ComboBoxTableCell.<PaperFX, Format>forTableColumn(Format.values()));
 		materialTypeColumn.setCellFactory(
 				ComboBoxTableCell.<PaperFX, PaperTypeFX>forTableColumn(paperTypeBox.getItems()));
-		
+		code1cColumn.setCellFactory(
+				TextFieldTableCell.<PaperFX>forTableColumn());
 	}
 
 	@Override

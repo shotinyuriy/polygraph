@@ -24,9 +24,12 @@ import javax.validation.ValidationException;
 import kz.aksay.polygraph.api.ILaminateService;
 import kz.aksay.polygraph.entity.Format;
 import kz.aksay.polygraph.entity.Laminate;
+import kz.aksay.polygraph.entity.Sticker;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entityfx.BindingSpringFX;
 import kz.aksay.polygraph.entityfx.EntityFX;
 import kz.aksay.polygraph.entityfx.LaminateFX;
+import kz.aksay.polygraph.entityfx.StickerFX;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
 
@@ -41,7 +44,9 @@ public class LaminateTableViewController implements Initializable, SessionAware 
 	@FXML 	private TableColumn<LaminateFX, Format> formatColumn;
 	@FXML 	private TableColumn<LaminateFX, String> priceColumn;
 	@FXML 	private TableColumn<LaminateFX, String> densityColumn;
+	@FXML	private TableColumn<LaminateFX, String> code1cColumn;
 	
+	@FXML	private TextField code1cField;
 	@FXML	private TextField descriptionField;
 	@FXML 	private ComboBox<Format> formatBox;
 	@FXML	private TextField densityField;
@@ -152,9 +157,25 @@ public class LaminateTableViewController implements Initializable, SessionAware 
 		}
 	}
 	
-	protected void save(Laminate spring) {
+	@FXML
+	public void updateCode1c(TableColumn.CellEditEvent<LaminateFX, String> cellEditEvent) {
+		LaminateFX laminateFX = cellEditEvent.getRowValue();
+		Laminate laminate = laminateFX.getEntity();
+		String code1c = cellEditEvent.getNewValue();
+		if(code1c != null && !code1c.isEmpty()) {
+			laminate.setCode1c(code1cField.getText());
+		} else {
+			laminate.setCode1c(null);
+		}
+		laminate.setUpdatedAt(new Date());
+		laminate.setUpdatedBy(SessionUtil.retrieveUser(session));
+		
+		save(laminate);
+	}
+	
+	protected void save(Laminate laminate) {
 		try {
-			LaminateService.save(spring);
+			LaminateService.save(laminate);
 		}
 		catch(ValidationException ve) {
 			validationLabel.setText(ve.getMessage());
@@ -170,6 +191,13 @@ public class LaminateTableViewController implements Initializable, SessionAware 
 		mt.setCreatedBy(User.TECH_USER);
 		mt.setDescription(descriptionField.getText());
 		mt.setFormat(formatBox.getSelectionModel().getSelectedItem());
+		
+		String code1c = code1cField.getText();
+		if(code1c != null && !code1c.isEmpty()) {
+			mt.setCode1c(code1cField.getText());
+		} else {
+			mt.setCode1c(null);
+		}
 		
 		try {
 			mt.setDensity(Integer.valueOf( densityField.getText() ));
@@ -205,6 +233,8 @@ public class LaminateTableViewController implements Initializable, SessionAware 
 		formatColumn.setCellFactory(ComboBoxTableCell.<LaminateFX, Format>forTableColumn(Format.values()));
 		priceColumn.setCellFactory(TextFieldTableCell.<LaminateFX>forTableColumn());
 		densityColumn.setCellFactory(TextFieldTableCell.<LaminateFX>forTableColumn());
+		code1cColumn.setCellFactory(
+				TextFieldTableCell.<LaminateFX>forTableColumn());
 	}
 	
 

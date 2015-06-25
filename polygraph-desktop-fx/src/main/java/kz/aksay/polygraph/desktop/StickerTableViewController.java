@@ -23,9 +23,12 @@ import javax.validation.ValidationException;
 
 import kz.aksay.polygraph.api.IStickerService;
 import kz.aksay.polygraph.entity.Format;
+import kz.aksay.polygraph.entity.Paper;
 import kz.aksay.polygraph.entity.Sticker;
 import kz.aksay.polygraph.entity.User;
+import kz.aksay.polygraph.entityfx.BindingSpringFX;
 import kz.aksay.polygraph.entityfx.EntityFX;
+import kz.aksay.polygraph.entityfx.PaperFX;
 import kz.aksay.polygraph.entityfx.StickerFX;
 import kz.aksay.polygraph.util.SessionAware;
 import kz.aksay.polygraph.util.SessionUtil;
@@ -42,6 +45,8 @@ public class StickerTableViewController implements Initializable, SessionAware {
 	@FXML 	private TableColumn<StickerFX, Format> formatColumn;
 	@FXML 	private TableColumn<StickerFX, String> priceColumn;
 	@FXML 	private TableColumn<StickerFX, String> densityColumn;
+	@FXML	private TableColumn<StickerFX, String> code1cColumn;
+	@FXML	private TextField code1cField;
 	
 	@FXML	private TextField descriptionField;
 	@FXML 	private ComboBox<Format> formatBox;
@@ -168,6 +173,22 @@ public class StickerTableViewController implements Initializable, SessionAware {
 		}
 	}
 	
+	@FXML
+	public void updateCode1c(TableColumn.CellEditEvent<StickerFX, String> cellEditEvent) {
+		StickerFX stickerFX = cellEditEvent.getRowValue();
+		Sticker sticker = stickerFX.getEntity();
+		String code1c = cellEditEvent.getNewValue();
+		if(code1c != null && !code1c.isEmpty()) {
+			sticker.setCode1c(code1cField.getText());
+		} else {
+			sticker.setCode1c(null);
+		}
+		sticker.setUpdatedAt(new Date());
+		sticker.setUpdatedBy(SessionUtil.retrieveUser(session));
+		
+		save(sticker);
+	}
+	
 	protected void save(Sticker spring) {
 		try {
 			stickerService.save(spring);
@@ -187,6 +208,13 @@ public class StickerTableViewController implements Initializable, SessionAware {
 		mt.setDescription(descriptionField.getText());
 		mt.setStickerType(typeBox.getValue());
 		mt.setFormat(formatBox.getSelectionModel().getSelectedItem());
+		
+		String code1c = code1cField.getText();
+		if(code1c != null && !code1c.isEmpty()) {
+			mt.setCode1c(code1cField.getText());
+		} else {
+			mt.setCode1c(null);
+		}
 		
 		try {
 			mt.setDensity(Integer.valueOf( densityField.getText() ));
@@ -224,6 +252,8 @@ public class StickerTableViewController implements Initializable, SessionAware {
 		formatColumn.setCellFactory(ComboBoxTableCell.<StickerFX, Format>forTableColumn(Format.values()));
 		priceColumn.setCellFactory(TextFieldTableCell.<StickerFX>forTableColumn());
 		densityColumn.setCellFactory(TextFieldTableCell.<StickerFX>forTableColumn());
+		code1cColumn.setCellFactory(
+				TextFieldTableCell.<StickerFX>forTableColumn());
 	}
 	
 

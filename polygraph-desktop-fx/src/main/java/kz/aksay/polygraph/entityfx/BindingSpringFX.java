@@ -24,10 +24,6 @@ public class BindingSpringFX extends EntityFX<BindingSpring> {
 		return null;
 	}
 	
-	public String getDescription() {
-		return entity.getDescription();
-	}
-	
 	public BigDecimal getPrice() {
 		return entity.getPrice();
 	}
@@ -39,4 +35,21 @@ public class BindingSpringFX extends EntityFX<BindingSpring> {
 		return null;
 	}
 
+	public String getName() {
+		if(entity != null) 
+			return entity.getName();
+		return null;
+		
+	}
+	
+	public String getCode1c() {
+		if(entity != null) {
+			return entity.getCode1c();
+		}
+		return null;
+	}
+	
+	public String getDescription() {
+		return entity.getDescription();
+	}
 }

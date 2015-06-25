@@ -22,6 +22,7 @@ import kz.aksay.polygraph.api.IMaterialService;
 import kz.aksay.polygraph.desktop.controls.AutoCompleteComboBoxListener;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.WorkType;
+import kz.aksay.polygraph.entityfx.EntityFX;
 import kz.aksay.polygraph.entityfx.MaterialConsumptionFX;
 import kz.aksay.polygraph.entityfx.MaterialFX;
 import kz.aksay.polygraph.exception.InternalLogicException;
@@ -154,8 +155,8 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 		
 		materialsFX.clear();
 		materialsFX.addAll(
-			MaterialFX.convertListEntityToFX(
-					materialService.findMaterialsByWorkType(workType)));
+			EntityFX.convertListEntityToFX(
+					materialService.findMaterialsByWorkType(workType), MaterialFX.class ));
 		materialCombo.getItems().clear();
 		materialCombo.getItems().addAll(materialsFX);
 		autoCompleteMaterial.refreshData();
@@ -166,7 +167,7 @@ public class MaterialConsumptionTableViewController implements ParametersAware,
 		materialService = StartingPane.getBean(IMaterialService.class);
 		materialConsumptionService = StartingPane.getBean(IMaterialConsumptionService.class);
 		materialsFX.addAll( 
-			MaterialFX.convertListEntityToFX(materialService.findAll()));
+				EntityFX.convertListEntityToFX(materialService.findAll(), MaterialFX.class ));
 		materialCombo.getItems().addAll(materialsFX);
 		
 		materialCombo.converterProperty().set(new StringConverter<MaterialFX>() {

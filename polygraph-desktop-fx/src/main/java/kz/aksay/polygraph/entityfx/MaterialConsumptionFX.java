@@ -54,7 +54,7 @@ public class MaterialConsumptionFX extends EntityFX<MaterialConsumption> {
 	public void setMaterialFX(MaterialFX materialFX) {
 		if(materialFX != null) {
 			this.materialFX = materialFX;
-			this.entity.setMaterial(materialFX.getMaterial());
+			this.entity.setMaterial(materialFX.getEntity());
 		}
 	}
 	

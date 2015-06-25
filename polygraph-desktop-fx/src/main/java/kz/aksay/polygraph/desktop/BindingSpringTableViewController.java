@@ -38,10 +38,14 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 	@FXML	private TableColumn<BindingSpringFX, BindingSpring.Type> typeColumn;
 	@FXML 	private TableColumn<BindingSpringFX, String> diameterColumn;
 	@FXML 	private TableColumn<BindingSpringFX, String> priceColumn;
+	  
 	@FXML	private TextField descriptionField;
 	@FXML	private ComboBox<BindingSpring.Type> typeBox;
 	@FXML	private TextField diameterField;
 	@FXML   private TextField priceField;
+	
+	@FXML	private TableColumn<BindingSpringFX, String> code1cColumn;
+	@FXML	private TextField code1cField;
 	
 	private Map<String, Object> session;
 	
@@ -143,6 +147,22 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 		}
 	}
 	
+	@FXML
+	public void updateCode1c(TableColumn.CellEditEvent<BindingSpringFX, String> cellEditEvent) {
+		BindingSpringFX bindingSpringFX = cellEditEvent.getRowValue();
+		BindingSpring bindingSpring = bindingSpringFX.getEntity();
+		String code1c = cellEditEvent.getNewValue();
+		if(code1c != null && !code1c.isEmpty()) {
+			bindingSpring.setCode1c(code1cField.getText());
+		} else {
+			bindingSpring.setCode1c(null);
+		}
+		bindingSpring.setUpdatedAt(new Date());
+		bindingSpring.setUpdatedBy(SessionUtil.retrieveUser(session));
+		
+		save(bindingSpring);
+	}
+	
 	protected void save(BindingSpring spring) {
 		try {
 			bindingSpringService.save(spring);
@@ -161,6 +181,13 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 		mt.setCreatedBy(User.TECH_USER);
 		mt.setDescription(name.toString());
 		mt.setType(type);
+		
+		String code1c = code1cField.getText();
+		if(code1c != null && !code1c.isEmpty()) {
+			mt.setCode1c(code1cField.getText());
+		} else {
+			mt.setCode1c(null);
+		}
 		
 		try {
 			mt.setDiameter(Integer.valueOf( diameterField.getText() ));
@@ -204,6 +231,8 @@ public class BindingSpringTableViewController implements Initializable, SessionA
 				TextFieldTableCell.<BindingSpringFX>forTableColumn());
 		typeColumn.setCellFactory(
 				ComboBoxTableCell.<BindingSpringFX, BindingSpring.Type>forTableColumn(typeBox.getItems()));
+		code1cColumn.setCellFactory(
+				TextFieldTableCell.<BindingSpringFX>forTableColumn());
 		
 	}
 

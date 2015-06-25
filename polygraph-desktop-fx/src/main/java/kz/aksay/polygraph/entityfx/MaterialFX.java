@@ -1,42 +1,41 @@
 package kz.aksay.polygraph.entityfx;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import kz.aksay.polygraph.entity.BindingSpring;
+import kz.aksay.polygraph.entity.Laminate;
 import kz.aksay.polygraph.entity.Material;
-import kz.aksay.polygraph.entity.PaperType;
-import kz.aksay.polygraph.util.FormatUtil;
+import kz.aksay.polygraph.entity.Paper;
+import kz.aksay.polygraph.entity.Sticker;
 
-public class MaterialFX {
+public class MaterialFX extends EntityFX<Material> {
 	
-	private Material material;
-	
-	public static List<MaterialFX> convertListEntityToFX(List<Material> materials) {
-		List<MaterialFX> materialsFx = new LinkedList<>();
-		for(Material material : materials) {
-			MaterialFX materialFx = new MaterialFX(material);
-			materialsFx.add(materialFx);
-		}
-		return materialsFx;
+	public MaterialFX(Material entity) {
+		super(entity);
 	}
 	
-	
-	public MaterialFX(Material material) {
-		this.material = material;
+	public MaterialFX(BindingSpring entity) {
+		super(entity);
 	}
 	
-	public Material getMaterial() {
-		return material;
+	public MaterialFX(Paper entity) {
+		super(entity);
 	}
 	
+	public MaterialFX(Sticker entity) {
+		super(entity);
+	}
+	
+	public MaterialFX(Laminate entity) {
+		super(entity);
+	}
+
 	@Override
 	public String toString() {
 		return getName();
 	}
 	
 	public String getMaterialClassName() {
-		if(material.getMaterialClass() != null) {
-			return material.getMaterialClass().getName();
+		if(entity.getMaterialClass() != null) {
+			return entity.getMaterialClass().getName();
 		}
 		else {
 			return null;
@@ -44,32 +43,20 @@ public class MaterialFX {
 	}
 	
 	public String getName() {
-		return material.getName();
+		if(entity != null) 
+			return entity.getName();
+		return null;
+		
 	}
 	
-	public String getCreatedByLogin() {
-		return material.getCreatedBy().getLogin();
+	public String getCode1c() {
+		if(entity != null) {
+			return entity.getCode1c();
+		}
+		return null;
 	}
 	
-	public String getCreatedAt() {
-		if(material.getCreatedAt() != null) {
-			return FormatUtil.dateFormatter.format(material.getCreatedAt());
-		}
-		else {
-			return null;
-		}
-	}
-	
-	public String getUpdatedByLogin() {
-		return material.getCreatedBy().getLogin();
-	}
-	
-	public String getUpdatedAt() {
-		if(material.getUpdatedAt() != null) {
-			return FormatUtil.dateFormatter.format(material.getUpdatedAt());
-		}
-		else {
-			return null;
-		}
+	public String getDescription() {
+		return entity.getDescription();
 	}
 }

@@ -50,7 +50,7 @@ public class OrderProceedGraphController implements Initializable, SessionAware 
 		
 		for(OrderProceedReport ordProcRep : orderProceeds) {
 			series.getData().add(new XYChart.Data<String, Double>(
-					ordProcRep.getMonthYear(), ordProcRep.getProcceedTime().doubleValue()));
+					ordProcRep.getName(), ordProcRep.getProcceedTime().doubleValue()));
 		}
 		
 		lineChart.getData().add(series);

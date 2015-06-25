@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ВыгрузкаРасходаМатериалов>
+    <РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Пружина Пластик 10</materialName>
+            <quantity>20</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A4 БУМАГА 250</materialName>
+            <quantity>1</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Наклейка A4 Adaster 280</materialName>
+            <quantity>13</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Наклейка A4 Plastic 280</materialName>
+            <quantity>13</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A4 Gloss 250</materialName>
+            <quantity>10</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A4 Svet 250</materialName>
+            <quantity>20</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A3 Svet 250</materialName>
+            <quantity>16</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Ламинат A4 120</materialName>
+            <quantity>29</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Пружина Металл 10</materialName>
+            <quantity>18</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A3 Col+ 250</materialName>
+            <quantity>15</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Пружина Пластик 15</materialName>
+            <quantity>28</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A4 Col+ 250</materialName>
+            <quantity>15</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Бумага A3 Gloss 250</materialName>
+            <quantity>30</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Ламинат A3 100</materialName>
+            <quantity>18</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+        <РасходМатериалов>
+            <materialName>Ламинат A4 200</materialName>
+            <quantity>19</quantity>
+            <wasted>0</wasted>
+        </РасходМатериалов>
+    </РасходМатериалов>
+</ВыгрузкаРасходаМатериалов>

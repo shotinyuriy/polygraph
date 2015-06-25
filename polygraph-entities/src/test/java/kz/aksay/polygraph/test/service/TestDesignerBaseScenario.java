@@ -40,6 +40,7 @@ import kz.aksay.polygraph.entity.report.EmployeeWorkloadReport;
 import kz.aksay.polygraph.entity.report.OrderProceedReport;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entity.WorkType;
+import kz.aksay.polygraph.integration1c.MaterialConsumptionToXMLExporter;
 import kz.aksay.polygraph.integration1c.OrderToXMLExporter;
 import kz.aksay.polygraph.test.ContextUtils;
 
@@ -91,7 +92,9 @@ public class TestDesignerBaseScenario extends Assert {
 	
 	private TestOrderService testOrderService;
 	private TestMaterialConsumptionService testMaterialConsumptionService;
-	private TestDataCreator testDataCreator; 
+	private TestDataCreator testDataCreator;
+
+	private MaterialConsumptionToXMLExporter materialConsumptionToXMLExporter; 
 
 	@BeforeClass
 	public void setUp()	{
@@ -117,6 +120,7 @@ public class TestDesignerBaseScenario extends Assert {
 		testDataCreator = new TestDataCreator(this.context);
 		complexityService = context.getBean(IComplexityService.class);
 		orderToXMLExporter = context.getBean(OrderToXMLExporter.class);
+		materialConsumptionToXMLExporter = context.getBean(MaterialConsumptionToXMLExporter.class);
 	}
 	
 	@Test
@@ -152,6 +156,7 @@ public class TestDesignerBaseScenario extends Assert {
 			testDefaultComplexity();
 			
 			orderToXMLExporter.export(orderService.findAll(), new File("test.xml"));
+			materialConsumptionToXMLExporter.export(materialConsumptionService.findAll(), new File("testMC.xml"));
 		}
 		catch(Exception e) {
 			e.printStackTrace();

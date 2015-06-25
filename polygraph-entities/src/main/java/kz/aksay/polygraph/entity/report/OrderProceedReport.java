@@ -2,6 +2,7 @@ package kz.aksay.polygraph.entity.report;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormatSymbols;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -28,6 +29,13 @@ public class OrderProceedReport implements Serializable, Comparable<OrderProceed
 		this.monthYear = monthYear;
 		this.procceedTime = Double.valueOf(
 				DateUtils.differenceInDays(dateEndReal, createdAt));
+	}
+	
+	public String getName() {
+		String year = monthYear.substring(0, 4);
+		int month = Integer.valueOf(monthYear.substring(4, 6));
+		String monthName = new DateFormatSymbols().getMonths()[month-1];
+		return year+" "+monthName;
 	}
 
 	public String getMonthYear() {

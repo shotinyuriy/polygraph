@@ -60,10 +60,16 @@
 
 		</center>
 		<bottom>
-				<VBox  VBox.vgrow="ALWAYS">
-				<children>
-					<Button onAction="#openOrderForm" alignment="TOP_LEFT">Изменить</Button>
-				</children>
+				<VBox >
+					<children>
+					<HBox VBox.vgrow="ALWAYS" spacing="10.0">
+					<children>
+						<Button onAction="#openOrderForm" alignment="TOP_LEFT">Открыть заказ</Button>
+						<Button fx:id="exportButton" onAction="#exportToXML" alignment="TOP_LEFT">Выгрузить в XML</Button>
+					</children>
+					</HBox>
+					<Label fx:id="errorLabel" text="" />
+					</children>
 				</VBox>
 		</bottom>
 	</BorderPane>

@@ -8,6 +8,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.dao.GenericDao;
@@ -34,6 +35,7 @@ public class ContractService extends AbstractGenericService<Contract, Long> impl
 
 	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional(readOnly=true)
 	public List<Contract> findByParty2(Organization organization) {
 		return getDao().getSession().createCriteria(getDao().clazz())
 				.add(Restrictions.eq("party2", organization))
@@ -41,6 +43,7 @@ public class ContractService extends AbstractGenericService<Contract, Long> impl
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Contract findActiveByParty2(Organization organization) {
 		return (Contract) getDao().getSession().createCriteria(getDao().clazz())
 				.add(Restrictions.eq("party2", organization))
@@ -50,10 +53,12 @@ public class ContractService extends AbstractGenericService<Contract, Long> impl
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public String getNewNumber() {
-		int count = findAll().size() + 1;
+		List<Contract> contracts = getDao().readAll();
+		int count = contracts.size() + 1;
 		int minLength = 4+3;
-		StringBuffer number = new StringBuffer(count).append("/юл");
+		StringBuffer number = new StringBuffer().append(count).append("/юл");
 		StringBuffer nulls = new StringBuffer();
 		for(int i = number.length(); i<minLength; i++ ) {
 			nulls.append("0");

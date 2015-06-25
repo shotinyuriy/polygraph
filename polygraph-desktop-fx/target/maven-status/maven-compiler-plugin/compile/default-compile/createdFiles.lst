@@ -25,6 +25,7 @@ kz\aksay\polygraph\desktop\EmployeeWorkLoadViewController$1.class
 kz\aksay\polygraph\desktop\OrderProceedGraphController.class
 kz\aksay\polygraph\entityfx\BindingSpringFX.class
 kz\aksay\polygraph\desktop\BindingSpringTableViewController.class
+kz\aksay\polygraph\desktop\OrderConsumptionTableViewController$4.class
 kz\aksay\polygraph\entityfx\PersonFX.class
 kz\aksay\polygraph\desktop\OrderTableViewController$6.class
 kz\aksay\polygraph\desktop\PaperTableViewController.class
@@ -58,7 +59,9 @@ kz\aksay\polygraph\entityfx\ComplexityFX.class
 kz\aksay\polygraph\util\ParametersAware.class
 kz\aksay\polygraph\desktop\StickerTableViewController.class
 kz\aksay\polygraph\desktop\EmployeeWorkLoadViewController.class
+kz\aksay\polygraph\desktop\OrderConsumptionTableViewController$2.class
 kz\aksay\polygraph\desktop\OrganizationTableViewController$1$1.class
+kz\aksay\polygraph\desktop\OrderConsumptionTableViewController$5.class
 kz\aksay\polygraph\entityfx\ProducedWorkFX.class
 kz\aksay\polygraph\desktop\WorkTypeTableViewController.class
 kz\aksay\polygraph\desktop\EmployeeTableViewController$1$1.class
@@ -96,6 +99,7 @@ kz\aksay\polygraph\desktop\OrderTableViewController$2.class
 kz\aksay\polygraph\desktop\OrderTableViewController$10$2.class
 kz\aksay\polygraph\desktop\reports\PrintFacade$1.class
 kz\aksay\polygraph\desktop\EmployeeWorkLoadViewController$BarType.class
+kz\aksay\polygraph\desktop\OrderConsumptionTableViewController$3.class
 kz\aksay\polygraph\entityfx\StickerFX.class
 kz\aksay\polygraph\desktop\OrderConsumptionTableViewController.class
 kz\aksay\polygraph\desktop\ProducedWorkFormController$2.class

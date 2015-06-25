@@ -26,7 +26,7 @@
       				<Label text="Дата окончания" GridPane.rowIndex="4" /> 
       				<Label fx:id="party1NameLabel" GridPane.columnIndex="1" />
       				<Label fx:id="party2NameLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      				<TextField fx:id="numberField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      				<Label fx:id="numberField" GridPane.columnIndex="1" GridPane.rowIndex="2" text="будет сгенерирован"/>
       				<DatePicker fx:id="beginDateField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       				<DatePicker fx:id="endDateField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       			</children>

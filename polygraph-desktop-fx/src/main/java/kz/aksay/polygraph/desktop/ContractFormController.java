@@ -94,21 +94,20 @@ public class ContractFormController implements Initializable,
 		if(contractFX != null) {
 			party1NameLabel.setText(contractFX.getPartyName1());
 			party2NameLabel.setText(contractFX.getPartyName2());
-			numberField.setText(contractFX.getNumber());
+			if(contractFX.getNumber() != null) {
+				numberField.setText(contractFX.getNumber());
+			}
 			if(contractFX.getEntity().getBeginDate() != null) {
 				beginDateField.valueProperty().set(FormatUtil.convertToLocalDate(contractFX.getEntity().getBeginDate()));
 			}
 			if(contractFX.getEntity().getEndDate() != null) {
 				endDateField.valueProperty().set(FormatUtil.convertToLocalDate(contractFX.getEntity().getEndDate()));
 			}
-		} else {
-			
 		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 		
 	}
 }

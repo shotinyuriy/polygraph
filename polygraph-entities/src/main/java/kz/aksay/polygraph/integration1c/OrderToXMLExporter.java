@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.entity.Contract;
+import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
 import kz.aksay.polygraph.entity.Organization;
 import kz.aksay.polygraph.entity.ProducedWork;
@@ -129,4 +130,5 @@ public class OrderToXMLExporter {
  	public void setProducedWorkService(IProducedWorkService producedWorkService) {
 		this.producedWorkService = producedWorkService;
 	}
+	
 }

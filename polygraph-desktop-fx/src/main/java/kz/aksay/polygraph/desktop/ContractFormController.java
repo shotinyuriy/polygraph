@@ -35,7 +35,7 @@ public class ContractFormController implements Initializable,
 	
 	@FXML private Label party1NameLabel;
 	@FXML private Label party2NameLabel;
-	@FXML private TextField numberField;
+	@FXML private Label numberField;
 	@FXML private DatePicker beginDateField;
 	@FXML private DatePicker endDateField;
 	@FXML private Label errorLabel;
@@ -51,15 +51,17 @@ public class ContractFormController implements Initializable,
 			errorLabel.setText(null);
 			
 			Contract contract = contractFX.getEntity();
-			contract.setNumber(numberField.getText());
 			contract.setBeginDate(FormatUtil.convertToDate(beginDateField.getValue()));
 			contract.setEndDate(FormatUtil.convertToDate(endDateField.getValue()));
+			
 			if(contract.getId() == null) {
 				contract.setCreatedAt(new Date());
 				contract.setCreatedBy(SessionUtil.retrieveUser(session));
+				contract.setNumber(contractService.getNewNumber());
 			} else {
 				contract.setUpdatedAt(new Date());
 				contract.setUpdatedBy(SessionUtil.retrieveUser(session));
+				contract.setNumber(numberField.getText());
 			}
 			
 			contractService.save(contract);
@@ -99,6 +101,8 @@ public class ContractFormController implements Initializable,
 			if(contractFX.getEntity().getEndDate() != null) {
 				endDateField.valueProperty().set(FormatUtil.convertToLocalDate(contractFX.getEntity().getEndDate()));
 			}
+		} else {
+			
 		}
 	}
 

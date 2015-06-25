@@ -11,4 +11,5 @@ public interface IContractService extends IGenericService<Contract, Long> {
 
 	Contract findActiveByParty2(Organization organization);
 
+	String getNewNumber();
 }

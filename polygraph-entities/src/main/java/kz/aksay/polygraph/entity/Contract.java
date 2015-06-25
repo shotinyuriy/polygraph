@@ -9,8 +9,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import kz.aksay.polygraph.validation.Comparison;
+import kz.aksay.polygraph.validation.DateEquation;
+import kz.aksay.polygraph.validation.DateEquations;
+
 @Entity
 @Table(name="contract")
+@DateEquations(dateEquations={
+		@DateEquation(comparison=Comparison.GREATER_THAN, date1Name="endDate", date2Name="beginDate", 
+				message="Дата окончания договора должна быть больше даты начала его действия")
+	})
 public class Contract extends EntitySupport {
 
 	@NotNull

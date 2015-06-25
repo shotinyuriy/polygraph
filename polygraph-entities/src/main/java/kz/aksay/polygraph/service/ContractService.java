@@ -3,6 +3,8 @@ package kz.aksay.polygraph.service;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,19 @@ public class ContractService extends AbstractGenericService<Contract, Long> impl
 				.add(Restrictions.ge("endDate", new Date()))
 				.setMaxResults(1)
 				.uniqueResult();
+	}
+
+	@Override
+	public String getNewNumber() {
+		int count = findAll().size() + 1;
+		int minLength = 4+3;
+		StringBuffer number = new StringBuffer(count).append("/юл");
+		StringBuffer nulls = new StringBuffer();
+		for(int i = number.length(); i<minLength; i++ ) {
+			nulls.append("0");
+		}
+		
+		return nulls.append(number).toString();
 	}
 	
 }

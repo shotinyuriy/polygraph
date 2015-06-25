@@ -9,10 +9,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import kz.aksay.polygraph.validation.Comparison;
+import kz.aksay.polygraph.validation.DateEquation;
+import kz.aksay.polygraph.validation.DateEquations;
+
 import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name="vicarious_power")
+@DateEquations(dateEquations={
+		@DateEquation(comparison=Comparison.GREATER_THAN, date1Name="endDate", date2Name="beginDate", 
+				message="Дата окончания доверенности должна быть больше даты начала ее действия")
+	})
 public class VicariousPower extends EntitySupport {
 
 	@NotNull

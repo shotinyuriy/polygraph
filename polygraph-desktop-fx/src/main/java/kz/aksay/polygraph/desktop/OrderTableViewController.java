@@ -96,8 +96,6 @@ public class OrderTableViewController implements Initializable,
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		
-		
 		List<Employee> employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
 		
 		onlyMy.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -116,7 +114,6 @@ public class OrderTableViewController implements Initializable,
 		executorCombo.getItems().addAll(EmployeeFX.contvertListEntityToFX(employees));
 		
 		setTableRowFactory();
-		
 		
 	}
 	

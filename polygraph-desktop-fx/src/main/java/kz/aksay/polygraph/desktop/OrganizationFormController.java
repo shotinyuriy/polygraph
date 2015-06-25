@@ -37,11 +37,13 @@ import kz.aksay.polygraph.desktop.fxml.packageInfo;
 import kz.aksay.polygraph.entity.Address;
 import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Organization;
+import kz.aksay.polygraph.entity.User;
 import kz.aksay.polygraph.entity.VicariousPower;
 import kz.aksay.polygraph.entityfx.AddressFX;
 import kz.aksay.polygraph.entityfx.ContractFX;
 import kz.aksay.polygraph.entityfx.EntityFX;
 import kz.aksay.polygraph.entityfx.VicariousPowerFX;
+import kz.aksay.polygraph.exception.InternalLogicException;
 import kz.aksay.polygraph.service.OrganizationService;
 import kz.aksay.polygraph.util.MainMenu;
 import kz.aksay.polygraph.util.ParameterKeys;
@@ -100,10 +102,34 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			if(organizationId != null) {
 				fillForm(organizationId);
 			}
-			if(organization == null) {
-				organization = new Organization();
-			}
+			
 		}
+		
+		if(organization == null) {
+			System.out.println("organization NEW");
+			User user = SessionUtil.retrieveUser(session);
+			organization = new Organization();
+			
+			AddressFX legalAddressFX = new AddressFX(null);
+			legalAddressFX.getEntity().setCreatedAt(new Date());
+			legalAddressFX.getEntity().setCreatedBy(user);
+			legalAddressPane.setAddressFX(legalAddressFX);
+			organization.setLegalAddress(legalAddressFX.getEntity());
+			
+			AddressFX mailAddressFX = new AddressFX(null);
+			mailAddressFX.getEntity().setCreatedAt(new Date());
+			mailAddressFX.getEntity().setCreatedBy(user);
+			mailAddressPane.setAddressFX(mailAddressFX);
+			organization.setLegalAddress(mailAddressFX.getEntity());
+			
+			AddressFX physicalAddressFX = new AddressFX(null);
+			physicalAddressFX.getEntity().setCreatedAt(new Date());
+			physicalAddressFX.getEntity().setCreatedBy(user);
+			physicalAddressPane.setAddressFX(physicalAddressFX);
+			organization.setLegalAddress(physicalAddressFX.getEntity());
+					
+		}
+		
 		physicalAddressSameAsLegal.selectedProperty().addListener(new ChangeListener<Boolean>(){
 
 			@Override
@@ -132,35 +158,41 @@ public class OrganizationFormController implements Initializable, SessionAware,
 
 	@FXML
 	public void save(ActionEvent actionEvent) {
-		
-		if(organizationId != null) {
-			organization = organizationService.find(organizationId);
-		}
-		if(organization == null) {
-			organization = new Organization();
-		}
-		if (organization.getCreatedAt() == null) {
-			organization.setCreatedAt(new Date());
-			organization.setCreatedBy(SessionUtil.retrieveUser(session));
-		}
-		else {
-			organization.setUpdatedAt(new Date());
-			organization.setUpdatedBy(SessionUtil.retrieveUser(session));
-		}
-		organization.setCode1c(code1cField.getText());
-		organization.setInn(innField.getText());
-		organization.setFullname(fullNameField.getText());
-		organization.setDirectorName(directorNameField.getText());
-		organization.setKpp(kppField.getText());
-		organization.setShortname(shortNameField.getText());
-		organization.setEmail(emailField.getText());
-		organization.setMobile(mobileField.getText());
-		organization.setPhone(phoneField.getText());
-		organization.setLegalAddress(legalAddressPane.getAddressFX().getEntity());
-		organization.setPhysicalAddress(physicalAddressPane.getAddressFX().getEntity());
-		organization.setMailAddress(mailAddressPane.getAddressFX().getEntity());
-		
 		try {
+			
+			validationLabel.setText(null);
+			
+			if(organizationId != null) {
+				organization = organizationService.find(organizationId);
+			}
+			if(organization == null) {
+				organization = new Organization();
+			}
+			if (organization.getCreatedAt() == null) {
+				organization.setCreatedAt(new Date());
+				organization.setCreatedBy(SessionUtil.retrieveUser(session));
+			}
+			else {
+				organization.setUpdatedAt(new Date());
+				organization.setUpdatedBy(SessionUtil.retrieveUser(session));
+			}
+			organization.setCode1c(code1cField.getText());
+			organization.setInn(innField.getText());
+			organization.setFullname(fullNameField.getText());
+			organization.setDirectorName(directorNameField.getText());
+			organization.setKpp(kppField.getText());
+			organization.setShortname(shortNameField.getText());
+			organization.setEmail(emailField.getText());
+			organization.setMobile(mobileField.getText());
+			organization.setPhone(phoneField.getText());
+			if(legalAddressPane.getAddressFX() == null) {
+				throw new InternalLogicException("Не указан юридический адрес");
+			}
+			organization.setLegalAddress(legalAddressPane.getAddressFX().getEntity());
+			organization.setPhysicalAddress(physicalAddressPane.getAddressFX().getEntity());
+			organization.setMailAddress(mailAddressPane.getAddressFX().getEntity());
+		
+		
 			organization = organizationService.save(organization);
 			newOrderButton.setVisible(true);
 			vicPowerControls.setManaged(true);
@@ -170,6 +202,9 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			organizationId = organization.getId();
 		}
 		catch(ValidationException ve) {
+			validationLabel.setText(ve.getMessage());
+		}
+		catch(InternalLogicException ve) {
 			validationLabel.setText(ve.getMessage());
 		}
 		catch(Exception e) {

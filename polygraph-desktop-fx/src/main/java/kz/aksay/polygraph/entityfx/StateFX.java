@@ -9,8 +9,10 @@ public class StateFX {
 	
 	public final static StateFX[] VALUES_PLUS_ALL;
 	public final static StateFX[] VALUES;
+	public final static StateFX PROCESSING;
 	
 	static {
+		StateFX processing = null;
 		Order.State[] orderStates = Order.State.values();
 		VALUES = new StateFX[orderStates.length];
 		VALUES_PLUS_ALL = new StateFX[orderStates.length+1];
@@ -18,8 +20,12 @@ public class StateFX {
 		VALUES_PLUS_ALL[0] = new StateFX(null, "Все");
 		for(int i = 0; i < orderStates.length; i++) {
 			VALUES[i] = new StateFX(orderStates[i], orderStates[i].getName());
+			if(orderStates[i].equals(Order.State.PROCESSING)) {
+				processing = VALUES[i];
+			}
 			VALUES_PLUS_ALL[i+1] = new StateFX(orderStates[i], orderStates[i].getName());
-		}
+		} 
+		PROCESSING = processing;
 	}
 	
 	public StateFX(Order.State state, String name) {

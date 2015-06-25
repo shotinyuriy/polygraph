@@ -36,9 +36,9 @@
                      </children>
                   </GridPane>
                   <ProgressIndicator fx:id="progressIndicator" layoutX="286.0" layoutY="260.0" progress="0.0" prefHeight="100.0" prefWidth="100.0" scaleShape="2.0"/>
-                  <HBox alignment="BOTTOM_CENTER">
+                  <!-- <HBox alignment="BOTTOM_CENTER">
                		<Label>Icons by </Label><Hyperlink text="Freepik">http://www.flaticon.com/authors/freepik</Hyperlink>
-               	  </HBox>
+               	  </HBox> -->
                </children>
                
             </Pane>

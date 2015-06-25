@@ -298,21 +298,27 @@ public class OrganizationFormController implements Initializable, SessionAware,
 			} else {
 				
 				VicariousPowerFX vicariousPowerFX;
+				
 				if (vicariousPowerTableView.getItems().size() == 1) {
 					vicariousPowerFX = vicariousPowerTableView.getItems().get(0);
 				} else {
 					vicariousPowerFX = vicariousPowerTableView.getSelectionModel().getSelectedItem();
 				}
+				
 				if(vicariousPowerFX == null) {
 					validationLabel.setText("Необходимо выбрать доверенность!");
 				} else {
-					Map<String, Object> parameters = new HashMap<>();
-					parameters.put(ParameterKeys.CUSTOMER_ID, organizationId);
-					parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
-					MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
-					if(mainMenu != null) {
-						mainMenu.loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_form.fxml", 
-								"Новый заказ", parameters);
+					if(vicariousPowerFX.getEntity().getEndDate().before(new Date())) {
+						validationLabel.setText(" Действие доверенности закончилось!");
+					} else {
+						Map<String, Object> parameters = new HashMap<>();
+						parameters.put(ParameterKeys.CUSTOMER_ID, organizationId);
+						parameters.put(ParameterKeys.VICARIOUS_POWER, vicariousPowerFX);
+						MainMenu mainMenu = SessionUtil.retrieveMainMenu(session);
+						if(mainMenu != null) {
+							mainMenu.loadFxmlAndOpenInTab(StartingPane.FXML_ROOT+"order_form.fxml", 
+									"Новый заказ", parameters);
+						}
 					}
 				}
 			}

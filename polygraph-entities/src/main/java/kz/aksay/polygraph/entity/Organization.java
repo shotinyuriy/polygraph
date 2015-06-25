@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -55,7 +56,10 @@ public class Organization extends Subject {
 	@NotNull(message="Не указан почтовый адрес организации")
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="mail_address_id")
-	private Address mailAddress;  
+	private Address mailAddress;
+	
+	@Transient
+	private boolean hasActiveContract = false;
 	
 	public String getFullname() {
 		return fullname;
@@ -144,6 +148,14 @@ public class Organization extends Subject {
 
 	public void setMailAddress(Address mailAddress) {
 		this.mailAddress = mailAddress;
+	}
+
+	public boolean getHasActiveContract() {
+		return hasActiveContract;
+	}
+
+	public void setHasActiveContract(boolean hasActiveContract) {
+		this.hasActiveContract = hasActiveContract;
 	}
 	
 }

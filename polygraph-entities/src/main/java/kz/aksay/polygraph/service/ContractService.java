@@ -42,7 +42,7 @@ public class ContractService extends AbstractGenericService<Contract, Long> impl
 	public Contract findActiveByParty2(Organization organization) {
 		return (Contract) getDao().getSession().createCriteria(getDao().clazz())
 				.add(Restrictions.eq("party2", organization))
-				.add(Restrictions.le("endDate", new Date()))
+				.add(Restrictions.ge("endDate", new Date()))
 				.setMaxResults(1)
 				.uniqueResult();
 	}

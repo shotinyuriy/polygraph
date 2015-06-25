@@ -84,13 +84,19 @@ public class OrderTableViewController implements Initializable,
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 		mainMenu = SessionUtil.retrieveMainMenu(session);
+		
+		User user = SessionUtil.retrieveUser(session);
+		if(user.getRole().equals(User.Role.DESIGNER)) {
+			onlyMy.selectedProperty().set(true);
+		} else {
+			findOrders();
+		}
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		orders = orderService.findAll();
-		List<OrderFX> ordersFX = OrderFX.convertListEntityToFX(orders);
+		
 		
 		List<Employee> employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
 		
@@ -103,15 +109,15 @@ public class OrderTableViewController implements Initializable,
 			}
 		});
 		
-		ordersTableView.getItems().addAll(ordersFX);
-		
 		stateCombo.getItems().addAll(StateFX.VALUES_PLUS_ALL);
-		stateCombo.getSelectionModel().select(0);
+		stateCombo.getSelectionModel().select(StateFX.PROCESSING);
 		
 		executorCombo.getItems().add(EmployeeFX.ALL_EMPLOYEES);
 		executorCombo.getItems().addAll(EmployeeFX.contvertListEntityToFX(employees));
 		
 		setTableRowFactory();
+		
+		
 	}
 	
 	@FXML

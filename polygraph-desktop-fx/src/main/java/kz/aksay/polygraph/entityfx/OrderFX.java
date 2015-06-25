@@ -117,7 +117,12 @@ public class OrderFX implements MaterialConsumptionHolderFX {
 		Subject customer = order.getCustomer();
 		if(customer != null) {
 			if(customer instanceof Organization) {
-				return "ЮЛ";
+				Organization organization = (Organization) customer;
+				String customerType = "ЮЛ";
+				if( organization.getHasActiveContract()) {
+					customerType += "-Д";
+				}
+				return customerType;
 			} else {
 				return "ФЛ";
 			}

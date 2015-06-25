@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import kz.aksay.polygraph.api.IContractService;
 import kz.aksay.polygraph.api.IEquipmentService;
 import kz.aksay.polygraph.api.IMaterialConsumptionService;
 import kz.aksay.polygraph.api.IOrderFullTextIndexService;
 import kz.aksay.polygraph.api.IOrderService;
 import kz.aksay.polygraph.api.IProducedWorkService;
 import kz.aksay.polygraph.dao.GenericDao;
+import kz.aksay.polygraph.entity.Contract;
 import kz.aksay.polygraph.entity.Equipment;
 import kz.aksay.polygraph.entity.MaterialConsumption;
 import kz.aksay.polygraph.entity.Order;
@@ -48,6 +50,8 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	
 	private IOrderFullTextIndexService orderFullTextIndexService;
 	
+	private IContractService contactService;
+	
 	private IEquipmentService equipmentService;
 	
 	@Override
@@ -75,10 +79,23 @@ public class OrderService extends AbstractGenericService<Order, Long>
 					}
 				}
 			}
+			
+			retrieveOrgProperties(order);
 		}
 		return order;
 	}
 	
+	private void retrieveOrgProperties(final Order order) {
+		if(order.getCustomer() instanceof Organization) {
+			Organization organization = (Organization)order.getCustomer();
+			Contract contract = contactService.findActiveByParty2(organization);
+			System.out.println("Contract "+contract);
+			if(contract != null) {
+				organization.setHasActiveContract(true);
+			}
+		}
+	}
+
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Order save(Order order) throws Exception {
@@ -173,7 +190,13 @@ public class OrderService extends AbstractGenericService<Order, Long>
 		if( example.getUpdatedAt() != null)
 			criteria.add(Restrictions.le("createdAt", example.getUpdatedAt()));
 		
-		return getDao().readByCriteria(criteria);
+		List<Order> orders = getDao().readByCriteria(criteria);
+		
+		for(Order order : orders) {
+			retrieveOrgProperties(order);
+		}
+		
+		return orders;
 	}
 	
 	public List<Order> findByExampleAndSearchString(Order example, String searchString) {
@@ -233,7 +256,11 @@ public class OrderService extends AbstractGenericService<Order, Long>
 				query.setParameter("dateTo", example.getUpdatedAt());
 			}
 			
-			orders = (List<Order>)query.list();	
+			orders = (List<Order>)query.list();
+			
+			for(Order order : orders) {
+				retrieveOrgProperties(order);
+			}
 		}
 		return orders != null ? orders : new ArrayList<Order>();
 	}
@@ -316,6 +343,11 @@ public class OrderService extends AbstractGenericService<Order, Long>
 	@Autowired
 	public void setEquipmentService(IEquipmentService equipmentService) {
 		this.equipmentService = equipmentService;
+	}
+
+	@Autowired
+	public void setContactService(IContractService contactService) {
+		this.contactService = contactService;
 	}
 }
 

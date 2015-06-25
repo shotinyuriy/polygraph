@@ -67,6 +67,7 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+		employees = employeeService.findAllByUserRole(User.Role.DESIGNER);
 		empWorkLoadRep = employeeService.getEmployeesWorkload();
 		employeeNames = FXCollections.observableArrayList();
 		
@@ -80,27 +81,36 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 		highSeries.setName("Высокая загруженность");
 		freeSeries.setName("Свободное рабочее время");
 		
-		for(Entry<Employee, EmployeeWorkloadReport> entry : empWorkLoadRep.entrySet()) {
-			Employee employee = entry.getKey();
-			EmployeeWorkloadReport employeeWorkloadReport = entry.getValue();
+		for(Employee employee : employees) {
+			
+			EmployeeWorkloadReport employeeWorkloadReport = empWorkLoadRep.get(employee);
 			String categoryName = createCategoryName(employee);
 			employeeNames.add(categoryName);
-			Double busyWorkload = employeeWorkloadReport.getWorkLoadAvg();
-			Double workloadDiff = WORKLOAD_DAY_LIMIT - busyWorkload;
-			final Data<String, Number> minData = new Data<String, Number>(categoryName, busyWorkload); 
-			final Data<String, Number> maxData = new Data<String, Number>(categoryName, workloadDiff);
-			
-			if(busyWorkload < 4) {
-				lowSeries.getData().add(minData);
-			} else if( busyWorkload < 6 ) {
-				medSeries.getData().add(minData);
-			} else {
-				highSeries.getData().add(minData);
+			Double workloadDiff = WORKLOAD_DAY_LIMIT * 1.0;
+			if(employeeWorkloadReport != null) {
+				Double busyWorkload = employeeWorkloadReport.getWorkLoadAvg() / WORKLOAD_DAY_LIMIT * 100.0;
+				final Data<String, Number> minData = new Data<String, Number>(categoryName, busyWorkload); 
+				
+				if(busyWorkload < 50.0) {
+					lowSeries.getData().add(minData);
+				} else if( busyWorkload < 75.0 ) {
+					medSeries.getData().add(minData);
+				} else {
+					highSeries.getData().add(minData);
+				}
+				
+				addLabelListener(minData, busyWorkload, BarType.AVG_WORKLOAD);
+				workloadDiff = WORKLOAD_DAY_LIMIT - busyWorkload;
 			}
 			
-			freeSeries.getData().add(maxData);
-			addLabelListener(minData, busyWorkload, BarType.AVG_WORKLOAD);
-			addLabelListener(maxData, workloadDiff, BarType.FREE_WORKLOAD);
+			if(workloadDiff < 0) { workloadDiff = 0.0; }
+			else { 
+				workloadDiff = workloadDiff/WORKLOAD_DAY_LIMIT * 100.0; 
+				final Data<String, Number> maxData = new Data<String, Number>(categoryName, workloadDiff);
+				freeSeries.getData().add(maxData);
+				addLabelListener(maxData, workloadDiff, BarType.FREE_WORKLOAD);
+			}
+			
 		}
 		
 		xAxis.setCategories(employeeNames);
@@ -146,7 +156,7 @@ public class EmployeeWorkLoadViewController implements Initializable, SessionAwa
 	  private void displayLabelForData(XYChart.Data<String, Number> data, final Number number) {
 	    final Node node = data.getNode();
 	    final Text dataText = new Text(new BigDecimal(number.toString())
-	    	.setScale(2, RoundingMode.HALF_UP) + "ч.");
+	    	.setScale(2, RoundingMode.HALF_UP) + "%");
 	    node.parentProperty().addListener(new ChangeListener<Parent>() {
 	      @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
 	        Group parentGroup = (Group) parent;
